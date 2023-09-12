@@ -1,0 +1,194 @@
+﻿@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var products = (List<Product>?)ViewData["Products"];
+}
+
+
+<!--=================================================== MAIN ============================================================ -->
+
+<section id="main">
+    <div id="release" class="release container">
+        <div class="release__circle"></div>
+        <div class="release__content">
+            <div class="textBox">
+                <h2>It's not just clothing<br>It's <span>Fashion</span></h2>
+                <p>Thời trang luôn là yếu tố giúp bạn tự tin hơn, chúng tôi mang đến một thời đại mới dành cho những người yêu thích trang phục đơn giản.</p>
+                <a href="@Url.Action("Store")">Learn more</a>
+            </div>
+            <div class="imgBox">
+                <img src="~/Images/sp/5.jpg" class="fashion">
+            </div>
+        </div>
+        <ul class="release__thumb">
+            @foreach(var product in products)
+            {
+                <li><img src="~/Images/sp/@Url.Content(@product.Picture)"></li>
+            }
+        </ul>
+    </div>
+
+    <div id="about" class="about container">
+        <div class="about__container">
+            <div id="slide">
+                <div class="item" style="background-image: url('../Images/slideshow/1.jpg');">
+                    <div class="content" id="content1">
+                        <div class="name">Trần Thanh Nhân</div>
+                        <div class="des">Sinh viên tại HUFLIT</div>
+                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url('../Images/slideshow/2.jpg');">
+                    <div class="content">
+                        <div class="name">Trần Thanh Nhân</div>
+                        <div class="des">Sinh viên tại HUFLIT</div>
+                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="item" style="background-image: Url('../Images/slideshow/3.jpg')">
+                    <div class="content">
+                        <div class="name">Trần Thanh Nhân</div>
+                        <div class="des">Sinh viên tại HUFLIT</div>
+                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url('../Images/slideshow/4.jpg');">
+                    <div class="content">
+                        <div class="name">Trần Thanh Nhân</div>
+                        <div class="des">Sinh viên tại HUFLIT</div>
+                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url('../Images/slideshow/5.jpg');">
+                    <div class="content">
+                        <div class="name">Trần Thanh Nhân</div>
+                        <div class="des">Sinh viên tại HUFLIT</div>
+                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="item" style="background-image: url('../Images/slideshow/6.jpg');">
+                    <div class="content">
+                        <div class="name">Trần Thanh Nhân</div>
+                        <div class="des">Sinh viên tại HUFLIT</div>
+                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button id="prev"><i class="fa fa-solid fa-angle-left"></i></button>
+                <button id="next"><i class="fa fa-solid fa-angle-right"></i></button>
+            </div>
+        </div>
+        <ul class="social_media">
+            <li style="--i:#5599ff;--j: #51dcff;">
+                <span class="icon"><i class="fa fa-facebook"></i></span>
+                <a href="https://www.facebook.com/ttnhan12" class="titulo">Facebook</a>
+            </li>
+            <li style="--i:#a955ff;--j: #ea51ff;">
+                <span class="icon"><i class="fa fa-instagram"></i></span>
+                <a href="https://www.instagram.com/tsi.nhan/" class="titulo">Instagram</a>
+            </li>
+            <li style="--i:#7455ff;--j: #a251ff;">
+                <span class="icon"><i class="fa fa-linkedin"></i></span>
+                <a href="https://www.linkedin.com/in/thanhnhanwoke/" class="titulo">Linkedin</a>
+            </li>
+        </ul>
+    </div>
+
+</section>
+
+
+<section id="banner">
+    <div id="logo"></div>
+    <div id="slideshow">
+    </div>
+</section>
+
+<section class="counter spad">
+    <div id="contact" class="contact spad">
+        <div class="container">
+            <div class="grid__row">
+                <div class="grid__column-6">
+                    <div class="contact__text">
+                        <div class="section-title">
+                            <span>Information</span>
+                            <h2>Contact Us</h2>
+                            <p>Nếu bạn đang có bất cứ vấn đề gì, vui lòng liên hệ với chúng tôi.</p>
+                        </div>
+                        <ul>
+                            <li>
+                                <h4>Thành Phố Hồ Chí Minh</h4>
+                                <p> 828 Sư Vạn Hạnh, phường 12, Quận 10. <br />(+84) 858 032 268</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="grid__column-6">
+                    <div class="contact__form">
+                        <form action="#">
+                            <div class="grid__row">
+                                <span id="content"></span>
+                                <div class="grid__column-6">
+                                    <input type="text" id="name" placeholder="Name">
+                                    <span class="error text-danger"></span>
+                                </div>
+                                <div class="grid__column-6">
+                                    <input type="text" id="email" placeholder="Email">
+                                    <span class="error text-danger"></span>
+                                </div>
+                                <div class="grid__column-12">
+                                    <textarea class="ckeditor" id="messenger"></textarea>
+                                    <span class="error text-danger"></span>
+                                </div>
+                                <button type="button" class="site-btn" id="sendmail">Send Message</button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="grid__row">
+            <div class="grid__column-2-4">
+                <div class="counter__item">
+                    <div class="counter__item__number">
+                        <h2 class="cn_num">46</h2>
+                    </div>
+                    <span>Our <br />City</span>
+                </div>
+            </div>
+            <div class="grid__column-2-4">
+                <div class="counter__item">
+                    <div class="counter__item__number">
+                        <h2 class="cn_num">32</h2>
+                    </div>
+                    <span>Total <br />Categories</span>
+                </div>
+            </div>
+            <div class="grid__column-2-4">
+                <div class="counter__item">
+                    <div class="counter__item__number">
+                        <h2 class="cn_num">96</h2>
+                    </div>
+                    <span>In <br />Product</span>
+                </div>
+            </div>
+            <div class="grid__column-2-4">
+                <div class="counter__item">
+                    <div class="counter__item__number">
+                        <h2 class="cn_num">98</h2>
+                        <strong>%</strong>
+                    </div>
+                    <span>Happy <br />Customer</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/index.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,84 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Clothings_Store</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\customer\111B910D-DFCB-48A7-818F-8ECD8A522DD2.JPEG" />
+    <None Include="wwwroot\images\system\footer-logo.png" />
+    <None Include="wwwroot\images\system\momo.jpg" />
+    <None Include="wwwroot\images\system\nhan.png" />
+    <None Include="wwwroot\images\slideshow\1.jpg" />
+    <None Include="wwwroot\images\slideshow\2.jpg" />
+    <None Include="wwwroot\images\slideshow\3.jpg" />
+    <None Include="wwwroot\images\slideshow\4.jpg" />
+    <None Include="wwwroot\images\slideshow\5.jpg" />
+    <None Include="wwwroot\images\slideshow\6.jpg" />
+    <None Include="wwwroot\images\slideshow\anh1.jpg" />
+    <None Include="wwwroot\images\slideshow\anh2.jpg" />
+    <None Include="wwwroot\images\slideshow\anh3.jpg" />
+    <None Include="wwwroot\images\slideshow\anh4.jpg" />
+    <None Include="wwwroot\images\slideshow\anh5.jpg" />
+    <None Include="wwwroot\images\sp\1.jpg" />
+    <None Include="wwwroot\images\sp\10.jpg" />
+    <None Include="wwwroot\images\sp\11.jpg" />
+    <None Include="wwwroot\images\sp\12.jpg" />
+    <None Include="wwwroot\images\sp\13.jpg" />
+    <None Include="wwwroot\images\sp\14.jpg" />
+    <None Include="wwwroot\images\sp\15.jpg" />
+    <None Include="wwwroot\images\sp\16.jpg" />
+    <None Include="wwwroot\images\sp\17.jpg" />
+    <None Include="wwwroot\images\sp\18.jpg" />
+    <None Include="wwwroot\images\sp\19.jpg" />
+    <None Include="wwwroot\images\sp\2.jpg" />
+    <None Include="wwwroot\images\sp\20.jpg" />
+    <None Include="wwwroot\images\sp\21.jpg" />
+    <None Include="wwwroot\images\sp\22.jpg" />
+    <None Include="wwwroot\images\sp\23.jpg" />
+    <None Include="wwwroot\images\sp\24.jpg" />
+    <None Include="wwwroot\images\sp\25.jpg" />
+    <None Include="wwwroot\images\sp\26.jpg" />
+    <None Include="wwwroot\images\sp\27.jpg" />
+    <None Include="wwwroot\images\sp\28.jpg" />
+    <None Include="wwwroot\images\sp\29.jpg" />
+    <None Include="wwwroot\images\sp\3.jpg" />
+    <None Include="wwwroot\images\sp\30.jpg" />
+    <None Include="wwwroot\images\sp\31.jpg" />
+    <None Include="wwwroot\images\sp\32.jpg" />
+    <None Include="wwwroot\images\sp\33.jpg" />
+    <None Include="wwwroot\images\sp\34.jpg" />
+    <None Include="wwwroot\images\sp\35.jpg" />
+    <None Include="wwwroot\images\sp\36.jpg" />
+    <None Include="wwwroot\images\sp\37.jpg" />
+    <None Include="wwwroot\images\sp\38.jpg" />
+    <None Include="wwwroot\images\sp\39.jpg" />
+    <None Include="wwwroot\images\sp\4.jpg" />
+    <None Include="wwwroot\images\sp\40.jpg" />
+    <None Include="wwwroot\images\sp\5.jpg" />
+    <None Include="wwwroot\images\sp\6.jpg" />
+    <None Include="wwwroot\images\sp\7.jpg" />
+    <None Include="wwwroot\images\sp\8.jpg" />
+    <None Include="wwwroot\images\sp\9.jpg" />
+    <None Include="wwwroot\images\system\vnpay.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FontAwesome" Version="4.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
+  </ItemGroup>
+
+</Project>

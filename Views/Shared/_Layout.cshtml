@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Clothings Store</title>
+    <link href="~/css/base.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/mystyle.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/responsive.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" asp-append-version="true" />
+
+</head>
+<body>
+
+    <!--=================================================== BACKTOP ============================================================ -->
+    <div id="backtop">
+        <i class="fa fa-arrow-up"></i>
+    </div>
+    <!--=================================================== NAVBAR ============================================================ -->
+    <partial name="Partial/navbar_Partial" />
+
+    <!--=================================================== BODY ============================================================ -->
+    <div>
+            @RenderBody()
+    </div>
+
+    <!--=================================================== FOOTER ============================================================ -->
+    <partial name="Partial/footer_Partial"  />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/layout.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

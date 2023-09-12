@@ -1,0 +1,70 @@
+﻿@using Clothings_Store.Data;
+@using Clothings_Store.Models;
+@{
+  
+        // List<Cart> list = (List<Cart>)Session["Cart"] as List<Cart>;
+}
+
+
+<nav id="navbar" class="container">
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">boutique</a>
+    <button id="mobile-menu"><i class="fa fa-align-justify"></i></button>
+    <ul id="navbar-center">
+        <li><a class="nav-link" asp-controller="Home" asp-action="Index">home</a></li>
+        <li><a class="nav-link" asp-controller="Home" asp-action="Store">store</a></li>
+        <li><a class="nav-link" href="javascript:void(0)" onclick="contact()">contact</a></li>
+        <li><a class="nav-link" href="javascript:void(0)" onclick="about()">about</a></li>
+    </ul>
+    <ul id="navbar-right">
+      
+    @*     <li>
+            <a class="nav-icon header-search__cart" href="@Url.Action("index","cart")">
+                <i class="fa fa-shopping-bag "></i>
+                @if (list != null)
+                {
+                    if (list.count == 0)
+                    {
+                        <div class="header-search__cart-list header-search__cart-list--no-card">
+                            <div class="header-search__cart-list-no-cart-msg">chưa có sản phẩm</div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="header-search__cart-list">
+                            <h4 class="header__cart-heading">sản phẩm đã thêm</h4>
+                            <ul class="header__cart-list-item">
+                                <!-- cart-item -->
+                                @foreach (var item in list)
+                                {
+                                    <li class="header__cart-item">
+                                        <img src="~/images/sp/@Url.Content(item.picture)" alt="sp" class="header__cart-img">
+                                        <div class="header__cart-item-info">
+                                            <div class="header__cart-item-head">
+                                                <h5 class="header__cart-item-name">@item.productname</h5>
+
+                                            </div>
+                                            <div class="header__cart-item-body">
+                                                <div class="header__cart-item-price-wrap">
+                                                    <span class="header__cart-item-price">@string.Format("{0:#,0}", item.unitprice) vnđ</span>
+                                                    <span class="header__cart-item-multiply">x</span>
+                                                    <span class="header__cart-item-qty">@item.quantity</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                            <div style="display:flex; align-items:center;justify-content:center">
+                                <button class="btn btn--primary header__cart-view-cart" style="display:block; border: 1px solid black"
+                                        onclick="location.href='@Url.Action("index", "cart")'">
+                                    xem giỏ hàng
+                                </button>
+                            </div>
+                        </div>
+                    }
+                }
+            </a>
+        </li> *@
+        <li><a class="nav-icon" href="@Url.Action("index","account")"><i class="fa fa-user "></i></a></li>
+    </ul>
+</nav>

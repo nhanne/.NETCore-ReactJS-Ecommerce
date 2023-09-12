@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Store";
+}
+<section id="main" class="container">
+    <div class="grid app__content">
+        <div class="store__heading ">
+            <div class="home-filter">
+                <div class="home-filter__page">
+                    <span class="home-filter__page-num">
+                        <a href="@Url.Action("Index", "Home")" class="myactionlink">Home</a>/
+                        <a href="@Url.Action("Store", "Home")" class="myactionlink">Store</a>/
+                        <a class="myactionlink"></a>
+                    </span>
+                </div>
+                <span class="home-filter__label">Sắp xếp theo</span>
+                <div class="select-input">
+                    <span class="select-input__label">Mặc định</span>
+                    <i class="fa fa-solid fa-caret-down"></i>
+                    <ul class="select-input__list">
+                        <li class="select-input__item">
+                            <a class="select-input__link">Mặc định</a>
+                        </li>
+                        <li class="select-input__item">
+                            <a class="select-input__link">Mới nhất</a>
+                        </li>
+                        <li class="select-input__item">
+                            <a class="select-input__link">Bán chạy</a>
+                        </li>
+                        <li class="select-input__item">
+                            <a class="select-input__link">Khuyến mãi</a>
+                        </li>
+                        <li class="select-input__item">
+                            <a class="select-input__link">Giá: thấp đến cao</a>
+                        </li>
+                        <li class="select-input__item">
+                            <a class="select-input__link">Giá: cao đến thấp</a>
+                        </li>
+                    </ul>
+                </div>
+                <form class="dropdown-search show" id="dropdown-search">
+                    <input class="input-validation-error" id="search-box" placeholder="nhập tên sản phẩm" type="text" value="">
+                    <button type="button" class="btnsearch" id="btnSearch">tìm kiếm</button>
+                </form>
+                <div class="home-filter__page">
+                    <span class="home-filter__page-num">
+                        <span class="home-filter__page-current"></span>
+                    </span>
+                    <div class="home-filter__page-control">
+                        <a href="" class="home-filter__page-btn home-filter__page-btn--left">
+                            <i class="home-filter__page-icon fa fa-caret-left"></i>
+                        </a>
+                        <a href="" class="home-filter__page-btn home-filter__page-btn--right">
+                            <i class="home-filter__page-icon fa fa-caret-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="grid__row store__body">
+            <div class="grid__column-2">
+                <nav class="category">
+                    <ul class="category-list" id="mySidebar">
+                    </ul>
+                </nav>
+            </div>
+            <button class="openbtn" onclick="openNav()">☰ Danh mục</button>
+            <div class="grid__column-10" id="release">
+                <ul id="products" class="row"></ul>
+                <div id="pagination" class="MenuTrang pagination-container"></div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script src="~/js/store.js" asp-append-version="true"></script>
+}
