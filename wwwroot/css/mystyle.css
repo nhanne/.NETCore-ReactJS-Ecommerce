@@ -36,7 +36,9 @@
         background-color: var(--color-bgsticky);
     }
 
-        #navbar.sticky .navbar-brand, #navbar.sticky button, #navbar.sticky a {
+        #navbar.sticky .navbar-brand,
+        #navbar.sticky button,
+        #navbar.sticky a {
             color: white !important
         }
 
@@ -92,11 +94,11 @@ ul#navbar-right {
     text-decoration: line-through !important;
 }
 
-#navbar-center .nav-dropdown{
+#navbar-center .nav-dropdown {
     position: relative;
 }
 
-#navbar-center .dropdown-menu{
+#navbar-center .dropdown-menu {
     position: absolute;
     top: 100%;
     right: -10px;
@@ -129,8 +131,9 @@ ul#navbar-right {
     margin-left: 10px;
 }
 
-   .dropdown-search #search-box {
-        padding: 10px 20px;
+    .dropdown-search #search-box {
+        margin-right: 3px;
+        padding: 10px 5px;
         outline: none;
         text-align: center;
         background: white;
@@ -237,6 +240,7 @@ ul#navbar-right {
     margin-bottom: 75px;
     text-align: center;
 }
+
 /*=========================== BANNER ==============================*/
 
 #banner {
@@ -306,11 +310,13 @@ ul#navbar-right {
         transform: rotateZ(360deg);
     }
 }
+
 /*=========================== MAIN ==============================*/
 
 #main img {
     width: 100%;
 }
+
 /*social_media*/
 ul.social_media {
     position: absolute;
@@ -339,7 +345,7 @@ ul.social_media {
 
         ul.social_media li:hover {
             width: 180px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0);
         }
 
         ul.social_media li::before {
@@ -347,7 +353,7 @@ ul.social_media {
             position: absolute;
             inset: 0;
             border-radius: 50px;
-            background: linear-gradient(45deg, var(--i),var(--j));
+            background: linear-gradient(45deg, var(--i), var(--j));
             opacity: 0;
             transition: 0.5s;
         }
@@ -363,7 +369,7 @@ ul.social_media {
             width: 100%;
             height: 100%;
             border-radius: 60px;
-            background: linear-gradient(45deg, var(--i),var(--j));
+            background: linear-gradient(45deg, var(--i), var(--j));
             opacity: 0;
             transition: 0.5s;
             z-index: -1;
@@ -586,7 +592,6 @@ ul.social_media {
 
 #products li {
     flex-basis: 25%;
-    padding-right: 15px;
 }
 
 .product-item {
@@ -750,9 +755,10 @@ ul.social_media {
     background-color: #FFF;
     border: 1px solid #dee2e6;
 }
-.page-link:hover{
-    cursor: pointer
-}
+
+    .page-link:hover {
+        cursor: pointer
+    }
 
 .active {
     background-color: black;
@@ -945,6 +951,7 @@ ul.social_media {
 .toast--failed {
     border-color: red;
 }
+
 /*=========================== FOOTER ==============================*/
 
 #footer {
@@ -999,6 +1006,7 @@ ul.social_media {
 }
 
     .category-item__link:hover {
+        cursor: pointer;
         right: -4px;
         color: var(--primary-color);
     }
@@ -1179,6 +1187,7 @@ ul.social_media {
     margin-top: 14px;
     color: var(--text-color);
 }
+
 /* Cart-list*/
 .header__cart-notice {
     position: absolute;
@@ -1398,20 +1407,25 @@ ul.social_media {
         .footer__copyright__text p a {
             color: #e53637;
         }
-    .footer__payment{
-        display: flex;
-    }
-     .footer__payment img{
+
+.footer__payment {
+    display: flex;
+}
+
+    .footer__payment img {
         padding: 10px
     }
+
 /*=========================== contact ==============================*/
 .contact {
     margin: 50px 0;
     line-height: 25px;
 }
-.contact__form .grid__column-6{
+
+.contact__form .grid__column-6 {
     margin-bottom: 10px
 }
+
 .contact__text .section-title {
     text-align: left;
     margin-bottom: 40px;
@@ -1507,18 +1521,22 @@ ul.social_media {
     .contact__form textarea::placeholder {
         color: #b7b7b7;
     }
-.text-danger{
+
+.text-danger {
     color: red;
 }
-#content{
+
+#content {
 }
-.contact__form{
+
+.contact__form {
     margin: 10px 0;
 }
-.contact__form button {
-    letter-spacing: 4px;
-    padding: 14px 35px;
-}
+
+    .contact__form button {
+        letter-spacing: 4px;
+        padding: 14px 35px;
+    }
 
 .site-btn {
     font-size: 14px;
@@ -1540,4 +1558,128 @@ ul.social_media {
     letter-spacing: 2px;
     margin-bottom: 15px;
     display: block;
+}
+
+/*=========================== Detail Product ==============================*/
+.detail__picture {
+    flex: 1;
+    padding: 30px;
+}
+
+    .detail__picture img {
+        width: 100%;
+    }
+
+.detail__info {
+    padding: 30px;
+    position: relative;
+}
+
+.detail__info-heading {
+    color: rgba(102, 102, 102, .7);
+    font-weight: 400;
+    text-transform: uppercase;
+    margin: 8px 0;
+}
+
+.detail__info-name {
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.3;
+    color: #555;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.detail__info-price {
+    font-size: 2.2rem;
+    margin: 20px 0
+}
+
+.detail__info-price--symbol {
+    font-size: .75em;
+    position: absolute;
+    top: 0;
+    font-size: 1.2rem;
+}
+
+.detail__info-price--cost {
+    white-space: nowrap;
+    color: #111;
+    font-weight: 700;
+    opacity: .6;
+    text-decoration: line-through;
+    position: relative;
+    margin-right: 20px;
+}
+
+.detail__info-price--unit {
+    white-space: nowrap;
+    color: #111;
+    font-weight: 700;
+    position: relative;
+}
+
+.detail__info-size,
+.detail__info-color {
+    margin: 20px 0
+}
+
+    .detail__info-size label,
+    .detail__info-color label {
+        color: #111111;
+        font-size: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+        border: 1px solid #e5e5e5;
+        padding: 6px 15px;
+        margin-bottom: 0;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+        .detail__info-size label.active,
+        .detail__info-color label.active {
+            background: #111111;
+            color: #ffffff;
+            border-color: #111111;
+        }
+
+        .detail__info-size label input {
+            position: absolute;
+            visibility: hidden;
+        }
+
+        .detail__info-color label input {
+            position: absolute;
+            visibility: hidden;
+        }
+
+.detail__info-size-label,
+.detail__info-color-label {
+    font-weight: bold;
+    display: block;
+    margin: 10px 0;
+}
+
+.detail__info-button-addtoCart {
+    opacity: 0.8;
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 14px 30px;
+    color: #ffffff;
+    background: #000000;
+    letter-spacing: 4px;
+}
+
+    .detail__info-button-addtoCart:hover {
+        opacity: 1;
+    }
+
+#qtyinStock {
+    display: block;
+    margin: 15px 0;
 }

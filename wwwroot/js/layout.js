@@ -15,8 +15,8 @@ mobileMenu.onclick = function() {
 }
 // ===========================  sidebar-collapse =========================== 
 function openNav() {
-    document.getElementById("mySidebar").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
+    document.getElementById("mySidebar").style.width = "50%";
+    document.getElementById("main").style.marginLeft = "50%";
 }
 
 function closeNav() {

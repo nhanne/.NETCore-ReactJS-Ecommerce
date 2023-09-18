@@ -37,7 +37,7 @@ namespace Clothings_Store.Controllers
             return View();
         }
         [HttpGet]
-        public JsonResult getData(string search,string category, string sort, int page = 1, int pageSize = 8)
+        public JsonResult getData(string? search,string? category, string? sort, int page = 1, int pageSize = 8)
         {
             var query = _db.Products.AsQueryable();
             // Danh mục
@@ -107,8 +107,39 @@ namespace Clothings_Store.Controllers
             }
             return query;
         }
-
-
         //
+        public JsonResult Product(int Id)
+        {
+            var stock = _db.Stocks.Where(p => p.ProductId == Id)
+                                   .Select(s => new
+                                   {
+                                       size = new { 
+                                           id = s.SizeId, 
+                                           name = s.Size.Name 
+                                       },
+                                       color = new {
+                                           id = s.ColorId, 
+                                           name = s.Color.Name
+                                       },
+                                       product = new
+                                       {
+                                           id = s.ProductId, 
+                                           image = s.Product.Picture, 
+                                           name = s.Product.Name, 
+                                           costPrice = s.Product.CostPrice,
+                                           unitPrice = s.Product.UnitPrice,
+                                           sale = s.Product.Sale,
+                                           category = s.Product.Category.Name
+                                       }
+                                   }).ToList();
+
+            var sizes = stock.Select(item => item.size).Distinct().ToList();
+            var colors = stock.Select(item => item.color).Distinct().ToList();
+            var product = stock.Select(item => item.product).Distinct().ToList();
+            return Json(new
+            {
+               product, sizes,colors
+            });
+        }
     }
 }

@@ -204,7 +204,9 @@ a {
     font-size: 1.4rem;
     position: relative;
 }
-
+.select-input:hover{
+    cursor: pointer
+}
 .select-input::after {
     content: "";
     display: block;

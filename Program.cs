@@ -1,5 +1,6 @@
-using Clothings_Store.Data;
+﻿using Clothings_Store.Data;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,19 +16,21 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    //: Đây là middleware để cấu hình HTTP Strict Transport Security (HSTS) để tăng cường bảo mật bằng cách yêu cầu trình duyệt kết nối qua HTTPS trong một khoảng thời gian nhất định.
     app.UseHsts();
 }
-
+// Middleware này sử dụng để tự động chuyển hướng yêu cầu từ HTTP sang HTTPS nếu chúng được gửi qua HTTP.
 app.UseHttpsRedirection();
+// Đây là middleware cho phép phục vụ các tệp tĩnh như CSS, JavaScript và hình ảnh từ thư mục tĩnh trong dự án.
 app.UseStaticFiles();
-
+// Middleware này làm cho ứng dụng định tuyến yêu cầu HTTP đến các điểm cuối tương ứng (controllers và actions) dựa trên địa chỉ URL.
 app.UseRouting();
-
+// Middleware này sử dụng để xác thực và ủy quyền người dùng trong ứng dụng.
 app.UseAuthorization();
-
+// Đây là cấu hình định tuyến cho các controller trong ứng dụng.
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
