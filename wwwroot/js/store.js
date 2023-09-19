@@ -1,9 +1,9 @@
 ﻿import React from 'react'
 import ReactDOM from 'react-dom' 
 import {useState} from 'react'
-import Categories from '/wwwroot/js/Components/category.js'
-import Filter from '/wwwroot/js/Components/filter.js'
-import GetData from '/wwwroot/js/Components/data.js'
+import Categories from './Components/category.js'
+import Filter from './Components/filter.js'
+import GetData from './Components/data.js'
 
 function App() {
     const [searchTerm, setSearch] = useState('');
@@ -27,13 +27,15 @@ function App() {
                 />
             </div>
             <div className="grid__row store__body">
-                <Categories setCateName={setCateName} />
+                <Categories
+                    setCateName={setCateName}
+                />
                 <GetData
-                    cateName={cateName}
-                    sortBy={sortBy}
-                    searchTerm={searchTerm}
-                    pageIndex={pageIndex}
-                    setPageIndex={setPageIndex}
+                    cate={cateName}
+                    sort={sortBy}
+                    search={searchTerm}
+                    page={pageIndex}
+                    setPage={setPageIndex}
                     totalPages={totalPages}
                     setTotalPages={setTotalPages}
                 />

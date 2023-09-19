@@ -1,10 +1,7 @@
-﻿import React from 'react' // nạp thư viện react
+﻿import React from 'react'
 import { useState, useEffect } from 'react'
 export default function Categories({ setCateName }) {
     const [categories, setCategories] = useState([]);
-    const handleCateChange = (event, categoryName) => {
-        setCateName(categoryName);
-    };
 
     useEffect(() => {
         fetch(`/Home/getCategories`)
@@ -22,7 +19,8 @@ export default function Categories({ setCateName }) {
                         <li key={0} className='category-item'>
                             <a
                                 className='category-item__link'
-                                onClick={(event) => handleCateChange(event, ' ')}>
+                                onClick={() => setCateName('')}
+                            >
                                 New Stuff
                             </a>
                         </li>
@@ -30,7 +28,8 @@ export default function Categories({ setCateName }) {
                             <li key={category.id} className='category-item'>
                                 <a
                                     className='category-item__link'
-                                    onClick={(event) => handleCateChange(event, category.name)}>
+                                    onClick={() => setCateName(category.name)}
+                                >
                                     {category.name}
                                 </a>
                             </li>
