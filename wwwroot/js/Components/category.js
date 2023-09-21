@@ -1,8 +1,10 @@
 ﻿import React from 'react'
-import { useState, useEffect } from 'react'
-export default function Categories({ setCateName }) {
+import { useState, useEffect, useContext } from 'react'
+import { FilterContext } from '../storeContext.js'
+function Categories() {
+    const context = useContext(FilterContext)
     const [categories, setCategories] = useState([]);
-
+   
     useEffect(() => {
         fetch(`/Home/getCategories`)
             .then(res => res.json())
@@ -19,7 +21,7 @@ export default function Categories({ setCateName }) {
                         <li key={0} className='category-item'>
                             <a
                                 className='category-item__link'
-                                onClick={() => setCateName('')}
+                                onClick={() => context.setCategory('')}
                             >
                                 New Stuff
                             </a>
@@ -28,7 +30,7 @@ export default function Categories({ setCateName }) {
                             <li key={category.id} className='category-item'>
                                 <a
                                     className='category-item__link'
-                                    onClick={() => setCateName(category.name)}
+                                    onClick={() => context.setCategory(category.name)}
                                 >
                                     {category.name}
                                 </a>
@@ -41,3 +43,4 @@ export default function Categories({ setCateName }) {
         </React.Fragment>
     )
 }
+export default React.memo(Categories)

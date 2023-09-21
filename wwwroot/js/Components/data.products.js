@@ -21,8 +21,8 @@ export default function Products({ products }) {
                         <a className="product-name">{product.p.name}</a>
                         <div className="product-price">
                             <span> </span>
-                            <span className="product--unitPrice">{product.p.unitPrice.toLocaleString()}
-                                <span className="product--currentPrice">ð</span>
+                            <span className="product--unitPrice">{product.p.unitPrice.toLocaleString()} VND
+                                <span className="product--currentPrice"></span>
                             </span>
                         </div>
 

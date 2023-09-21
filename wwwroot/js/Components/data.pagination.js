@@ -1,19 +1,20 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useContext } from 'react'
+import { FilterContext } from '../storeContext.js'
 
-export default function Pagination(props) {
-
+export default function Pagination() {
+    const context = useContext(FilterContext)
 
     return (
         <div id="pagination" className="MenuTrang pagination-container">
             <ul className="pagination">
-                {props.totalPages > 1 ? (
+                {context.totalPages > 1 ? (
                     <>
-                        {Array.from({ length: props.totalPages }, (_, i) => (
+                        {Array.from({ length: context.totalPages }, (_, i) => (
                             <li className={`page-item`} key={i}>
                                 <a
-                                    onClick={() => props.setPage(i + 1)}
-                                    className={`page-link ${i + 1 === props.page ? 'active' : ''}`}
+                                    onClick={() => context.setPage(i + 1)}
+                                    className={`page-link ${i + 1 === context.page ? 'active' : ''}`}
                                 >
                                     {i + 1}
                                 </a>

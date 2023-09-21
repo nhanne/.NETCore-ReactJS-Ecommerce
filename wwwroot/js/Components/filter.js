@@ -2,7 +2,11 @@
 import Select from './filter.select.js'
 import Search from './filter.search.js'
 import Button from './filter.button.js'
-export default function Filter(props) {
+import { useContext } from 'react'
+import { FilterContext } from '../storeContext.js'
+
+export default function Filter(category) {
+    const context = useContext(FilterContext)
 
     return (
         <div className="home-filter">
@@ -10,22 +14,12 @@ export default function Filter(props) {
                 <span className="home-filter__page-num">
                     <a href="/Home" className="myactionlink">Home</a>/
                     <a href="/Home/Store" className="myactionlink">Store</a>
-                    <a className="myactionlink">/{props.cateName}</a>
+                    <a className="myactionlink">/{context.category}</a>
                 </span>
             </div>
-            <Select
-                sort={props.sort}
-                setSortBy={props.setSortBy}
-            />
-            <Search
-                setSearch={props.setSearch}
-                search={props.search}
-            />
-            <Button
-                pageIndex={props.pageIndex}
-                setPageIndex={props.setPageIndex}
-                totalPages={props.totalPages}
-            />
+            <Select />
+            <Search />
+            <Button />
         </div>
     )
 }
