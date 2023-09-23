@@ -1,0 +1,120 @@
+﻿.grid__column_6 {
+    flex: 1;
+    padding: 30px;
+}
+
+.detail {
+}
+
+.detail__picture img {
+    width: 100%;
+}
+
+.detail__info {
+    position: relative;
+}
+
+.detail__info_heading {
+    color: rgba(102, 102, 102, .7);
+    font-weight: 400;
+    text-transform: uppercase;
+    margin: 8px 0;
+}
+
+.detail__info_name {
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.3;
+    color: #555;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.detail__info_price {
+    font-size: 2.2rem;
+    margin: 20px 0
+}
+
+.detail__info_price__symbol {
+    font-size: .75em;
+    position: absolute;
+    top: 0;
+    font-size: 1.2rem;
+}
+
+.detail__info_price__cost {
+    white-space: nowrap;
+    color: #111;
+    font-weight: 700;
+    opacity: .6;
+    text-decoration: line-through;
+    position: relative;
+    margin-right: 20px;
+}
+
+.detail__info_price__unit {
+    white-space: nowrap;
+    color: #111;
+    font-weight: 700;
+    position: relative;
+}
+
+.detail__info_size, .detail__info_color {
+    margin: 20px 0
+}
+
+    .detail__info_size label, .detail__info_color label {
+        color: #111111;
+        font-size: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        display: inline-block;
+        border: 1px solid #e5e5e5;
+        padding: 6px 15px;
+        margin-bottom: 0;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+        .detail__info_size label.active, .detail__info_color label.active {
+            background: #111111;
+            color: #ffffff;
+            border-color: #111111;
+        }
+
+        .detail__info_size label input {
+            position: absolute;
+            visibility: hidden;
+        }
+
+        .detail__info_color label input {
+            position: absolute;
+            visibility: hidden;
+        }
+
+.detail__info_size_label, .detail__info_color_label {
+    font-weight: bold;
+    display: block;
+    margin: 10px 0;
+}
+
+.detail__info_button_addtoCart {
+    opacity: 0.8;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 14px 30px;
+    color: #ffffff;
+    background: #000000;
+    letter-spacing: 4px;
+}
+
+    .detail__info_button_addtoCart:hover {
+        opacity: 1;
+    }
+
+#qtyinStock {
+    display: block;
+    margin: 15px 0;
+}

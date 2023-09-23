@@ -1,5 +1,5 @@
 ﻿import React from 'react'
-import { useState, useEffect, createContext } from 'react'
+import { useState, useEffect, useRef, createContext } from 'react'
 
 const FilterContext = createContext()
 function FilterProvider({ children }) {
@@ -7,19 +7,19 @@ function FilterProvider({ children }) {
     const [sort, setSort] = useState('Mặc định');
     const [category, setCategory] = useState('');
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState();
-
     const [products, setProducts] = useState([]);
+    const totalPages = useRef();
 
     useEffect(() => {
         fetch(`/Home/getData?category=${category}&&sort=${sort}&&search=${search}&&page=${page}`)
             .then(res => res.json())
             .then(reponse => {
+                totalPages.current = reponse.totalPages;
                 setProducts(reponse.products);
-                setTotalPages(reponse.totalPages);
             });
-    }, [category, sort, search, page, totalPages])
-    if (page > totalPages) {
+    }, [category, sort, search, page])
+    console.log("re-render");
+    if (page > totalPages.current) {
         setPage(1)
     }
 
@@ -28,7 +28,7 @@ function FilterProvider({ children }) {
         sort, setSort,
         category, setCategory,
         page, setPage,
-        totalPages, setTotalPages,
+        totalPages,
         products
     }
 

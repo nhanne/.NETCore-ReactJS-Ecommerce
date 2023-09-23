@@ -8,9 +8,9 @@ export default function Pagination() {
     return (
         <div id="pagination" className="MenuTrang pagination-container">
             <ul className="pagination">
-                {context.totalPages > 1 ? (
+                {context.totalPages.current > 1 ? (
                     <>
-                        {Array.from({ length: context.totalPages }, (_, i) => (
+                        {Array.from({ length: context.totalPages.current }, (_, i) => (
                             <li className={`page-item`} key={i}>
                                 <a
                                     onClick={() => context.setPage(i + 1)}
