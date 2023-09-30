@@ -7,7 +7,7 @@ public partial class Stock
 {
     public int Id { get; set; }
 
-    public int? ProductId { get; set; }
+    public int ProductId { get; set; }
 
     public int? ColorId { get; set; }
 
@@ -17,11 +17,11 @@ public partial class Stock
 
     public DateTime? StockInDate { get; set; }
 
-    public virtual Color? Color { get; set; }
+    public virtual Color Color { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
-    public virtual Product? Product { get; set; }
+    public virtual Product Product { get; set; }
 
-    public virtual Size? Size { get; set; }
+    public virtual Size Size { get; set; }
 }

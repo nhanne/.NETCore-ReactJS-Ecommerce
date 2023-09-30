@@ -62,7 +62,7 @@ namespace Clothings_Store.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Colors__3214EC074B6E2D47");
 
-                    b.ToTable("Colors");
+                    b.ToTable("Colors", (string)null);
                 });
 
             modelBuilder.Entity("Clothings_Store.Models.Customer", b =>
@@ -326,7 +326,7 @@ namespace Clothings_Store.Migrations
                     b.HasKey("PromotionId")
                         .HasName("PK__Promotio__2CB9556BBEE408D1");
 
-                    b.ToTable("Promotions");
+                    b.ToTable("Promotions", (string)null);
                 });
 
             modelBuilder.Entity("Clothings_Store.Models.Size", b =>
@@ -351,7 +351,7 @@ namespace Clothings_Store.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Sizes__3214EC07D711A6F5");
 
-                    b.ToTable("Sizes");
+                    b.ToTable("Sizes", (string)null);
                 });
 
             modelBuilder.Entity("Clothings_Store.Models.Staff", b =>
@@ -406,7 +406,7 @@ namespace Clothings_Store.Migrations
 
                     b.HasIndex("JobTitle");
 
-                    b.ToTable("Staff", t =>
+                    b.ToTable("Staff", null, t =>
                         {
                             t.HasTrigger("ASP_AbortRoleAdmin");
                         });

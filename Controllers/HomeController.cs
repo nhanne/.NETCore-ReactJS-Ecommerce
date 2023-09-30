@@ -141,5 +141,18 @@ namespace Clothings_Store.Controllers
                product, sizes,colors
             });
         }
+        //
+        [HttpGet]
+        public JsonResult getStock(int productId, int sizeId, int colorId)
+        {
+            var stock = _db.Stocks
+               .Where(p => p.ProductId == productId
+                        && p.ColorId == colorId
+                        && p.SizeId == sizeId)
+               .FirstOrDefault();
+            int quantity = stock == null ? 0 : (int)stock.Stock1;
+            return Json(new { quantity = quantity });
+            
+        }
     }
 }

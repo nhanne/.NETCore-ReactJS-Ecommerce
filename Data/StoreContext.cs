@@ -7,8 +7,8 @@ namespace Clothings_Store.Data
     {
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {
-        }
 
+        }
         public virtual DbSet<Category> Categories { get; set; }
 
         public virtual DbSet<Color> Colors { get; set; }

@@ -14,15 +14,18 @@ function FilterProvider({ children }) {
         fetch(`/Home/getData?category=${category}&&sort=${sort}&&search=${search}&&page=${page}`)
             .then(res => res.json())
             .then(reponse => {
-                totalPages.current = reponse.totalPages;
+                if (reponse.products.length > 0) {
+                    totalPages.current = reponse.totalPages;
+                }
                 setProducts(reponse.products);
+
             });
     }, [category, sort, search, page])
-    console.log("re-render");
+
     if (page > totalPages.current) {
         setPage(1)
     }
-
+    
     const value = {
         search, setSearch,
         sort, setSort,

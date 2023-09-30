@@ -1,4 +1,5 @@
 ﻿import React from 'react'
+import { Link } from 'react-router-dom'
 import { useState, useEffect, useContext } from 'react'
 import { FilterContext } from '../storeContext.js'
 function Categories() {
@@ -19,21 +20,21 @@ function Categories() {
                 <nav className="category">
                     <ul className='category-list' id='mySidebar'>
                         <li key={0} className='category-item'>
-                            <a
+                            <Link to="/Home/Store"
                                 className='category-item__link'
                                 onClick={() => context.setCategory('')}
                             >
                                 New Stuff
-                            </a>
+                            </Link>
                         </li>
                         {categories.map(category => (
                             <li key={category.id} className='category-item'>
-                                <a
+                                <Link to="/Home/Store"
                                     className='category-item__link'
                                     onClick={() => context.setCategory(category.name)}
                                 >
                                     {category.name}
-                                </a>
+                                </Link>
                             </li>
                         ))}
                     </ul>

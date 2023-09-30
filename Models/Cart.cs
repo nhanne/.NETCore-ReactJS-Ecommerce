@@ -1,40 +1,34 @@
 ﻿using Clothings_Store.Data;
-using System;
-using System.Collections.Generic;
 namespace Clothings_Store.Models;
 
-public partial class Cart
+public class Cart
 {
     private readonly StoreContext _db;
-    public int IdProduct { set; get; }
-    public int IdColor { set; get; }
-    public int IdSize { set; get; }
-    public int IdStock { set; get; }
+    public int IdCart { set; get; }
+    public double unitPrice { set; get; }
+    public int quantity { set; get; }
+    public string images { set; get; }
+    public string size { set; get; }
+    public string color { set; get; }
+    public virtual Stock Stock { set; get; }
 
-    public string ProductName { set; get; }
-    public string Picture { set; get; }
-    public float unitPrice { set; get; }
-    public int Quantity { set; get; }
-    public string Brand { set; get; }
-    public string Color { set; get; }
-    public string Size { set; get; }
-    public float totalPrice
+    public double totalPrice
     {
-        get { return Quantity * unitPrice; }
+        get { return quantity * unitPrice; }
     }
-    public Cart(int MaSP, int MaMau, int MaSize)
+
+    public Cart(StoreContext context,int stockId)
     {
-        IdProduct = MaSP;
-        IdColor = MaMau;
-        IdSize = MaSize;
-        Stock model = _db.Stocks.Single(p => p.ProductId == IdProduct && p.ColorId == IdColor && p.SizeId == IdSize);
-        ProductName = model.Product.Name;
-        Picture = model.Product.Picture;
-        unitPrice = float.Parse(model.Product.UnitPrice.ToString());
-        Quantity = 1;
-        Brand = model.Product.Category.Name;
-        Color = model.Color.Name;
-        Size = model.Size.Name;
-        IdStock = model.Id;
+        _db = context;
+        if(_db != null)
+        {
+            Stock stock = _db.Stocks.Find(stockId);
+            IdCart = stockId;
+            quantity = 1;
+            images = _db.Products.Find(stock.ProductId).Picture;
+            unitPrice = _db.Products.Find(stock.ProductId).UnitPrice;
+            size = _db.Sizes.Find(stock.SizeId).Name;
+            color = _db.Colors.Find(stock.ColorId).Name;
+        }
     }
 }
