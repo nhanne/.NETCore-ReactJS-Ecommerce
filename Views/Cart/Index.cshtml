@@ -1,38 +1,39 @@
 ﻿@model List<Clothings_Store.Models.Cart>
 
-
-@if (Model.Count > 0)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Hình ảnh</th>
-                <th>Số lượng</th>
-                <th>Giá</th>
-                <th>Màu sắc</th>
-                <th>Kích cỡ</th>
-            </tr>
-        <thead>
-        <tbody>
-                    @foreach (var cartitem in Model)
-                    {
+<div class="container">
+    @if (Model.Count > 0)
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <th>@cartitem.IdCart</th>
-                    <th>
-                        <img src="~/images/sp/@Url.Content(@cartitem.images)"
-                             class="detail__picture" alt="Cotton T-shirt">
-                    </th>
-                    <th>@cartitem.quantity</th>
-                    <th>@string.Format("{0:#,0}", cartitem.unitPrice)</th>
-                    <th>@cartitem.color</th>
-                    <th>@cartitem.size</th>
+                    <th>#</th>
+                    <th>Hình ảnh</th>
+                    <th>Số lượng</th>
+                    <th>Giá</th>
+                    <th>Màu sắc</th>
+                    <th>Kích cỡ</th>
                 </tr>
-                    }
-        </tbody>
-    </table>
-}
-else
-{
-    <p class="alert alert-danger">Giỏ hàng trống</p>
-}
+            <thead>
+            <tbody>
+                        @foreach (var cartitem in Model)
+                        {
+                            <tr>
+                                <th>@cartitem.IdCart</th>
+                                <th>
+                                    <img src="~/images/sp/@Url.Content(@cartitem.images)"
+                                         class="detail__picture" alt="Cotton T-shirt">
+                                </th>
+                                <th>@cartitem.quantity</th>
+                                <th>@string.Format("{0:#,0}", cartitem.unitPrice)</th>
+                                <th>@cartitem.color</th>
+                                <th>@cartitem.size</th>
+                            </tr>
+                        }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="alert alert-danger">Giỏ hàng trống</p>
+    }
+</div>

@@ -1,4 +1,6 @@
 ﻿using Clothings_Store.Data;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,8 +11,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<StoreContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-// cache
-builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddDistributedMemoryCache(); // cache
 // session
 builder.Services.AddSession(options =>
 {
@@ -19,9 +21,10 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline. (Middleware)
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

@@ -3,16 +3,20 @@ import axios from 'axios';
 import { useParams, Link } from 'react-router-dom'
 import clsx from 'clsx'
 import styles from '/wwwroot/css/module/product.module.css'
+import Toast from './toasts.js'
 
 function Product() {
 
     const { Id } = useParams();
+    // Color & Size
     const sizes = React.useRef();
     const colors = React.useRef();
     const [checkedSize, setCheckedSize] = React.useState();
     const [checkedColor, setCheckedColor] = React.useState();
+    // Quantity & Product
     const [quantity, setQuantity] = React.useState();
     const [product, setProduct] = React.useState();
+
     React.useEffect(() => {
         fetch(`/Home/Product?Id=${Id}`)
             .then(res => res.json())

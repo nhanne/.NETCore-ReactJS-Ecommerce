@@ -40,7 +40,7 @@ function Categories() {
                     </ul>
                 </nav>
             </div>
-            <button className="openbtn" onClick={() => openNav()}>☰ Danh mục</button>
+            <button type="button" className="openbtn" onClick={() => openNav()}>☰ Danh mục</button>
         </React.Fragment>
     )
 }

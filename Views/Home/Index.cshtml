@@ -5,97 +5,92 @@
 }
 
 
-<!--=================================================== MAIN ============================================================ -->
+<section id="release" class="release container">
+    <div class="release__circle"></div>
+    <div class="release__content">
+        <div class="textBox">
+            <h2>It's not just clothing<br>It's <span>Fashion</span></h2>
+            <p>Thời trang luôn là yếu tố giúp bạn tự tin hơn, chúng tôi mang đến một thời đại mới dành cho những người yêu thích trang phục đơn giản.</p>
+            <a href="@Url.Action("Store")">Learn more</a>
+        </div>
+        <div class="imgBox">
+            <img src="~/Images/sp/5.jpg" class="fashion">
+        </div>
+    </div>
+    <ul class="release__thumb">
+        @foreach (var product in products)
+        {
+            <li><img src="~/Images/sp/@Url.Content(@product.Picture)"></li>
+        }
+    </ul>
+</section>
 
-<section id="main">
-    <div id="release" class="release container">
-        <div class="release__circle"></div>
-        <div class="release__content">
-            <div class="textBox">
-                <h2>It's not just clothing<br>It's <span>Fashion</span></h2>
-                <p>Thời trang luôn là yếu tố giúp bạn tự tin hơn, chúng tôi mang đến một thời đại mới dành cho những người yêu thích trang phục đơn giản.</p>
-                <a href="@Url.Action("Store")">Learn more</a>
+<section id="about" class="about container">
+    <div class="about__container">
+        <div id="slide">
+            <div class="item" style="background-image: url('../Images/slideshow/1.jpg');">
+                <div class="content" id="content1">
+                    <div class="name">Trần Thanh Nhân</div>
+                    <div class="des">Sinh viên tại HUFLIT</div>
+                    <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
-            <div class="imgBox">
-                <img src="~/Images/sp/5.jpg" class="fashion">
+            <div class="item" style="background-image: url('../Images/slideshow/2.jpg');">
+                <div class="content">
+                    <div class="name">Trần Thanh Nhân</div>
+                    <div class="des">Sinh viên tại HUFLIT</div>
+                    <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <div class="item" style="background-image: Url('../Images/slideshow/3.jpg')">
+                <div class="content">
+                    <div class="name">Trần Thanh Nhân</div>
+                    <div class="des">Sinh viên tại HUFLIT</div>
+                    <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <div class="item" style="background-image: url('../Images/slideshow/4.jpg');">
+                <div class="content">
+                    <div class="name">Trần Thanh Nhân</div>
+                    <div class="des">Sinh viên tại HUFLIT</div>
+                    <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <div class="item" style="background-image: url('../Images/slideshow/5.jpg');">
+                <div class="content">
+                    <div class="name">Trần Thanh Nhân</div>
+                    <div class="des">Sinh viên tại HUFLIT</div>
+                    <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <div class="item" style="background-image: url('../Images/slideshow/6.jpg');">
+                <div class="content">
+                    <div class="name">Trần Thanh Nhân</div>
+                    <div class="des">Sinh viên tại HUFLIT</div>
+                    <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
         </div>
-        <ul class="release__thumb">
-            @foreach(var product in products)
-            {
-                <li><img src="~/Images/sp/@Url.Content(@product.Picture)"></li>
-            }
-        </ul>
-    </div>
 
-    <div id="about" class="about container">
-        <div class="about__container">
-            <div id="slide">
-                <div class="item" style="background-image: url('../Images/slideshow/1.jpg');">
-                    <div class="content" id="content1">
-                        <div class="name">Trần Thanh Nhân</div>
-                        <div class="des">Sinh viên tại HUFLIT</div>
-                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
-                    </div>
-                </div>
-                <div class="item" style="background-image: url('../Images/slideshow/2.jpg');">
-                    <div class="content">
-                        <div class="name">Trần Thanh Nhân</div>
-                        <div class="des">Sinh viên tại HUFLIT</div>
-                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
-                    </div>
-                </div>
-                <div class="item" style="background-image: Url('../Images/slideshow/3.jpg')">
-                    <div class="content">
-                        <div class="name">Trần Thanh Nhân</div>
-                        <div class="des">Sinh viên tại HUFLIT</div>
-                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
-                    </div>
-                </div>
-                <div class="item" style="background-image: url('../Images/slideshow/4.jpg');">
-                    <div class="content">
-                        <div class="name">Trần Thanh Nhân</div>
-                        <div class="des">Sinh viên tại HUFLIT</div>
-                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
-                    </div>
-                </div>
-                <div class="item" style="background-image: url('../Images/slideshow/5.jpg');">
-                    <div class="content">
-                        <div class="name">Trần Thanh Nhân</div>
-                        <div class="des">Sinh viên tại HUFLIT</div>
-                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
-                    </div>
-                </div>
-                <div class="item" style="background-image: url('../Images/slideshow/6.jpg');">
-                    <div class="content">
-                        <div class="name">Trần Thanh Nhân</div>
-                        <div class="des">Sinh viên tại HUFLIT</div>
-                        <button onclick="location.href='@Url.Action("Store", "Home")'" class="more">Shop now <i class="fa fa-solid fa-arrow-right"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="buttons">
-                <button id="prev"><i class="fa fa-solid fa-angle-left"></i></button>
-                <button id="next"><i class="fa fa-solid fa-angle-right"></i></button>
-            </div>
+        <div class="buttons">
+            <button id="prev"><i class="fa fa-solid fa-angle-left"></i></button>
+            <button id="next"><i class="fa fa-solid fa-angle-right"></i></button>
         </div>
-        <ul class="social_media">
-            <li style="--i:#5599ff;--j: #51dcff;">
-                <span class="icon"><i class="fa fa-facebook"></i></span>
-                <a href="https://www.facebook.com/ttnhan12" class="titulo">Facebook</a>
-            </li>
-            <li style="--i:#a955ff;--j: #ea51ff;">
-                <span class="icon"><i class="fa fa-instagram"></i></span>
-                <a href="https://www.instagram.com/tsi.nhan/" class="titulo">Instagram</a>
-            </li>
-            <li style="--i:#7455ff;--j: #a251ff;">
-                <span class="icon"><i class="fa fa-linkedin"></i></span>
-                <a href="https://www.linkedin.com/in/thanhnhanwoke/" class="titulo">Linkedin</a>
-            </li>
-        </ul>
     </div>
-
+    <ul class="social_media">
+        <li style="--i:#5599ff;--j: #51dcff;">
+            <span class="icon"><i class="fa fa-facebook"></i></span>
+            <a href="https://www.facebook.com/ttnhan12" class="titulo">Facebook</a>
+        </li>
+        <li style="--i:#a955ff;--j: #ea51ff;">
+            <span class="icon"><i class="fa fa-instagram"></i></span>
+            <a href="https://www.instagram.com/tsi.nhan/" class="titulo">Instagram</a>
+        </li>
+        <li style="--i:#7455ff;--j: #a251ff;">
+            <span class="icon"><i class="fa fa-linkedin"></i></span>
+            <a href="https://www.linkedin.com/in/thanhnhanwoke/" class="titulo">Linkedin</a>
+        </li>
+    </ul>
 </section>
 
 
@@ -189,6 +184,6 @@
     </div>
 </section>
 
-@section Scripts {
-    <script src="~/myscript/index.js" asp-append-version="true"></script>
-}
+    @section Scripts {
+        <script src="~/myscript/index.js" asp-append-version="true"></script>
+    }
