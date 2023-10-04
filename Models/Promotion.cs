@@ -1,4 +1,4 @@
-﻿using Clothings_Store.Patterns.Strategy;
+﻿
 
 namespace Clothings_Store.Models;
 
@@ -15,5 +15,5 @@ public partial class Promotion
     public DateTime EndDate { get; set; }
 
     public decimal DiscountPercentage { get; set; }
-    //public IDiscountStrategy DiscountStrategy { get; set; }
+    
 }
