@@ -1,8 +1,8 @@
 ﻿import React from 'react'
-import { useContext } from 'react'
-import { FilterContext } from '../storeContext.js'
+import { FilterContext } from '../store.Context'
+
 export default function Select() {
-    const context = useContext(FilterContext)
+    const context = React.useContext(FilterContext)
 
     const listInputs = ['Mặc định', 'Mới nhất', 'Bán chạy',
         'Khuyến mãi', 'Giá: thấp đến cao', 'Giá: cao đến thấp']

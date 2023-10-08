@@ -1,9 +1,8 @@
 import React from 'react'
-import { useContext } from 'react'
-import { FilterContext } from '../storeContext.js'
+import { FilterContext } from '../store.Context'
 
 export default function Pagination() {
-    const context = useContext(FilterContext)
+    const context = React.useContext(FilterContext)
 
     return (
         <div id="pagination" className="MenuTrang pagination-container">

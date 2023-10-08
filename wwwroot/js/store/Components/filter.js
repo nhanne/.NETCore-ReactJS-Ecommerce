@@ -1,13 +1,12 @@
 ﻿import React from 'react'
 import { Link } from 'react-router-dom'
+import { FilterContext } from '../store.Context'
 import Select from './filter.select.js'
 import Search from './filter.search.js'
 import Button from './filter.button.js'
-import { useContext } from 'react'
-import { FilterContext } from '../storeContext.js'
 
-export default function Filter(category) {
-    const context = useContext(FilterContext)
+function Filter() {
+    const context = React.useContext(FilterContext)
 
     return (
         <div className="home-filter">
@@ -24,3 +23,5 @@ export default function Filter(category) {
         </div>
     )
 }
+
+export default Filter

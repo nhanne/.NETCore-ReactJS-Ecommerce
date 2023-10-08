@@ -1,12 +1,14 @@
 ﻿const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-    entry: "./wwwroot/js/store.js",
+    entry: {
+        store: "./wwwroot/js/store/store.js"
+        // cart: "./wwwroot/js/cart/cart.js"
+    },
 
     output: {
         path: path.join(__dirname, 'wwwroot/build'), // Thư mục chứa file được build ra
-        filename: "bundle.js" // Tên file được build ra
+        filename: "[name].bundle.js" // Tên file được build ra
     },
 
     module: {
@@ -26,11 +28,5 @@ module.exports = {
                 use: ["style-loader", "css-loader"]
             }
         ]
-    },
-
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: "./Views/Home/Store.cshtml"
-        })
-    ]
+    }
 };

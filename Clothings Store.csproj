@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Patterns\**" />
+    <Content Remove="Patterns\**" />
+    <EmbeddedResource Remove="Patterns\**" />
+    <None Remove="Patterns\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\images\customer\111B910D-DFCB-48A7-818F-8ECD8A522DD2.JPEG" />
     <None Include="wwwroot\images\system\footer-logo.png" />
     <None Include="wwwroot\images\system\momo.jpg" />
@@ -81,7 +88,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Patterns\Strategy\" />
+    <Folder Include="wwwroot\js\cart\Components\" />
   </ItemGroup>
 
 </Project>

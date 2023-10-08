@@ -1,26 +1,27 @@
 ﻿import React from 'react'
 import { Link } from 'react-router-dom'
-
-import { FilterContext } from '../storeContext.js'
+import { FilterContext } from '../store.Context'
 import Pagination from './data.pagination.js'
+
 function Products() {
     const context = React.useContext(FilterContext);
-    const products = context.products;
     return (
         <>
-            {products.length > 0 ? (
+            {context.products.length > 0 ? (
                 <ul id="products" className="row">
-                    {products.map(product => (
+                    {context.products.map(product => (
                         <li key={product.p.id} className='product-item'>
                             <div className="product-top">
                                 <Link
                                     className="product-thumb"
-                                    to={`./Product/${product.p.id}`}><img
-                                    src={`/Images/sp/${product.p.picture}`} />
+                                    to={`./Product/${product.p.id}`}
+                                >
+                                    <img src={`/Images/sp/${product.p.picture}`} />
                                 </Link>
                                 <Link className="buynow"
                                     title="Order"
-                                    to={`./Product/${product.p.id}`} >
+                                    to={`./Product/${product.p.id}`}
+                                >
                                     Xem ngay
                                 </Link>
                             </div>
@@ -44,9 +45,9 @@ function Products() {
                     ))}
                 </ul>
             ) : (
-                    <span style={{ display: 'block', padding: '12px 16px' }}>Không tìm thấy sản phẩm
-                        <span style={{ fontWeight: 'bold', fontSize: '2rem' }}> {context.search} </span>.
-                    </span>
+                <span style={{ display: 'block', padding: '12px 16px' }}>Không tìm thấy sản phẩm
+                    <span style={{ fontWeight: 'bold', fontSize: '2rem' }}> {context.search} </span>.
+                </span>
             )}
             <Pagination />
         </>

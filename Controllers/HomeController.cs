@@ -22,7 +22,6 @@ namespace Clothings_Store.Controllers
             {
                 ViewData["Products"] = _db.Products.OrderByDescending(p => p.Sold).Take(3).ToList();
                 _logger.LogInformation("Connected to database.");
-                // Thực hiện các thao tác khác với dữ liệu
 
                 return View();
             }
@@ -37,10 +36,9 @@ namespace Clothings_Store.Controllers
             return View();
         }
         [HttpGet]
-        public JsonResult getData(string? search,string? category, string? sort, int page = 1, int pageSize = 8)
+        public JsonResult getData(string? search, string? category, string? sort, int page = 1, int pageSize = 8)
         {
             var query = _db.Products.AsQueryable();
-            // Danh mục
             if (!string.IsNullOrEmpty(category))
             {
                 query = query.Where(p => p.Category.Name
@@ -49,7 +47,6 @@ namespace Clothings_Store.Controllers
                                                             .ToLower()
                                                    ));
             }
-            // Tìm kiếm
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.Name.ToLower()
@@ -57,21 +54,24 @@ namespace Clothings_Store.Controllers
                                                           .ToLower()
                                                    ));
             }
-            // Sắp xếp
+            //
             query = Sort(sort, query);
-            // Phân trang
+            //
             int totalItems = query.Count();
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
             var products = query
-                .Select(p => new{
+                .Select(p => new
+                {
                     p,
                     cateName = p.Category.Name
                 })
-                .Skip((page-1) * pageSize)
+                .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .AsNoTracking()
                 .ToList();
-            return Json(new { products,
+            return Json(new
+            {
+                products,
                 TotalPages = totalPages,
                 CurrentPage = page,
             });
@@ -82,7 +82,7 @@ namespace Clothings_Store.Controllers
             var categories = _db.Categories.Select(p => p).ToList();
             return Json(new { categories, totalItems = categories.Count });
         }
-     
+
         private IQueryable<Product> Sort(string sort, IQueryable<Product> query)
         {
             switch (sort)
@@ -113,19 +113,21 @@ namespace Clothings_Store.Controllers
             var stock = _db.Stocks.Where(p => p.ProductId == Id)
                                    .Select(s => new
                                    {
-                                       size = new { 
-                                           id = s.SizeId, 
-                                           name = s.Size.Name 
+                                       size = new
+                                       {
+                                           id = s.SizeId,
+                                           name = s.Size.Name
                                        },
-                                       color = new {
-                                           id = s.ColorId, 
+                                       color = new
+                                       {
+                                           id = s.ColorId,
                                            name = s.Color.Name
                                        },
                                        product = new
                                        {
-                                           id = s.ProductId, 
-                                           image = s.Product.Picture, 
-                                           name = s.Product.Name, 
+                                           id = s.ProductId,
+                                           image = s.Product.Picture,
+                                           name = s.Product.Name,
                                            costPrice = s.Product.CostPrice,
                                            unitPrice = s.Product.UnitPrice,
                                            sale = s.Product.Sale,
@@ -138,7 +140,9 @@ namespace Clothings_Store.Controllers
             var product = stock.Select(item => item.product).Distinct().ToList();
             return Json(new
             {
-               product, sizes,colors
+                product,
+                sizes,
+                colors
             });
         }
         //
@@ -152,7 +156,8 @@ namespace Clothings_Store.Controllers
                .FirstOrDefault();
             int quantity = stock == null ? 0 : (int)stock.Stock1;
             return Json(new { quantity = quantity });
-            
         }
+
+        
     }
 }

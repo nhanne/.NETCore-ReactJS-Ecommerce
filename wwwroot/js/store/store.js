@@ -2,10 +2,10 @@
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 
-import { FilterProvider } from './storeContext.js'
-import Categories from './Components/category.js'
-import Filter from './Components/filter.js'
-import GetData from './Components/data.js'
+import { FilterProvider } from './store.Context'
+import Categories from './Components/category'
+import Filter from './Components/filter'
+import GetData from './Components/data'
 
 function App() {
     return (

@@ -277,7 +277,7 @@ ul#navbar-right {
     }
 
     50% {
-        background-image: url('../Images/slideshow/anh3.jpg');
+        background-image: url('../Images/slideshow/anh1.jpg');
     }
 
     75% {
@@ -285,7 +285,7 @@ ul#navbar-right {
     }
 
     100% {
-        background-image: url('../Images/slideshow/anh5.jpg');
+        background-image: url('../Images/slideshow/anh2.jpg');
     }
 }
 
@@ -875,7 +875,7 @@ ul.social_media {
     position: fixed;
     top: 50px;
     right: 65px;
-    display: none;
+    display: block;
     z-index: 3;
 }
 

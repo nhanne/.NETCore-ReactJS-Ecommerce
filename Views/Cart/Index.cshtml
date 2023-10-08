@@ -1,39 +1,129 @@
 ﻿@model List<Clothings_Store.Models.Cart>
+@{
+    Layout = null;
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+}
 
-<div class="container">
-    @if (Model.Count > 0)
-    {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Hình ảnh</th>
-                    <th>Số lượng</th>
-                    <th>Giá</th>
-                    <th>Màu sắc</th>
-                    <th>Kích cỡ</th>
-                </tr>
-            <thead>
-            <tbody>
-                        @foreach (var cartitem in Model)
-                        {
-                            <tr>
-                                <th>@cartitem.IdCart</th>
-                                <th>
-                                    <img src="~/images/sp/@Url.Content(@cartitem.images)"
-                                         class="detail__picture" alt="Cotton T-shirt">
-                                </th>
-                                <th>@cartitem.quantity</th>
-                                <th>@string.Format("{0:#,0}", cartitem.unitPrice)</th>
-                                <th>@cartitem.color</th>
-                                <th>@cartitem.size</th>
-                            </tr>
-                        }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <p class="alert alert-danger">Giỏ hàng trống</p>
-    }
-</div>
+<section class="h-100 h-custom" style="background-color: #838383;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div>
+                <div class="col-12">
+                    <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                        <div class="card-body p-0">
+                            <div class="row g-0">
+                                <div class="col-lg-8">
+                                    <div class="p-5">
+                                        <div class="d-flex justify-content-between align-items-center mb-5">
+                                            <h1 class="fw-bold mb-0 text-black">Giỏ hàng</h1>
+                                            <h6 class="mb-0 text-muted">@ViewBag.TotalItems sản phẩm</h6>
+                                        </div>
+                                        @foreach (var item in Model)
+                                        {
+                                            <hr class="my-4">
+                                            using (Html.BeginForm("UpdateCart", "Cart", new { @IdCart = item.IdCart }))
+                                            {
+                                                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                                    <div class="col-md-2 col-lg-2 col-xl-2">
+                                                        <img src="~/images/sp/@Url.Content(@item.images)"
+                                                            class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-3 col-xl-3">
+                                                        <h6 class="text-muted">@item.cateName</h6>
+                                                        <h6 class="text-black mb-0">@item.name - @item.color - @item.size
+                                                        </h6>
+                                                        <h6 class="text-black mb-0">@string.Format("{0:#,0}", item.unitPrice) ₫
+                                                        </h6>
+                                                    </div>
+
+                                                    <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                        <button class="btn btn-link px-2" type="submit"
+                                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                            <i class="fa fa-minus"></i>
+                                                        </button>
+
+                                                        <input id="form1" min="1" name="quantity" value="@item.quantity"
+                                                            type="number" class="form-control form-control-sm" />
+
+                                                        <button class="btn btn-link px-2" type="submit"
+                                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                        <h6 class="mb-0">@string.Format("{0:#,0}", item.totalPrice) ₫</h6>
+                                                    </div>
+                                                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                        <a href="@Url.Action("RemoveFromCart","Cart", new { @IdCart = item.IdCart})"
+                                                            class="text-muted"><i class="fa fa-times"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 bg-grey">
+                                    <div class="p-5">
+                                        <h3 class="fw-bold mb-5 mt-2 pt-1">Tạm tính</h3>
+                                        <hr class="my-4">
+
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <h5 class="text-uppercase">Sản phẩm: @ViewBag.TotalItems</h5>
+                                            <h5></h5>
+                                        </div>
+
+                                        <h5 class="text-uppercase mb-3">Mã khuyến mãi</h5>
+
+                                        <div class="mb-5">
+                                            <div class="form-outline">
+                                                <input type="text" id="form3Examplea2"
+                                                    class="form-control form-control-lg" />
+                                                <button type="button" class="btn btn-primary mt-5" data-toggle="modal"
+                                                    data-target="#myModal">
+                                                    Xem danh sách khuyến mãi
+                                                </button>
+                                            </div>
+
+                                        </div>
+
+                                        <hr class="my-4">
+
+                                        <div class="d-flex justify-content-between mb-5">
+                                            <h5 class="text-uppercase">Tổng tiền</h5>
+
+                                            @if (Model.Count != 0)
+                                            {
+                                                <h5>@string.Format("{0:#,0}", ViewBag.TotalPrice) ₫</h5>
+                                            }
+                                            else
+                                            {
+                                                <h5> 0₫ </h5>
+                                            }
+
+
+                                        </div>
+                                        <button type="button" class="btn btn-light btn-block btn-lg"
+                                            data-mdb-ripple-color="dark"
+                                            onclick="location.href='@Url.Action("Index","Home")'">
+                                            Quay về
+                                        </button>
+                                        <button type="button" class="btn btn-dark btn-block btn-lg"
+                                            data-mdb-ripple-color="dark" onclick="checkout()">
+                                            Đặt hàng
+                                        </button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

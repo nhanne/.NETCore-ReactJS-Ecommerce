@@ -1,8 +1,8 @@
 import React from 'react'
-import { useContext } from 'react'
-import { FilterContext } from '../storeContext.js'
+import { FilterContext } from '../store.Context'
+
 export default function Button() {
-    const context = useContext(FilterContext)
+    const context = React.useContext(FilterContext)
 
     const handlePage = (e, skipPage) => {
         if (skipPage > 0 && skipPage < parseInt(context.totalPages.current) + 1) {

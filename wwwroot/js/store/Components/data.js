@@ -1,9 +1,8 @@
 ﻿import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import {memo} from 'react'
 
-import Products from './data.products.js'
-import Product from './data.product'
+import Products from './data.products'
+import Product from './product'
 
  function GetData() {
 
@@ -16,4 +15,4 @@ import Product from './data.product'
         </div>
     )
 }
-export default memo(GetData)
+export default React.memo(GetData)

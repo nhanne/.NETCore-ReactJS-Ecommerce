@@ -1,7 +1,8 @@
 ﻿import React from 'react'
 import { Link } from 'react-router-dom'
 import { useState, useEffect, useContext } from 'react'
-import { FilterContext } from '../storeContext.js'
+import { FilterContext } from '../store.Context'
+
 function Categories() {
     const context = useContext(FilterContext)
     const [categories, setCategories] = useState([]);
@@ -9,8 +10,8 @@ function Categories() {
     useEffect(() => {
         fetch(`/Home/getCategories`)
             .then(res => res.json())
-            .then(reponse => {
-                setCategories(reponse.categories)
+            .then(response => {
+                setCategories(response.categories)
             })
     }, [])
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams, Link } from 'react-router-dom'
 import clsx from 'clsx'
 import styles from '/wwwroot/css/module/product.module.css'
-import Toast from './toasts.js'
+import Toast from './toast'
 
 function Product() {
 
@@ -17,27 +17,32 @@ function Product() {
     const [quantity, setQuantity] = React.useState();
     const [product, setProduct] = React.useState();
 
+    const [showToast, setShowToast] = React.useState(false);
+
     React.useEffect(() => {
         fetch(`/Home/Product?Id=${Id}`)
             .then(res => res.json())
-            .then(reponse => {
-                sizes.current = reponse.sizes;
-                colors.current = reponse.colors;
-                setProduct(reponse.product[0]);
+            .then(response => {
+                sizes.current = response.sizes;
+                colors.current = response.colors;
+                setProduct(response.product[0]);
             });
     }, [Id])
-    console.log("re-render");
     const handleAddToCart = () => {
         if (checkedSize && checkedColor) {
-                axios.post('/Cart/AddToCart', null, {
-                    params: {
-                        productId: parseInt(Id),
-                        colorId: checkedColor,
-                        sizeId: checkedSize,
-                    }
-                })
+            axios.post('/Cart/AddToCart', null, {
+                params: {
+                    productId: parseInt(Id),
+                    colorId: checkedColor,
+                    sizeId: checkedSize,
+                }
+            })
                 .then((response) => {
-                    console.log(response);
+                    (response.data) ? setShowToast(true) : setShowToast(false);
+                    setTimeout(() => {
+                        setShowToast(false);
+                    }, 3000);
+
                 })
         }
         else {
@@ -45,7 +50,7 @@ function Product() {
         }
     }
     if (checkedSize && checkedColor) {
-            axios.get('/Home/getStock', {
+        axios.get('/Home/getStock', {
                 params: {
                     productId: Id,
                     colorId: checkedColor,
@@ -55,10 +60,9 @@ function Product() {
             .then((response) => {
                 setQuantity(response.data.quantity)
             })
-            .catch((error) => {
-                console.error(error);
-            });
     }
+    console.log("re-render");
+
     return (
         <div className={clsx("grid__row", styles.detail)}>
             {product !== undefined ? (
@@ -127,11 +131,10 @@ function Product() {
                             Thêm vào giỏ hàng
                         </button>
                     </div>
+                    {showToast && <Toast state={showToast}/>}
                 </>
             ) : (
-                <>
-                    <span className="validate">Sản phẩm hiện đang hết hàng, vui lòng quay lại sau.</span>
-                </>
+                <span className="validate">Sản phẩm hiện đang hết hàng, vui lòng quay lại sau.</span>
             )
             }
         </div >
