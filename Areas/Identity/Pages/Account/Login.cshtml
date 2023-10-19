@@ -1,0 +1,40 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="social-icons">
+    <a href=""><i class="fa fa-facebook"></i></a>
+    <a href=""><i class="fa fa-instagram"></i></a>
+    <a href=""><i class="fa fa-twitter"></i></a>
+</div>
+<div class="form-box login">
+    <form id="account" method="post">
+        <div class="input-box">
+            <span class="icon"><i class="fa fa-envelope"></i></span>
+            <input asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <span asp-validation-for="Input.Email" class="validate"></span>
+            <label asp-for="Input.Email">Email</label>
+        </div>
+        <div class="input-box">
+            <span class="icon"><i class="fa fa-unlock-alt"></i></span>
+            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+            <span asp-validation-for="Input.Password" class="validate"></span>
+            <label asp-for="Input.Password" class="form-label">Password</label>
+        </div>
+
+        <div class="remember-forgot">
+            <label asp-for="Input.RememberMe" class="form-label">
+                <input class="form-check-input" asp-for="Input.RememberMe" />
+                @Html.DisplayNameFor(m => m.Input.RememberMe)
+            </label>
+            <a id="forgot-password" asp-page="./ForgotPassword">Forget password?</a>
+        </div>
+        <button type="submit" class="btn">Sign In</button>
+        <div class="login-register">
+            <p>Don't have an account ? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="register-link">Sign Up</a></p>
+        </div>
+    </form>
+</div>
+

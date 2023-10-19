@@ -12,30 +12,31 @@ Controller là nơi trung gian thực hiện các yêu cầu của người dùn
 
 Trang chủ
 
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/14039f62-c835-4e12-ad52-66a6c6377319)
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/57a77635-a2f6-4c0e-821c-28f19d6a256c)
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/913258de-a7ae-401c-bff4-51f81aa4a311)
+![Alt text](/wwwroot/images/readme/image.png)
+![Alt text](/wwwroot/images/readme/image-1.png)
+![Alt text](/wwwroot/images/readme/image-2.png)
 
 Trang cửa hàng
 
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/94679dc2-9f27-4dcb-a731-5f53a4442fb4)
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/36c9ae9e-a8fa-42d5-a01d-7db5b2a47aac)
+![Alt text](/wwwroot/images/readme/image-3.png)
+![Alt text](/wwwroot/images/readme/image-5.png)
 
 Trang đặt hàng
 
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/795abb1a-2eee-4211-9111-769b1fcde5e6)
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/8f6a4325-28ac-43f3-89ae-b347c347076b)
+![Alt text](/wwwroot/images/readme/image-6.png)
+![Alt text](/wwwroot/images/readme/image-7.png)
 
 Thanh toán online qua MoMo and VnPay
 
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/015e109a-70e0-4948-ae64-cf819cc42524)
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/8b0a60f9-91d5-4119-aa5d-db9c37c9bbf3)
+![Alt text](/wwwroot/images/readme/image-8.png)
+![Alt text](/wwwroot/images/readme/image-9.png)
+![Alt text](/wwwroot/images/readme/image-10.png)
 
 
 Trang đăng nhập và đăng ký người dùng
 
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/42122069-b4ff-42a2-bab3-685bb87c1a5f)
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/c2cf931a-e169-4c78-9ca6-a9026fb2dda2)
+![Alt text](/wwwroot/images/readme/image-11.png)
+![Alt text](/wwwroot/images/readme/image-12.png)
 
 Trang admin với các chức năng thêm - xóa - sửa
 

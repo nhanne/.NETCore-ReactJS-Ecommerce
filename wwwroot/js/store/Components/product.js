@@ -42,7 +42,6 @@ function Product() {
                     setTimeout(() => {
                         setShowToast(false);
                     }, 3000);
-
                 })
         }
         else {
@@ -51,12 +50,12 @@ function Product() {
     }
     if (checkedSize && checkedColor) {
         axios.get('/Home/getStock', {
-                params: {
-                    productId: Id,
-                    colorId: checkedColor,
-                    sizeId: checkedSize,
-                }
-            })
+            params: {
+                productId: Id,
+                colorId: checkedColor,
+                sizeId: checkedSize,
+            }
+        })
             .then((response) => {
                 setQuantity(response.data.quantity)
             })
@@ -131,7 +130,7 @@ function Product() {
                             Thêm vào giỏ hàng
                         </button>
                     </div>
-                    {showToast && <Toast state={showToast}/>}
+                    {showToast && <Toast state={showToast} />}
                 </>
             ) : (
                 <span className="validate">Sản phẩm hiện đang hết hàng, vui lòng quay lại sau.</span>

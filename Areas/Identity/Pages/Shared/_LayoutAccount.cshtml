@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/Images/logo.png">
+    <title>Boutique - @ViewData["Title"]</title>
+    <link href="~/css/login.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" asp-append-version="true" />
+</head>
+
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <a href="@Url.Action("Index","Home")">Home</a>
+            <a href="@Url.Action("Store","Home")">Store</a>
+            <a href="/Home#contact">Contact</a>
+            <a href="/Home#about">About</a>
+        </nav>
+    </header>
+    <div class="background"></div>
+    <div class="container">
+        <div class="content">
+            <h2 class="logo"> <i class="fa fa-shopping-bag"></i> NHÂN BOUTIQUE</h2>
+            <div class="text-sci">
+                <h2>Welcome! <br><span>To My Store.</span></h2>
+                <p>
+                    Đăng ký ngay tài khoản để có thể dễ dàng theo dõi tình trạng đơn hàng.
+                </p>
+            </div>
+        </div>
+        <div class="logreg-box active">
+            @RenderBody()
+        </div>
+    </div>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,9 +1,12 @@
-﻿using Clothings_Store.Models;
+﻿using Clothings_Store.Identity;
+using Clothings_Store.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Clothings_Store.Data
 {
-    public class StoreContext : DbContext
+    public class StoreContext : IdentityDbContext<AppUser>
     {
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)
         {
@@ -258,6 +261,16 @@ namespace Clothings_Store.Data
                     .HasForeignKey(d => d.SizeId)
                     .HasConstraintName("FK__Stock__SizeId__1AD3FDA4");
             });
+
+            base.OnModelCreating(modelBuilder);
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var tableName = entityType.GetTableName();
+                if (tableName.StartsWith("AspNet"))
+                {
+                    entityType.SetTableName(tableName.Substring(6));
+                }
+            }
 
         }
 

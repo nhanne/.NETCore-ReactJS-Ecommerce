@@ -1,4 +1,8 @@
-﻿<nav id="navbar" class="container">
+﻿@using Microsoft.AspNetCore.Identity
+@using Clothings_Store.Identity
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+<nav id="navbar" class="container">
     <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">boutique</a>
     <button id="mobile-menu"><i class="fa fa-align-justify"></i></button>
     <ul id="navbar-center">
@@ -8,15 +12,31 @@
         <li><a class="nav-link" href="javascript:void(0)" onclick="about()">about</a></li>
     </ul>
     <ul id="navbar-right">
-        <li>
-            <a class="nav-icon header-search__cart" href="@Url.Action("index","cart")">
-                <i class="fa fa-shopping-bag "></i>
-            </a>
-        </li>
-        <li>
-            <a class="nav-icon" href="@Url.Action("index","account")">
-                <i class="fa fa-user "></i>
-            </a>
-        </li>
+        @if (!SignInManager.IsSignedIn(User))
+        {
+            <li>
+                <a class="nav-icon header-search__cart" href="@Url.Action("index","cart")">
+                    <i class="fa fa-shopping-bag "></i>
+                </a>
+            </li>
+            <li>
+                <a class="nav-icon" id="login" asp-area="Identity" asp-page="/Account/Login">
+                    <i class="fa fa-user "></i>
+                </a>
+            </li>
+        }
+        else
+        {
+            <li>
+                <a class="nav-icon header-search__cart" href="@Url.Action("index","cart")">
+                    <i class="fa fa-shopping-bag "></i>
+                </a>
+            </li>
+            <li>
+                <a class="nav-icon" id="login" asp-area="Identity" asp-page="/Account/Login">
+                    Hello @UserManager.GetUserName(User)!
+                </a>
+            </li>
+        }
     </ul>
 </nav>

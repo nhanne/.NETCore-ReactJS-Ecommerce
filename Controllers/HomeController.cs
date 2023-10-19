@@ -43,16 +43,14 @@ namespace Clothings_Store.Controllers
             {
                 query = query.Where(p => p.Category.Name
                                           .ToLower()
-                                          .Contains(category.Trim()
-                                                            .ToLower()
-                                                   ));
+                                          .Contains(category.Trim().ToLower()
+                                   ));
             }
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.Name.ToLower()
-                                          .Contains(search.Trim()
-                                                          .ToLower()
-                                                   ));
+                                          .Contains(search.Trim().ToLower()
+                                   ));
             }
             //
             query = Sort(sort, query);

@@ -1,10 +1,12 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Clothings_Store.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly StoreContext _db;
@@ -114,10 +116,29 @@ namespace Clothings_Store.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [HttpGet]
         public IActionResult CheckOut()
         {
-            return View();
+            List<Cart> listCart = GetCart();
+            if(listCart.Count == 0){
+                return RedirectToAction("Store","Home");
+            }
+            //ViewData["Customer"] = 
+            return View(listCart);
         }
+        // [HttpPost]
+        // public IActionResult CheckOut(Customer customerM, Order orderM, string promoCode){
+        //     Order order = new Order();
+        //     order_Info(order, orderM);
+        // }
+        // void order_Info(Order order, Order orderM){
+        //     order.OrdTime = DateTime.Now;
+        //     order.DeliTime = order.OrdTime.Value.AddDays(3);
+        //     order.Status = "Chưa giao hàng";
+        //     order.PaymentId = orderM.PaymentId;
+        //     order.Address = orderM.Address;
+        //     order.Note = orderM.Note;
+        //     order.TotalQuantity = TotalItems();
+        // }
     }
 }
