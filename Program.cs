@@ -15,6 +15,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e w
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<StoreContext>();
+builder.Services.Configure<SecurityStampValidatorOptions>(o =>
+                   o.ValidationInterval = TimeSpan.FromMinutes(1));
 
 builder.Services.AddRazorPages();
 builder.Services.Configure<IdentityOptions>(options =>
@@ -42,7 +44,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     // Cookie settings
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
+    options.Cookie.Name = "StoreCookie";
     options.LoginPath = "/Identity/Account/Login";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
     options.SlidingExpiration = true;

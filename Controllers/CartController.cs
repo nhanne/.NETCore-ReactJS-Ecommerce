@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 
 namespace Clothings_Store.Controllers
 {
-    [Authorize]
     public class CartController : Controller
     {
         private readonly StoreContext _db;
@@ -14,7 +13,7 @@ namespace Clothings_Store.Controllers
         {
             _db = context;
         }
-
+        [Authorize]
         public IActionResult Index()
         {
             ViewBag.TotalPrice = TotalPrice();

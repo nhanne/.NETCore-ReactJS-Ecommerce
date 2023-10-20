@@ -2,6 +2,10 @@
 @using Clothings_Store.Identity
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+
 <nav id="navbar" class="container">
     <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">boutique</a>
     <button id="mobile-menu"><i class="fa fa-align-justify"></i></button>
@@ -33,8 +37,13 @@
                 </a>
             </li>
             <li>
-                <a class="nav-icon" id="login" asp-area="Identity" asp-page="/Account/Login">
-                    Hello @UserManager.GetUserName(User)!
+                <a class="nav-icon" id="login" asp-area="Identity" asp-page="/Account/Manage/Index">
+                    @user.Name
+                </a>
+            </li>
+            <li>
+                <a class="nav-icon" id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                   Logout
                 </a>
             </li>
         }
