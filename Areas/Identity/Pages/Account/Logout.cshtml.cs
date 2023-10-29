@@ -1,15 +1,10 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
-
-using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Clothings_Store.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
 
 namespace Clothings_Store.Areas.Identity.Pages.Account
 {
@@ -23,6 +18,16 @@ namespace Clothings_Store.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
         }
+        //public IActionResult OnGet()
+        //{
+        //    return ViewComponent("MessagePage", new Shared.Components.MessagePage.MessagePage.Message
+        //    {
+        //        title = "Thông báo quan trọng",
+        //        htmlcontent = "Đây là <strong>Nội dung HTML</strong>",
+        //        secondwait = 5,
+        //        urlredirect = "/Identity/Account/Logout"
+        //    });
+        //}
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {

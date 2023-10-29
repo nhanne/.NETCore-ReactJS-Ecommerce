@@ -9,10 +9,10 @@ namespace Clothings_Store.Areas.Identity.Pages.Shared.Components.MessagePage
         // Dữ liệu nội dung trang thông báo
         public class Message
         {
-            public string title { set; get; } = "Thông báo";     // Tiêu đề của Box hiện thị
-            public string htmlcontent { set; get; } = "";         // Nội dung HTML hiện thị
-            public string urlredirect { set; get; } = "/";        // Url chuyển hướng đến
-            public int secondwait { set; get; } = 3;              // Sau secondwait giây thì chuyển
+            public string title { set; get; } = "Thông báo";    
+            public string htmlcontent { set; get; } = "";       
+            public string urlredirect { set; get; } = "/";      
+            public int secondwait { set; get; } = 3;          
         }
         public MessagePage() { }
         public IViewComponentResult Invoke(Message message)

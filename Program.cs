@@ -2,6 +2,7 @@
 using Clothings_Store.Identity;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
 
@@ -71,7 +72,10 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
     facebookOptions.AppId = facebookAuthNSection["AppId"];
     facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
     facebookOptions.CallbackPath = "/loginFacebook";
-}); ;
+}); 
+var mailSettings = builder.Configuration.GetSection("MailSettings");  // đọc config
+builder.Services.Configure<MailSettings>(mailSettings);
+builder.Services.AddTransient<IEmailSender, SendMailService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline. (Middleware)
