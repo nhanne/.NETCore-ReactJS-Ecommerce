@@ -1,24 +1,27 @@
-using Clothings_Store.Data;
+﻿using Clothings_Store.Data;
 using Clothings_Store.Identity;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddOptions();
-
 // How to connect StoreContext to MS SQL Server
 builder.Services.AddDbContext<StoreContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e when error connected database
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<StoreContext>();
+                .AddEntityFrameworkStores<StoreContext>()
+                .AddDefaultTokenProviders();
 builder.Services.Configure<SecurityStampValidatorOptions>(o =>
                    o.ValidationInterval = TimeSpan.FromMinutes(1));
 
-builder.Services.AddRazorPages();
+builder.Services.AddControllersWithViews(); // MVC
+builder.Services.AddDistributedMemoryCache(); // Cache
+builder.Services.AddRazorPages(); // Razor
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings.
@@ -28,12 +31,10 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
-
     // Lockout settings.
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
-
     // User settings.
     options.User.AllowedUserNameCharacters =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
@@ -50,8 +51,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-builder.Services.AddControllersWithViews(); // MVC
-builder.Services.AddDistributedMemoryCache(); // Cache
+
 // Configuration session
 builder.Services.AddSession(options =>
 {
@@ -59,6 +59,19 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
+    googleOptions.ClientId = googleAuthNSection["ClientId"];
+    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+    googleOptions.CallbackPath = "/loginGoogle";
+}).AddFacebook(facebookOptions => {
+    IConfigurationSection facebookAuthNSection = builder.Configuration.GetSection("Authentication:Facebook");
+    facebookOptions.AppId = facebookAuthNSection["AppId"];
+    facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
+    facebookOptions.CallbackPath = "/loginFacebook";
+}); ;
 
 var app = builder.Build();
 // Configure the HTTP request pipeline. (Middleware)

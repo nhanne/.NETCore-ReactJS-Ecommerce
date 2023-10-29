@@ -5,22 +5,45 @@
     ViewData["Title"] = "Log in";
 }
 <div class="social-icons">
-    <a href=""><i class="fa fa-facebook"></i></a>
-    <a href=""><i class="fa fa-instagram"></i></a>
+    @if ((Model.ExternalLogins?.Count ?? 0) != 0)
+    {
+        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+            <div>
+                <p>
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <a>
+                            <button style="background-color: transparent; border:none; cursor: pointer" type="submit" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                @if (provider.Name.ToString().Equals("Facebook"))
+                                {
+                                    <i class="fa fa-facebook"></i>
+                                }
+                                else if (provider.Name.ToString().Equals("Google"))
+                                {
+                                    <i class="fa fa-google"></i>
+                                }
+                            </button>
+                        </a>
+                    }
+                </p>
+            </div>
+        </form>
+    }
     <a href=""><i class="fa fa-twitter"></i></a>
 </div>
+
 <div class="form-box login">
-    <form id="account" method="post">
+    <form id="account" asp-route-returnUrl="@Model.ReturnUrl" method="post">
         <div class="input-box">
             <span class="icon"><i class="fa fa-envelope"></i></span>
-            <input asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="name@example.com" />
             <span asp-validation-for="Input.Email" class="validate"></span>
+            <input asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="name@example.com" />
             <label asp-for="Input.Email">Email</label>
         </div>
         <div class="input-box">
             <span class="icon"><i class="fa fa-unlock-alt"></i></span>
-            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
             <span asp-validation-for="Input.Password" class="validate"></span>
+            <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
             <label asp-for="Input.Password" class="form-label">Password</label>
         </div>
 

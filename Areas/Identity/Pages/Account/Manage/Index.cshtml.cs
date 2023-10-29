@@ -40,7 +40,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
             [Required]
             [Display(Name = "Birth Date")]
             [DataType(DataType.Date)]
-            public DateTime DOB { get; set; }
+            public DateTime? DOB { get; set; }
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
