@@ -1,4 +1,4 @@
-﻿using Clothings_Store.Data;
+using Clothings_Store.Data;
 using Clothings_Store.Identity;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;

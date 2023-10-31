@@ -3,19 +3,17 @@
     Layout = null;
     <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" asp-append-version="true" />
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 }
 
-<section class="h-100 h-custom" style="background-color: #838383;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
+<section class="h-custom" style="background-color: #838383;">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center align-items-center">
             <div>
                 <div class="col-12">
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">
                         <div class="card-body p-0">
                             <div class="row g-0">
-                                <div class="col-lg-8">
+                                <div class="col-lg-12">
                                     <div class="p-5">
                                         <div class="d-flex justify-content-between align-items-center mb-5">
                                             <h1 class="fw-bold mb-0 text-black">Giỏ hàng</h1>
@@ -28,27 +26,29 @@
                                                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                                                     <div class="col-md-2 col-lg-2 col-xl-2">
                                                         <img src="~/images/sp/@Url.Content(@item.images)"
-                                                            class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                                             class="img-fluid rounded-3" alt="Cotton T-shirt">
                                                     </div>
                                                     <div class="col-md-3 col-lg-3 col-xl-3">
                                                         <h6 class="text-muted">@item.cateName</h6>
-                                                        <h6 class="text-black mb-0">@item.name - @item.color - @item.size
+                                                        <h6 class="text-black mb-0">
+                                                            @item.name - @item.color - @item.size
                                                         </h6>
-                                                        <h6 class="text-black mb-0">@string.Format("{0:#,0}", item.unitPrice) ₫
+                                                        <h6 class="text-black mb-0">
+                                                            @string.Format("{0:#,0}", item.unitPrice) ₫
                                                         </h6>
                                                     </div>
 
                                                     <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                                         <button class="btn btn-link px-2" type="submit"
-                                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                                onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
                                                             <i class="fa fa-minus"></i>
                                                         </button>
 
                                                         <input id="form1" min="1" name="quantity" value="@item.quantity"
-                                                            type="number" class="form-control form-control-sm" />
+                                                               type="number" class="form-control form-control-sm" />
 
                                                         <button class="btn btn-link px-2" type="submit"
-                                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                                onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
                                                             <i class="fa fa-plus"></i>
                                                         </button>
                                                     </div>
@@ -57,7 +57,8 @@
                                                     </div>
                                                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                                         <a href="@Url.Action("RemoveFromCart","Cart", new { @IdCart = item.IdCart})"
-                                                            class="text-muted"><i class="fa fa-times"></i>
+                                                           class="text-muted">
+                                                            <i class="fa fa-times"></i>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -65,58 +66,7 @@
                                         }
                                     </div>
                                 </div>
-                                <div class="col-lg-4 bg-grey">
-                                    <div class="p-5">
-                                        <h3 class="fw-bold mb-5 mt-2 pt-1">Tạm tính</h3>
-                                        <hr class="my-4">
 
-                                        <div class="d-flex justify-content-between mb-4">
-                                            <h5 class="text-uppercase">Sản phẩm: @ViewBag.TotalItems</h5>
-                                            <h5></h5>
-                                        </div>
-
-                                        <h5 class="text-uppercase mb-3">Mã khuyến mãi</h5>
-
-                                        <div class="mb-5">
-                                            <div class="form-outline">
-                                                <input type="text" id="form3Examplea2"
-                                                    class="form-control form-control-lg" />
-                                                <button type="button" class="btn btn-primary mt-5" data-toggle="modal"
-                                                    data-target="#myModal">
-                                                    Xem danh sách khuyến mãi
-                                                </button>
-                                            </div>
-
-                                        </div>
-
-                                        <hr class="my-4">
-
-                                        <div class="d-flex justify-content-between mb-5">
-                                            <h5 class="text-uppercase">Tổng tiền</h5>
-
-                                            @if (Model.Count != 0)
-                                            {
-                                                <h5>@string.Format("{0:#,0}", ViewBag.TotalPrice) ₫</h5>
-                                            }
-                                            else
-                                            {
-                                                <h5> 0₫ </h5>
-                                            }
-
-
-                                        </div>
-                                        <button type="button" class="btn btn-light btn-block btn-lg"
-                                            data-mdb-ripple-color="dark"
-                                            onclick="location.href='@Url.Action("Index","Home")'">
-                                            Quay về
-                                        </button>
-                                        <button type="button" class="btn btn-dark btn-block btn-lg"
-                                            data-mdb-ripple-color="dark" onclick="checkout()">
-                                            Đặt hàng
-                                        </button>
-
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -128,47 +78,31 @@
 
 <section class="h-100 h-custom" style="background-color: #838383;">
     <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-lg-12 bg-grey">
+        <div class="row d-flex justify-content-center align-items-center h-100 card card-registration card-registration-2" style="border-radius: 15px;">
+            <div class="col-lg-8">
                 <div class="p-5">
                     <h3 class="fw-bold mb-5 mt-2 pt-1">Thông tin khách hàng</h3>
                     <hr class="my-4">
-          @*           <div class="row mb-5">
-                        <input id="Id" value="@Model.Id" type="hidden" />
+                    <div class="row mb-5">
+                        <input id="Id" value="" type="hidden" />
                         <div class="col-md-6">
                             <label class="form-label" for="FullName">Full name</label>
-                            @Html.TextBoxFor(m => m.FullName, "", new
-                                {
-                                    @id = "full_name",
-                                    @class = "form-control",
-                                    @placeholder = "Họ tên của bạn"
-                                })
+                            <input class="form-control" data-val="true" data-val-length="Vui lòng nhập họ tên thật" data-val-length-max="50" data-val-length-min="5" data-val-required="Vui lòng nhập họ tên" id="full_name" name="FullName" placeholder="Họ tên của bạn" type="text" value="">
                             <span class="error text-danger"></span>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" for="email">Email</label>
-                            @Html.TextBoxFor(m => m.Email, "", new
-                                {
-                                    @id = "email",
-                                    @class = "form-control",
-                                    @placeholder = "Email của bạn"
-                                })
+                            <input class="form-control" data-val="true" data-val-regex="Vui lòng nhập email hợp lệ" data-val-required="Vui lòng nhập Email" id="email" name="Email" placeholder="Email của bạn" type="text" value="">
                             <span class="error text-danger"></span>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" for="phone_number">Phone number</label>
-                            @Html.TextBoxFor(m => m.Phone, "", new
-                                {
-                                    @id = "phone",
-                                    @class = "form-control",
-                                    @placeholder = "Số điện thoại của bạn"
-                                })
+                            <input class="form-control" data-val="true" data-val-regex="Vui lòng nhập số điện thoại hợp lệ" data-val-regex-pattern="^(0[0-9]{9,10})$" data-val-required="Vui lòng nhập số điện thoại" id="phone" name="Phone" placeholder="Số điện thoại của bạn" type="text" value="">
                             <span class="error text-danger"></span>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label" for="street">Street Address</label>
-                            <input type="text" placeholder="Số nhà và tên đường" class="form-control" id="street"
-                                name="street" required>
+                            <input type="text" placeholder="Số nhà và tên đường" class="form-control" id="street" name="street" required>
                             <span class="error text-danger"></span>
                         </div>
 
@@ -182,7 +116,7 @@
                         <div class="col-md-4">
                             <label class="form-label" for="district">District</label>
                             <select class="form-select" name="district" id="district" aria-label=".form-select-sm"
-                                required>
+                                    required>
                                 <option value="" selected>Chọn quận huyện</option>
                             </select>
                             <span class="error text-danger"></span>
@@ -201,7 +135,7 @@
                         <div class="col-md-12">
                             <label class="form-label" for="payment">Hình thức thanh toán</label>
                             <select class="form-select" name="payment" id="payment" aria-label=".form-select-sm"
-                                required>
+                                    required>
                                 <option value="1" selected>Thanh toán qua ví điện tử Momo</option>
                                 <option value="2" selected>Thanh toán qua ví điện tử Vnpay</option>
                                 <option value="3" selected>Thanh toán khi nhận hàng</option>
@@ -210,22 +144,58 @@
                         <div class="col-12">
                             <label class="form-label" for="note">Order notes (optional)</label>
                             <textarea id="note" class="form-control" placeholder="Something..." style="height: 100px"
-                                name="note" maxlength="200"> </textarea>
+                                      name="note" maxlength="200"> </textarea>
                         </div>
                     </div>
+                    <hr class="my-4">
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="p-5">
+                    <h3 class="fw-bold mb-5 mt-2 pt-1">Tạm tính</h3>
+                    <hr class="my-4">
 
- *@
+                    <div class="d-flex justify-content-between mb-4">
+                        <h5 class="text-uppercase">Sản phẩm: @ViewBag.TotalItems</h5>
+                        <h5></h5>
+                    </div>
+
+                    <h5 class="text-uppercase mb-3">Mã khuyến mãi</h5>
+
+                    <div class="mb-5">
+                        <div class="form-outline">
+                            <input type="text" id="form3Examplea2"
+                                   class="form-control form-control-lg" />
+                            <button type="button" class="btn btn-primary mt-5" data-toggle="modal"
+                                    data-target="#myModal">
+                                Xem danh sách khuyến mãi
+                            </button>
+                        </div>
+
+                    </div>
 
                     <hr class="my-4">
 
+                    <div class="d-flex justify-content-between mb-5">
+                        <h5 class="text-uppercase">Tổng tiền</h5>
 
+                        @if (Model.Count != 0)
+                        {
+                            <h5>@string.Format("{0:#,0}", ViewBag.TotalPrice) ₫</h5>
+                        }
+                        else
+                        {
+                            <h5> 0₫ </h5>
+                        }
+
+                    </div>
                     <button type="button" class="btn btn-light btn-block btn-lg" data-mdb-ripple-color="dark"
-                        onclick="location.href='@Url.Action("Index","Cart")'">
+                            onclick="location.href='@Url.Action("Index","Home")'">
                         Quay về
                     </button>
 
                     <button class="btn btn-dark btn-block btn-lg submit" id="submit" type="button"
-                        onclick="myFunction()" title="Order">
+                            onclick="myFunction()" title="Order">
                         Place order
                     </button>
                 </div>
@@ -234,3 +204,55 @@
         </div>
     </div>
 </section>
+
+<script src="~/lib/jquery/jquery.min.js"></script>
+<script src="~/lib/axios/axios.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    var citis = document.getElementById("city");
+    var districts = document.getElementById("district");
+    var wards = document.getElementById("ward");
+    var selectedCity, selectedDistrict, selectedWard, street, address;
+    var Parameter = {
+        url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+        method: "GET",
+        responseType: "application/json",
+    };
+    var promise = axios(Parameter);
+    promise.then(function (result) {
+        renderCity(result.data);
+    });
+
+    function renderCity(data) {
+        for (const x of data) {
+            citis.options[citis.options.length] = new Option(x.Name, x.Id);
+        }
+        citis.onchange = function () {
+
+            district.length = 1;
+            ward.length = 1;
+            if (this.value != "") {
+                const result = data.filter(n => n.Id === this.value);
+                for (const k of result[0].Districts) {
+                    district.options[district.options.length] = new Option(k.Name, k.Id);
+                }
+
+            }
+        };
+        district.onchange = function () {
+            ward.length = 1;
+            const dataCity = data.filter((n) => n.Id === citis.value);
+            if (this.value != "") {
+                const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+
+                for (const w of dataWards) {
+                    wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                }
+            }
+
+        };
+        ward.onchange = function () {
+        }
+    }
+</script>

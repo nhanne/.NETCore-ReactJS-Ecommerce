@@ -13,7 +13,7 @@
         <li><a class="nav-link" asp-controller="Home" asp-action="Index">home</a></li>
         <li><a class="nav-link" asp-controller="Home" asp-action="Store">store</a></li>
         <li><a class="nav-link" href="javascript:void(0)" onclick="contact()">contact</a></li>
-        <li><a class="nav-link" href="javascript:void(0)" onclick="about()">about</a></li>
+        <li><a class="nav-link" href="https://thanhnhan-001.netlify.app" target="blank">about</a></li>
     </ul>
     <ul id="navbar-right">
         @if (!SignInManager.IsSignedIn(User))
@@ -38,7 +38,7 @@
             </li>
             <li>
                 <a class="nav-icon" id="login" asp-area="Identity" asp-page="/Account/Manage/Index">
-                    @user.Name
+                    <i class="fa fa-user"></i>
                 </a>
             </li>
             <li>
