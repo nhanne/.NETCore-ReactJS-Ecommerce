@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Clothings_Store.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace Clothings_Store.Models;
@@ -8,10 +9,11 @@ public partial class Order
     public int Id { get; set; }
 
     public int? CustomerId { get; set; }
+    public string? UserId { get; set; }
 
-    public string Status { get; set; }
+    public string? Status { get; set; }
 
-    public string Address { get; set; }
+    public string? Address { get; set; }
 
     public int PaymentId { get; set; }
 
@@ -28,12 +30,15 @@ public partial class Order
     public int? StaffId { get; set; }
 
     public virtual Customer? Customer { get; set; }
+    public virtual AppUser? User { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
-    public virtual Payment? Payment { get; set; }
+    public virtual Payment? Payment { get; set; } 
 
     public virtual Staff? Staff { get; set; }
 
-    public virtual OrderStatus? StatusNavigation { get; set; }
+    public virtual OrderStatus? StatusNavigation { get; set; } 
+
+
 }

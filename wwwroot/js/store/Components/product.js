@@ -60,7 +60,6 @@ function Product() {
                 setQuantity(response.data.quantity)
             })
     }
-    console.log("re-render");
 
     return (
         <div className={clsx("grid__row", styles.detail)}>

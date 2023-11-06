@@ -30,11 +30,14 @@ namespace Clothings_Store.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DOB")
+                    b.Property<DateTime?>("DOB")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -209,7 +212,6 @@ namespace Clothings_Store.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
@@ -233,7 +235,6 @@ namespace Clothings_Store.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -242,6 +243,9 @@ namespace Clothings_Store.Migrations
 
                     b.Property<int>("TotalQuantity")
                         .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id")
                         .HasName("PK__tmp_ms_x__3214EC076065A524");
@@ -253,6 +257,8 @@ namespace Clothings_Store.Migrations
                     b.HasIndex("StaffId");
 
                     b.HasIndex("Status");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Order", (string)null);
                 });
@@ -691,9 +697,11 @@ namespace Clothings_Store.Migrations
                     b.HasOne("Clothings_Store.Models.OrderStatus", "StatusNavigation")
                         .WithMany("Orders")
                         .HasForeignKey("Status")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
                         .HasConstraintName("FK__Order__Status__2FCF1A8A");
+
+                    b.HasOne("Clothings_Store.Identity.AppUser", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Customer");
 
@@ -702,6 +710,8 @@ namespace Clothings_Store.Migrations
                     b.Navigation("Staff");
 
                     b.Navigation("StatusNavigation");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Clothings_Store.Models.OrderDetail", b =>
@@ -824,6 +834,11 @@ namespace Clothings_Store.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Clothings_Store.Identity.AppUser", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Clothings_Store.Models.Category", b =>

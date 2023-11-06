@@ -24,7 +24,8 @@ public class Cart
         _db = context;
         if(_db != null)
         {
-            Stock? stock = _db.Stocks.Include(p => p.Product)
+            Stock? stock = _db.Stocks
+                .Include(p => p.Product)
                 .Include(p => p.Product.Category)
                 .Include(p => p.Color)
                 .Include(p => p.Size)

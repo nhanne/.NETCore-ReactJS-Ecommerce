@@ -15,5 +15,5 @@ public partial class Promotion
     public DateTime EndDate { get; set; }
 
     public decimal DiscountPercentage { get; set; }
-    
+
 }

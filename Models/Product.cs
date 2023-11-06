@@ -25,7 +25,7 @@ public partial class Product
 
     public DateTime? StockInDate { get; set; }
 
-    public virtual Category Category { get; set; }
+    public virtual Category Category { get; set; } 
 
     public virtual ICollection<Stock> Stocks { get; set; } = new List<Stock>();
 }
