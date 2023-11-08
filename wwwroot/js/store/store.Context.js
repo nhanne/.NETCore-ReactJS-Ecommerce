@@ -13,11 +13,11 @@ function FilterProvider({ children }) {
     useEffect(() => {
         fetch(`/Home/getData?category=${category}&&sort=${sort}&&search=${search}&&page=${page}`)
             .then(res => res.json())
-            .then(reponse => {
-                if (reponse.products.length > 0) {
-                    totalPages.current = reponse.totalPages;
+            .then(response => {
+                if (response.products.length > 0) {
+                    totalPages.current = response.totalPages;
                 }
-                setProducts(reponse.products);
+                setProducts(response.products);
 
             });
     }, [category, sort, search, page])

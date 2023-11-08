@@ -40,11 +40,9 @@ Trang đăng nhập và đăng ký người dùng
 
 Trang admin với các chức năng thêm - xóa - sửa
 
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/542f1df9-08c8-4822-b9e9-83459e615d16)
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/da606da9-79e1-4b73-892b-9408e5b74c62)
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/09d7521b-70b9-4bee-ae3d-9b21ae404045)
-![image](https://github.com/nhanne/Clothings-Store/assets/90546715/ffbb0fa7-90d5-481a-805d-c5ab59398a92)
-
-
+![Alt text](/wwwroot/images/readme/GET.png)
+![Alt text](/wwwroot/images/readme/CREATE.png)
+![Alt text](/wwwroot/images/readme/EDIT.png)
+![Alt text](/wwwroot/images/readme/PHANLOAI.png)
 
 
