@@ -18,7 +18,7 @@ export default function Search() {
                 className="btnsearch"
                 id="btnSearch"
             >
-                <i className="fa fa-search"></i>
+                <i className="fa fa-shopping-cart"></i>
             </button>
         </form>
     )

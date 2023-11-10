@@ -8,13 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Patterns\**" />
     <Compile Remove="wwwroot\js\cart\**" />
-    <Content Remove="Patterns\**" />
     <Content Remove="wwwroot\js\cart\**" />
-    <EmbeddedResource Remove="Patterns\**" />
     <EmbeddedResource Remove="wwwroot\js\cart\**" />
-    <None Remove="Patterns\**" />
     <None Remove="wwwroot\js\cart\**" />
   </ItemGroup>
 
@@ -109,10 +105,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Identity\Pages\Admin\" />
+    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Views\" />
     <Folder Include="Controllers\" />
     <Folder Include="Data\" />
-    <Folder Include="mailssave\" />
 	<Folder Include="Models\" />
 	<Folder Include="wwwroot\css\" />
 	<Folder Include="wwwroot\images\" />

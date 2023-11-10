@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Clothings_Store.Areas.Identity.Pages.Shared.Components.MessagePage;
 
 namespace Clothings_Store.Areas.Identity.Pages.Account
 {
@@ -19,16 +20,13 @@ namespace Clothings_Store.Areas.Identity.Pages.Account
     public class RegisterConfirmationModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IEmailSender _sender;
 
-        public RegisterConfirmationModel(UserManager<AppUser> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
-            _sender = sender;
         }
         public string Email { get; set; }
-        public bool DisplayConfirmAccountLink { get; set; }
-        public string EmailConfirmationUrl { get; set; }
+        public string UrlContinue { set; get; }
 
         public async Task<IActionResult> OnGetAsync(string email, string returnUrl = null)
         {
@@ -41,23 +39,27 @@ namespace Clothings_Store.Areas.Identity.Pages.Account
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
-                return NotFound($"Unable to load user with email '{email}'.");
+                return NotFound($"Không có người dùng với email: '{email}'.");
             }
-
-            Email = email;
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
-            DisplayConfirmAccountLink = true;
-            if (DisplayConfirmAccountLink)
+            if (user.EmailConfirmed)
             {
-                var userId = await _userManager.GetUserIdAsync(user);
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                EmailConfirmationUrl = Url.Page(
-                    "/Account/ConfirmEmail",
-                    pageHandler: null,
-                    values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
-                    protocol: Request.Scheme);
+                return ViewComponent(MessagePage.COMPONENTNAME,
+                        new MessagePage.Message()
+                        {
+                            title = "Thông báo",
+                            htmlcontent = "Tài khoản đã xác thực, chờ chuyển hướng",
+                            urlredirect = (returnUrl != null) ? returnUrl : Url.Page("/Index")
+                        }
+
+                );
             }
+            Email = email;
+            if (returnUrl != null)
+            {
+                UrlContinue = Url.Page("RegisterConfirmation", new { email = Email, returnUrl = returnUrl });
+            }
+            else
+                UrlContinue = Url.Page("RegisterConfirmation", new { email = Email });
 
             return Page();
         }

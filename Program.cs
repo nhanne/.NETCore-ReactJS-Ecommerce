@@ -1,5 +1,6 @@
 using Clothings_Store.Data;
 using Clothings_Store.Identity;
+using Clothings_Store.Patterns;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -12,6 +13,7 @@ builder.Services.AddOptions();
 // How to connect StoreContext to MS SQL Server
 builder.Services.AddDbContext<StoreContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+builder.Services.AddScoped<IMyDependency, MyDependency>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e when error connected database
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -73,7 +75,8 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
     facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
     facebookOptions.CallbackPath = "/loginFacebook";
 }); 
-var mailSettings = builder.Configuration.GetSection("MailSettings");  // đọc config
+// Send Mail
+var mailSettings = builder.Configuration.GetSection("MailSettings"); 
 builder.Services.Configure<MailSettings>(mailSettings);
 builder.Services.AddTransient<IEmailSender, SendMailService>();
 

@@ -1,6 +1,7 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Identity;
 using Clothings_Store.Models;
+using Clothings_Store.Patterns;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ namespace Clothings_Store.Controllers
         {
             _db = context;
         }
-        
+
         public IActionResult Index()
         {
             ViewBag.TotalPrice = TotalPrice();

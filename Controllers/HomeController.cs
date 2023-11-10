@@ -1,8 +1,8 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Models;
+using Clothings_Store.Patterns;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Clothings_Store.Controllers
 {
@@ -10,10 +10,12 @@ namespace Clothings_Store.Controllers
     {
         private readonly StoreContext _db;
         private readonly ILogger<HomeController> _logger;
-        public HomeController(StoreContext context, ILogger<HomeController> logger)
+        private readonly IMyDependency _myDependency;
+        public HomeController(StoreContext context, ILogger<HomeController> logger, IMyDependency myDependency)
         {
             _db = context;
             _logger = logger;
+            _myDependency = myDependency;
         }
 
         public IActionResult Index()
@@ -22,7 +24,7 @@ namespace Clothings_Store.Controllers
             {
                 ViewData["Products"] = _db.Products.OrderByDescending(p => p.Sold).Take(3).ToList();
                 _logger.LogInformation("Connected to database.");
-
+                _myDependency.WriteMessage("Index2Model.OnGet");
                 return View();
             }
             catch (Exception ex)

@@ -18,9 +18,6 @@ namespace Clothings_Store.Identity
         private readonly MailSettings mailSettings;
 
         private readonly ILogger<SendMailService> logger;
-
-        // mailSetting được Inject qua dịch vụ hệ thống
-        // Có inject Logger để xuất log
         public SendMailService(IOptions<MailSettings> _mailSettings, ILogger<SendMailService> _logger)
         {
             mailSettings = _mailSettings.Value;
@@ -51,9 +48,9 @@ namespace Clothings_Store.Identity
             }
             catch (Exception ex)
             {
-                // Gửi mail thất bại, nội dung email sẽ lưu vào thư mục mailssave
-                System.IO.Directory.CreateDirectory("mailssave");
-                var emailsavefile = string.Format(@"mailssave/{0}.eml", Guid.NewGuid());
+                // Gửi mail thất bại, nội dung email sẽ lưu vào thư mục MailsSave
+                System.IO.Directory.CreateDirectory("MailsSave");
+                var emailsavefile = string.Format(@"MailsSave/{0}.eml", Guid.NewGuid());
                 await message.WriteToAsync(emailsavefile);
 
                 logger.LogInformation("Lỗi gửi mail, lưu tại - " + emailsavefile);
