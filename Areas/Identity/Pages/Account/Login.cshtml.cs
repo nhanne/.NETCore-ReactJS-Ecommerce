@@ -25,10 +25,10 @@ namespace Clothings_Store.Areas.Identity.Pages.Account
         public string ErrorMessage { get; set; }
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Không để trống Email.")]
             [EmailAddress]
             public string Email { get; set; }
-            [Required]
+            [Required(ErrorMessage = "Không để trống Mật khẩu.")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
             [Display(Name = "Remember me?")]

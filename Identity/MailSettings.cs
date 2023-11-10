@@ -22,7 +22,7 @@ namespace Clothings_Store.Identity
         {
             mailSettings = _mailSettings.Value;
             logger = _logger;
-            logger.LogInformation("Create SendMailService");
+            logger.LogInformation("Tạo dịch vụ gửi mail");
         }
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -48,7 +48,7 @@ namespace Clothings_Store.Identity
             }
             catch (Exception ex)
             {
-                // Gửi mail thất bại, nội dung email sẽ lưu vào thư mục MailsSave
+                // Failed
                 System.IO.Directory.CreateDirectory("MailsSave");
                 var emailsavefile = string.Format(@"MailsSave/{0}.eml", Guid.NewGuid());
                 await message.WriteToAsync(emailsavefile);

@@ -25,6 +25,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
         }
+        [Display(Name = "Email")]
         public string Username { get; set; }
         [TempData]
         public string StatusMessage { get; set; }
@@ -32,17 +33,18 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
         public InputModel Input { get; set; }
         public class InputModel
         {
-            [Required]
+            [Required(ErrorMessage = "Không để trống Họ Tên.")]
             [DataType(DataType.Text)]
-            [Display(Name = "Full name")]
+            [Display(Name = "Họ Tên")]
             public string Name { get; set; }
 
-            [Required]
-            [Display(Name = "Birth Date")]
+            [Required(ErrorMessage = "Không để trống Ngày Sinh.")]
+            [Display(Name = "Ngày Sinh")]
             [DataType(DataType.Date)]
             public DateTime? DOB { get; set; }
+            [Required(ErrorMessage = "Không để trống Số điện thoại.")]
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Số điện thoại")]
             public string PhoneNumber { get; set; }
         }
 
@@ -107,7 +109,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
 
             await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Hồ sơ của bạn đã được cập nhật";
             return RedirectToPage();
         }
     }
