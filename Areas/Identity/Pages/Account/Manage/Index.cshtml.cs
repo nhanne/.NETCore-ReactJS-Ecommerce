@@ -25,7 +25,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        [Display(Name = "Email")]
+        [Display(Name = "Tên tài khoản")]
         public string Username { get; set; }
         [TempData]
         public string StatusMessage { get; set; }
@@ -35,7 +35,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
         {
             [Required(ErrorMessage = "Không để trống Họ Tên.")]
             [DataType(DataType.Text)]
-            [Display(Name = "Họ Tên")]
+            [Display(Name = "Họ Tên đầy đủ")]
             public string Name { get; set; }
 
             [Required(ErrorMessage = "Không để trống Ngày Sinh.")]
@@ -46,6 +46,9 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Số điện thoại")]
             public string PhoneNumber { get; set; }
+            [MaxLength(255)]
+            [Display(Name = "Địa chỉ")]
+            public string Address { set; get; }
         }
 
         private async Task LoadAsync(AppUser user)
@@ -57,7 +60,8 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
             {
                 Name = user.Name,
                 DOB = user.DOB,
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                Address = user.Address
             };
         }
 
@@ -66,7 +70,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Không có tài khoản ID '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);
@@ -78,7 +82,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Không có tài khoản ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -93,7 +97,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "Lỗi cập nhật số điện thoại.";
                     return RedirectToPage();
                 }
             }
@@ -105,6 +109,10 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
             if (Input.DOB != user.DOB)
             {
                 user.DOB = Input.DOB;
+            }
+            if (Input.Address != user.Address)
+            {
+                user.Address = Input.Address;
             }
 
             await _userManager.UpdateAsync(user);

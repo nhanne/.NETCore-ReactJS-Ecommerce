@@ -12,9 +12,11 @@ namespace Clothings_Store.Controllers
     public class CartController : Controller
     {
         private readonly StoreContext _db;
-        public CartController(StoreContext context)
+        private readonly ILogger<HomeController> _logger;
+        public CartController(StoreContext context, ILogger<HomeController> logger)
         {
             _db = context;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -69,23 +71,31 @@ namespace Clothings_Store.Controllers
         [HttpPost]
         public JsonResult AddToCart(int productId, int colorId, int sizeId)
         {
-            var stock = _db.Stocks.Where(p => p.ProductId == productId && p.ColorId == colorId && p.SizeId == sizeId).FirstOrDefault();
-            if (stock == null) return Json(false);
-
-            var listCart = GetCart();
-            var cartitem = listCart.Find(p => p.IdCart == stock.Id);
-            if (cartitem != null)
+            try
             {
-                cartitem.quantity++;
-            }
-            else
-            {
-                cartitem = new Cart(_db, stock.Id);
-                listCart.Add(cartitem);
-            }
+                var stock = _db.Stocks.Where(p => p.ProductId == productId && p.ColorId == colorId && p.SizeId == sizeId).FirstOrDefault();
+                if (stock == null) return Json(false);
 
-            SaveCartSession(listCart);
-            return Json(true);
+                var listCart = GetCart();
+                var cartitem = listCart.Find(p => p.IdCart == stock.Id);
+                if (cartitem != null)
+                {
+                    cartitem.quantity++;
+                }
+                else
+                {
+                    cartitem = new Cart(_db, stock.Id);
+                    listCart.Add(cartitem);
+                }
+                SaveCartSession(listCart);
+                _logger.LogInformation("Add product to cart success.");
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error when add product to cart.");
+                throw;
+            }
         }
         public IActionResult RemoveFromCart(int IdCart)
         {
@@ -153,6 +163,7 @@ namespace Clothings_Store.Controllers
                 noAccount.Member = false;
                 _db.Customers.Add(noAccount);
                 _db.SaveChanges();
+                order.CustomerId = noAccount.Id;
             }
         }
         void order_Info(Order order, Order orderModel)
@@ -171,16 +182,13 @@ namespace Clothings_Store.Controllers
             List<Cart> listCart = GetCart();
             foreach (var item in listCart)
             {
-                //OrderDetail detailItem = new OrderDetail();
-                //detailItem.OrderId = orderId;
-                //detailItem.StockId = item.Stock.Id;
-                //detailItem.Quantity = item.quantity;
-                //detailItem.UnitPrice = item.unitPrice;
-                //_db.OrderDetails.Add(detailItem);
-                //detailItem.Stock.Product.Sold++;
-                //detailItem.Stock.Stock1--;
-                //_db.Entry(detailItem.Stock).State = EntityState.Modified;
-                //_db.SaveChanges();
+                OrderDetail model = new OrderDetail();
+                model.OrderId = orderId;
+                model.StockId = item.IdCart;
+                model.Quantity = item.quantity;
+                model.UnitPrice = item.unitPrice;
+                _db.OrderDetails.Add(model);
+                _db.SaveChanges();
             }
         }
     } 
