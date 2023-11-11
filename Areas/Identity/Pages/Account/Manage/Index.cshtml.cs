@@ -41,7 +41,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account.Manage
             [Required(ErrorMessage = "Không để trống Ngày Sinh.")]
             [Display(Name = "Ngày Sinh")]
             [DataType(DataType.Date)]
-            public DateTime? DOB { get; set; }
+            public DateTime DOB { get; set; }
             [Required(ErrorMessage = "Không để trống Số điện thoại.")]
             [Phone]
             [Display(Name = "Số điện thoại")]

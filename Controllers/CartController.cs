@@ -137,7 +137,7 @@ namespace Clothings_Store.Controllers
         }
         void order_Customer(Order order, AppUser userModel)
         {
-            AppUser? user = _db.Users.SingleOrDefault(m => m.Email.Equals(userModel.Email));
+            var user = _db.Users.SingleOrDefault(m => m.Email.Equals(userModel.Email));
             if (user != null)
             {
                 order.UserId = user.Id;
