@@ -17,6 +17,7 @@ builder.Services.AddScoped<IMyDependency, MyDependency>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e when error connected database
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<StoreContext>()
                 .AddDefaultTokenProviders();
 builder.Services.Configure<SecurityStampValidatorOptions>(o =>
@@ -69,14 +70,15 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
     googleOptions.ClientId = googleAuthNSection["ClientId"];
     googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
     googleOptions.CallbackPath = "/loginGoogle";
-}).AddFacebook(facebookOptions => {
+}).AddFacebook(facebookOptions =>
+{
     IConfigurationSection facebookAuthNSection = builder.Configuration.GetSection("Authentication:Facebook");
     facebookOptions.AppId = facebookAuthNSection["AppId"];
     facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
     facebookOptions.CallbackPath = "/loginFacebook";
-}); 
+});
 // Send Mail
-var mailSettings = builder.Configuration.GetSection("MailSettings"); 
+var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSettings);
 builder.Services.AddTransient<IEmailSender, SendMailService>();
 
