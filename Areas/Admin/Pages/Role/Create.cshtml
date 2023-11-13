@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Tạo role mới";
 }
+
 <h2>@ViewData["Title"]</h2>
 <partial name="_StatusMessage" for="StatusMessage" />
 <hr />
@@ -16,7 +17,7 @@
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="tạo mới" class="btn btn-primary"/>
+                <input type="submit" value="tạo mới" class="btn btn-primary" />
             </div>
         </form>
     </div>

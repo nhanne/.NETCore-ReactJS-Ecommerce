@@ -17,6 +17,5 @@ namespace Clothings_Store.Areas.Admin.Pages.Role
             _roleManager = roleManager;
             _context = context;
         }
-
     }
 }

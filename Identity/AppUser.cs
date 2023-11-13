@@ -1,7 +1,6 @@
 ﻿using Clothings_Store.Models;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Clothings_Store.Identity
 {
