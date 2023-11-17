@@ -1,22 +1,21 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Đăng ký";
 }
 
 <div class="form-box register">
     <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-        <h2>Sign Up</h2>
         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
         <div class="input-box">
             <input asp-for="Input.Name" />
             <span asp-validation-for="Input.Name" class="validate"></span>
-            <label for="">Fullname</label>
+            <label for="">Họ và tên</label>
         </div>
         <div class="input-box">
             <input asp-for="Input.DOB" />
             <span asp-validation-for="Input.DOB" class="validate"></span>
-            <label for="">DOB</label>
+            <label for="">Ngày sinh</label>
         </div>
         <div class="input-box">
             <input asp-for="Input.Email" autocomplete="username" aria-required="true" placeholder="name@example.com" />
@@ -26,20 +25,20 @@
         <div class="input-box">
             <input asp-for="Input.Password" autocomplete="new-password" aria-required="true" placeholder="password" />
             <span asp-validation-for="Input.Password" class="validate"></span>
-            <label for="">Password</label>
+            <label for="">Mật khẩu</label>
         </div>
          <div class="input-box">
-            <input asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" placeholder="password" />
+            <input asp-for="Input.ConfirmPassword" autocomplete="new-password" aria-required="true" placeholder="confirm password" />
             <span asp-validation-for="Input.ConfirmPassword" class="validate"></span>
-            <label for="">ConfirmPassword</label>
+            <label for="">Xác nhận mật khẩu</label>
         </div>
        
         <div class="remember-forget">
-            <label for=""><input type="checkbox">I agree to the term & conditions</label>
+            <label for=""><input type="checkbox">Tôi đồng ý với chính sách và điều khoản của website</label>
         </div>
-        <button id="registerSubmit" class="btn" type="submit">Sign Up</button>
+        <button id="registerSubmit" class="btn" type="submit">Đăng ký</button>
         <div class="login-register">
-            <p>Already have an account ? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="login-link">Sign in</a> </p>
+            <p>Bạn đã có tài khoản ? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="login-link">Đăng nhập</a> </p>
         </div>
     </form>
 </div>

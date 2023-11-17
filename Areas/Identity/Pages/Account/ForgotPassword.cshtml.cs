@@ -55,8 +55,8 @@ namespace Clothings_Store.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    "Cập nhật mật khẩu",
+                    $"Gửi {user.Name}, <br><br> Cập nhật lại mật khẩu tại website clothing store bằng cách <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>ấn vào đây</a>. <br><br> Trân trọng ! <br> Clothing Store");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }

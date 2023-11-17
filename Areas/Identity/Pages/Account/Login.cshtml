@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Đăng nhập";
 }
 <div class="social-icons">
     @if ((Model.ExternalLogins?.Count ?? 0) != 0)
@@ -44,7 +44,7 @@
             <span class="icon"><i class="fa fa-unlock-alt"></i></span>
             <span asp-validation-for="Input.Password" class="validate"></span>
             <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-            <label asp-for="Input.Password" class="form-label">Password</label>
+            <label asp-for="Input.Password" class="form-label">Mật khẩu</label>
         </div>
 
         <div class="remember-forgot">
@@ -52,11 +52,11 @@
                 <input class="form-check-input" asp-for="Input.RememberMe" />
                 @Html.DisplayNameFor(m => m.Input.RememberMe)
             </label>
-            <a id="forgot-password" asp-page="./ForgotPassword">Forget password?</a>
+            <a id="forgot-password" asp-page="./ForgotPassword">Quên mật khẩu?</a>
         </div>
-        <button type="submit" class="btn">Sign In</button>
+        <button type="submit" class="btn">Đăng nhập</button>
         <div class="login-register">
-            <p>Don't have an account ? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="register-link">Sign Up</a></p>
+            <p>Bạn chưa có tài khoản ? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="register-link">Đăng ký ngay</a></p>
         </div>
     </form>
 </div>

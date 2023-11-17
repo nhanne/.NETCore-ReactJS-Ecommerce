@@ -83,7 +83,7 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 // Send Mail
 var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSettings);
-builder.Services.AddTransient<IEmailSender, SendMailService>();
+builder.Services.AddScoped<IEmailSender, SendMailService>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline. (Middleware)

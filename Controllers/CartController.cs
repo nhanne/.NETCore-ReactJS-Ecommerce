@@ -105,7 +105,6 @@ namespace Clothings_Store.Controllers
             {
                 listCart.RemoveAll(c => c.IdCart == IdCart);
                 SaveCartSession(listCart);
-                return Json(new { status = true, messege = "Đã xóa sản phẩm khỏi giỏ hàng" });
             }
             if (listCart.Count == 0)
             {
@@ -135,11 +134,11 @@ namespace Clothings_Store.Controllers
             return View(listCart);
         }
         [HttpPost]
-        public IActionResult CheckOut(AppUser userModel, Order orderModel, String code)
+        public IActionResult CheckOut(AppUser userModel, Order orderModel, string code)
         {
             Order order = new Order();
             order_Customer(order, userModel);
-            order_Info(order, orderModel);
+            order_Info(order, orderModel, code);
             _db.Orders.Add(order);
             _db.SaveChanges();
             order_Detail(order.Id);
@@ -159,14 +158,14 @@ namespace Clothings_Store.Controllers
                 noAccount.Phone = userModel.PhoneNumber;
                 noAccount.FullName = userModel.Name;
                 noAccount.Address = userModel.Address;
-                noAccount.Password = "Admin123?";
+                noAccount.Password = "A2cja2xi#@!35nx/.?";
                 noAccount.Member = false;
                 _db.Customers.Add(noAccount);
                 _db.SaveChanges();
                 order.CustomerId = noAccount.Id;
             }
         }
-        void order_Info(Order order, Order orderModel)
+        void order_Info(Order order, Order orderModel, string code)
         {
             order.OrdTime = DateTime.Now;
             order.DeliTime = order.OrdTime.AddDays(3);
@@ -175,7 +174,15 @@ namespace Clothings_Store.Controllers
             order.Address = orderModel.Address;
             order.Note = orderModel.Note;
             order.TotalQuantity = TotalItems();
-            order.TotalPrice = TotalPrice();
+            // total Price
+            DateTime now = DateTime.Now;
+            double totalPrice = TotalPrice();
+            var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == code && m.EndDate > now);
+            double percent = (code != null) ? (double)codeKM.DiscountPercentage : 100;
+            // How to apply strategy pattern
+            IBillingStrategy strategy = new NormalStrategy();
+            var CustomerBill = new CustomerBill(strategy);
+            order.TotalPrice = CustomerBill.LastPrice(totalPrice, percent);
         }
         void order_Detail(int orderId)
         {

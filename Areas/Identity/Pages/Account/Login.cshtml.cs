@@ -31,7 +31,7 @@ namespace Clothings_Store.Areas.Identity.Pages.Account
             [Required(ErrorMessage = "Không để trống Mật khẩu.")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
-            [Display(Name = "Remember me?")]
+            [Display(Name = "Ghi nhớ tôi?")]
             public bool RememberMe { get; set; }
         }
 

@@ -24,7 +24,7 @@ namespace Clothings_Store.Controllers
             {
                 ViewData["Products"] = _db.Products.OrderByDescending(p => p.Sold).Take(3).ToList();
                 _logger.LogInformation("Connected to database.");
-                _myDependency.WriteMessage("Index2Model.OnGet");
+                _myDependency.WriteMessage("Index of Home Controller");
                 return View();
             }
             catch (Exception ex)
