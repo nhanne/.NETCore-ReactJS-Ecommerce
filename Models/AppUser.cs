@@ -1,8 +1,7 @@
-﻿using Clothings_Store.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace Clothings_Store.Identity
+namespace Clothings_Store.Models
 {
     public class AppUser : IdentityUser
     {
@@ -18,6 +17,6 @@ namespace Clothings_Store.Identity
         public DateTime? Birthday { set; get; }
         [PersonalData]
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
-       
+
     }
 }

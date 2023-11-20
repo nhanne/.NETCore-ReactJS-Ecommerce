@@ -1,18 +1,11 @@
-﻿using MailKit.Security;
+﻿using Clothings_Store.Models;
+using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace Clothings_Store.Identity
+namespace Clothings_Store.Services
 {
-    public class MailSettings
-    {
-        public string Mail { get; set; }
-        public string DisplayName { get; set; }
-        public string Password { get; set; }
-        public string Host { get; set; }
-        public int Port { get; set; }
-    }
     public class SendMailService : IEmailSender
     {
         private readonly MailSettings mailSettings;
@@ -49,7 +42,7 @@ namespace Clothings_Store.Identity
             catch (Exception ex)
             {
                 // Failed
-                System.IO.Directory.CreateDirectory("MailsSave");
+                Directory.CreateDirectory("MailsSave");
                 var emailsavefile = string.Format(@"MailsSave/{0}.eml", Guid.NewGuid());
                 await message.WriteToAsync(emailsavefile);
 
