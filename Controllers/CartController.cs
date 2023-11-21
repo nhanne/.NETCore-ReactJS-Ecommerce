@@ -8,12 +8,12 @@ namespace Clothings_Store.Controllers
     public class CartController : Controller
     {
         private readonly StoreContext _db;
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<CartController> _logger;
         private readonly IOrderService _orderService;
         private readonly ICartService _cartService;
         public CartController(
             StoreContext context,
-            ILogger<HomeController> logger,
+            ILogger<CartController> logger,
             IOrderService orderService,
             ICartService cartService)
         {

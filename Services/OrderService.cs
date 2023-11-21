@@ -8,43 +8,70 @@ namespace Clothings_Store.Services
     public class OrderService : IOrderService
     {
         private readonly StoreContext _db;
-        public OrderService(StoreContext db)
+        private readonly ILogger<OrderService> _logger;
+        public OrderService(StoreContext db, ILogger<OrderService> logger)
         {
-            _db = db;
+            try
+            {
+                _db = db;
+                _logger = logger;
+                _logger.LogInformation("Inject thành công db và logger.");
+            }
+            catch(Exception ex) {
+                throw;
+            }
         }
         public void OrderCustomer(Order order, AppUser userModel)
         {
-            var user = _db.Users.SingleOrDefault(m => m.Email!.Equals(userModel.Email));
-            if (user != null)
+            try
             {
-                order.UserId = user.Id;
+                var user = _db.Users.SingleOrDefault(m => m.Email!.Equals(userModel.Email));
+                if (user != null)
+                {
+                    order.UserId = user.Id;
+                }
+                else
+                {
+                    Customer noAccount = new Customer();
+                    noAccount.Email = userModel.Email;
+                    noAccount.Phone = userModel.PhoneNumber;
+                    noAccount.FullName = userModel.Name;
+                    noAccount.Address = userModel.Address;
+                    noAccount.Password = "A2cja2xi#@!35nx/.?";
+                    noAccount.Member = false;
+                    _db.Customers.Add(noAccount);
+                    _db.SaveChanges();
+                    order.CustomerId = noAccount.Id;
+                }
+                _logger.LogInformation("Lưu thông tin khách hàng thành công.");
             }
-            else
+            catch (Exception ex)
             {
-                Customer noAccount = new Customer();
-                noAccount.Email = userModel.Email;
-                noAccount.Phone = userModel.PhoneNumber;
-                noAccount.FullName = userModel.Name;
-                noAccount.Address = userModel.Address;
-                noAccount.Password = "A2cja2xi#@!35nx/.?";
-                noAccount.Member = false;
-                _db.Customers.Add(noAccount);
-                _db.SaveChanges();
-                order.CustomerId = noAccount.Id;
+                _logger.LogError(ex, "Thất bại khi lưu thông tin khách hàng.");
+                throw;
             }
         }
 
         public void OrderDetail(int orderId, List<Cart> listCart)
         {
-            foreach (var item in listCart)
+            try
             {
-                OrderDetail model = new OrderDetail();
-                model.OrderId = orderId;
-                model.StockId = item.IdCart;
-                model.Quantity = item.quantity;
-                model.UnitPrice = item.unitPrice;
-                _db.OrderDetails.Add(model);
-                _db.SaveChanges();
+                foreach (var item in listCart)
+                {
+                    OrderDetail model = new OrderDetail();
+                    model.OrderId = orderId;
+                    model.StockId = item.IdCart;
+                    model.Quantity = item.quantity;
+                    model.UnitPrice = item.unitPrice;
+                    _db.OrderDetails.Add(model);
+                    _db.SaveChanges();
+                    _logger.LogInformation("Thêm vào bảng chi tiết đơn hàng thành công.");
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Thất bại khi thêm vào bảng chi tiết đơn hàng.");
+                throw;
             }
         }
 
@@ -67,9 +94,19 @@ namespace Clothings_Store.Services
                 percent = (double)codeKM.DiscountPercentage;
             }
             // How to apply strategy pattern to calculate TotalPrice
-            IBillingStrategy strategy = new NormalStrategy();
-            var CustomerBill = new CustomerBill(strategy);
-            order.TotalPrice = CustomerBill.LastPrice(totalPrice, percent);
+            try
+            {
+                IBillingStrategy strategy = new NormalStrategy();
+                var CustomerBill = new CustomerBill(strategy);
+                order.TotalPrice = CustomerBill.LastPrice(totalPrice, percent);
+                _logger.LogInformation("Áp dụng mẫu thiết kế Strategy thành công.");
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Thất bại khi sử dụng mẫu thiết kế Strategy.");
+                throw;
+            }
+          
         }
     }
 }

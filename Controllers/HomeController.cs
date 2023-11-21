@@ -10,7 +10,7 @@ namespace Clothings_Store.Controllers
     {
         private readonly StoreContext _db;
         private readonly ILogger<HomeController> _logger;
-        public HomeController(StoreContext context, ILogger<HomeController> logger, IMyDependency myDependency)
+        public HomeController(StoreContext context, ILogger<HomeController> logger)
         {
             _db = context;
             _logger = logger;
