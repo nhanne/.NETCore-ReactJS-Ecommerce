@@ -1,7 +1,7 @@
-﻿@page "/admin/add-role"
-@model CreateModel
+﻿@page "/admin/edit-role/{roleid}"
+@model EditModel
 @{
-    ViewData["Title"] = "Tạo role mới";
+    ViewData["Title"] = "Cập nhật role";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -18,7 +18,7 @@
             </div>
             <hr/>
             <div class="form-group">
-                <input type="submit" value="Tạo mới" class="btn btn-primary" />
+                <input type="submit" value="Cập nhật" class="btn btn-primary" />
                 <a class="btn btn-danger" asp-page="./Index">Danh sách các role</a>
             </div>
         </form>

@@ -1,7 +1,7 @@
-﻿@page "/admin/add-role"
-@model CreateModel
+﻿@page "/admin/delete-role/{roleid}"
+@model DeleteModel
 @{
-    ViewData["Title"] = "Tạo role mới";
+    ViewData["Title"] = "Xóa role";
 }
 
 <h2>@ViewData["Title"]</h2>
@@ -11,14 +11,10 @@
     <div class="col-md-6">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger" style="text-align:center" role="alert"></div>
-            <div class="input-box">
-                <label asp-for="Input.Name" class="form-label"></label>
-                <input asp-for="Input.Name" class="form-control" />
-                <span asp-validation-for="Input.Name" class="text-danger"></span>
-            </div>
+            <p>Bạn có chắc chắn muốn xóa role này ?</p>
             <hr/>
             <div class="form-group">
-                <input type="submit" value="Tạo mới" class="btn btn-primary" />
+                <input type="submit" value="Đồng ý" class="btn btn-primary" />
                 <a class="btn btn-danger" asp-page="./Index">Danh sách các role</a>
             </div>
         </form>

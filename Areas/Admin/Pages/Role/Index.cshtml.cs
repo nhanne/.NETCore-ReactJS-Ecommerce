@@ -1,10 +1,11 @@
 using Clothings_Store.Data;
-using Clothings_Store.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clothings_Store.Areas.Admin.Pages.Role
 {
+    [Authorize(Roles = "Admin")]
     public class IndexModel : RolePageModel
     {
         public IndexModel(RoleManager<IdentityRole> roleManager, StoreContext context) : base(roleManager, context)

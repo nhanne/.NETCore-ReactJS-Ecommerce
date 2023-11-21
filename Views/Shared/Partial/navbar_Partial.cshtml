@@ -1,5 +1,5 @@
-﻿@    using Microsoft.AspNetCore.Identity
-@    using Clothings_Store.Identity
+﻿@using Microsoft.AspNetCore.Identity
+@using Clothings_Store.Models
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
 @{
@@ -42,9 +42,13 @@
                 </a>
             </li>
             <li>
-                <a class="nav-icon" id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post">
+                <a class="nav-icon" href="javascript:void(0);" onclick="logOut()">
                     <i class="fa fa-sign-out"></i>
                 </a>
+
+                <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" method="post">
+                    <input type="hidden" name="returnUrl" value="@Url.Page("/", new { area = "" })" />
+                </form>
             </li>
         }
     </ul>

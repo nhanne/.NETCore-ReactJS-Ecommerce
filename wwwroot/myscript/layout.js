@@ -69,4 +69,6 @@ function about() {
 function contact() {
     window.location = '/Home#contact';
 }
-
+function logOut() {
+    document.getElementById("logoutForm").submit();
+}

@@ -38,6 +38,11 @@
         "js/bootstrap.js",
         "js/bootstrap.min.js"
       ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "multiple-select@1.2.3",
+      "destination": "wwwroot/lib/multiple-select/"
     }
   ]
 }

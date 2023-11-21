@@ -1,6 +1,7 @@
 using Clothings_Store.Data;
 using Clothings_Store.Models;
 using Clothings_Store.Patterns;
+using Clothings_Store.Services;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -84,6 +85,8 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSettings);
 builder.Services.AddScoped<IEmailSender, SendMailService>();
+
+builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
 
 var app = builder.Build();
 // Configure the HTTP request pipeline. (Middleware)

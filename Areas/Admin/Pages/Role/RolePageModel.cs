@@ -1,5 +1,4 @@
 ﻿using Clothings_Store.Data;
-using Clothings_Store.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;

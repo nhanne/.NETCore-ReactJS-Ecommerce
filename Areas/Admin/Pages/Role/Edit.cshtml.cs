@@ -8,9 +8,9 @@ using System.ComponentModel.DataAnnotations;
 namespace Clothings_Store.Areas.Admin.Pages.Role
 {
     [Authorize(Roles = "Admin")]
-    public class CreateModel : RolePageModel
+    public class EditModel : RolePageModel
     {
-        public CreateModel(RoleManager<IdentityRole> roleManager, StoreContext context) : base(roleManager, context)
+        public EditModel(RoleManager<IdentityRole> roleManager, StoreContext context) : base(roleManager, context)
         {
         }
         public class InputModel
@@ -22,20 +22,38 @@ namespace Clothings_Store.Areas.Admin.Pages.Role
         }
         [BindProperty]
         public InputModel Input { get; set; }   
-        public void OnGet()
+        public IdentityRole role {  get; set; }
+        public async Task<IActionResult> OnGet(string roleid)
         {
+            if (roleid == null) return NotFound("không tìm thấy role");
+            var role = await _roleManager.FindByIdAsync(roleid);
+            if (role != null)
+            {
+                Input = new InputModel()
+                {
+                    Name = role.Name
+                };
+                return Page();
+            }
+
+            return Page();
         }
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string roleid)
         {
+            if (roleid == null) return NotFound("không tìm thấy role");
+            var role = await _roleManager.FindByIdAsync(roleid);
+            if (role == null) return NotFound("không tìm thấy role");
+
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-            var newRole = new IdentityRole(Input.Name);
-            var result = await _roleManager.CreateAsync(newRole);
+            role.Name = Input.Name;
+            var result = await _roleManager.UpdateAsync(role);
+         
             if (result.Succeeded)
             {
-                StatusMessage = $"Bạn vừa tạo role mới: {Input.Name}";
+                StatusMessage = $"Bạn vừa đổi tên role: {Input.Name}";
                 return RedirectToPage("./Index");
             }
             else
