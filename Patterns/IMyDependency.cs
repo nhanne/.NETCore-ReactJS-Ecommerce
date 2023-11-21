@@ -8,7 +8,7 @@
     {
         public void WriteMessage(string message)
         {
-            Console.WriteLine($"MyDependency.WriteMessage Message: {message}");
+            Console.WriteLine($"\tMyDependency.WriteMessage Message: {message}");
         }
     }
 }
