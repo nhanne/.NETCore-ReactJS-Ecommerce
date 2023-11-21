@@ -14,7 +14,7 @@ namespace Clothings_Store.Services
         }
         public void OrderCustomer(Order order, AppUser userModel)
         {
-            var user = _db.Users.SingleOrDefault(m => m.Email.Equals(userModel.Email));
+            var user = _db.Users.SingleOrDefault(m => m.Email!.Equals(userModel.Email));
             if (user != null)
             {
                 order.UserId = user.Id;
@@ -50,6 +50,7 @@ namespace Clothings_Store.Services
 
         public void OrderInfo(Order order, Order orderModel, string code, double totalPrice, int TotalItems)
         {
+            if (orderModel == null || _db == null) return;
             order.OrdTime = DateTime.Now;
             order.DeliTime = order.OrdTime.AddDays(3);
             order.Status = "Chờ xác nhận";
@@ -59,9 +60,13 @@ namespace Clothings_Store.Services
             order.TotalQuantity = TotalItems;
             // Get Promotion
             DateTime now = DateTime.Now;
+            double percent = 100;
             var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == code && m.EndDate > now);
-            double percent = (code != null) ? (double)codeKM.DiscountPercentage : 100;
-            // How to apply strategy pattern to calculate TotalPrice;=
+            if (codeKM != null)
+            {
+                percent = (double)codeKM.DiscountPercentage;
+            }
+            // How to apply strategy pattern to calculate TotalPrice
             IBillingStrategy strategy = new NormalStrategy();
             var CustomerBill = new CustomerBill(strategy);
             order.TotalPrice = CustomerBill.LastPrice(totalPrice, percent);

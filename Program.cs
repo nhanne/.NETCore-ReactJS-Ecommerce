@@ -15,7 +15,6 @@ builder.Services.AddOptions();
 // How to connect StoreContext to MS SQL Server
 builder.Services.AddDbContext<StoreContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
-builder.Services.AddScoped<IMyDependency, MyDependency>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e when error connected database
 
 builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -82,6 +81,7 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 // Send Mail
 var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSettings);
+// Service DI
 builder.Services.AddScoped<IEmailSender, SendMailService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();

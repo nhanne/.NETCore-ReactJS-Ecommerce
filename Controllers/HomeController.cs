@@ -10,21 +10,17 @@ namespace Clothings_Store.Controllers
     {
         private readonly StoreContext _db;
         private readonly ILogger<HomeController> _logger;
-        private readonly IMyDependency _myDependency;
         public HomeController(StoreContext context, ILogger<HomeController> logger, IMyDependency myDependency)
         {
             _db = context;
             _logger = logger;
-            _myDependency = myDependency;
         }
-
         public IActionResult Index()
         {
             try
             {
                 ViewData["Products"] = _db.Products.OrderByDescending(p => p.Sold).Take(3).ToList();
                 _logger.LogInformation("Connected to database.");
-                _myDependency.WriteMessage("Index of Home Controller");
                 return View();
             }
             catch (Exception ex)

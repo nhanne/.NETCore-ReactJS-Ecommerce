@@ -14,26 +14,36 @@ namespace Clothings_Store.Services
         }
         public void ClearCart()
         {
-            var session = _httpContextAccessor.HttpContext.Session;
-            session.Remove(CARTKEY);
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext != null && httpContext.Session != null)
+            {
+                httpContext.Session.Remove(CARTKEY);
+            }
         }
 
         public List<Cart> GetCart()
         {
-            var session = _httpContextAccessor.HttpContext.Session;
-            string jsoncart = session.GetString(CARTKEY);
+            var httpContext = _httpContextAccessor.HttpContext;
+            var session = httpContext?.Session; 
+            string jsoncart = session?.GetString(CARTKEY) ?? string.Empty; 
             if (!string.IsNullOrEmpty(jsoncart))
             {
-                return JsonConvert.DeserializeObject<List<Cart>>(jsoncart);
+                return JsonConvert.DeserializeObject<List<Cart>>(jsoncart)!; 
             }
+
             return new List<Cart>();
         }
 
+
         public void SaveCartSession(List<Cart> listCart)
         {
-            var session = _httpContextAccessor.HttpContext.Session;
-            string jsoncart = JsonConvert.SerializeObject(listCart);
-            session.SetString(CARTKEY, jsoncart);
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext != null && httpContext.Session != null)
+            {
+                var session = httpContext.Session;
+                string jsoncart = JsonConvert.SerializeObject(listCart);
+                session.SetString(CARTKEY, jsoncart);
+            }
         }
 
         public int TotalItems()
