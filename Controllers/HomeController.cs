@@ -34,7 +34,12 @@ namespace Clothings_Store.Controllers
             return View();
         }
         [HttpGet]
-        public JsonResult getData(string? search, string? category, string? sort, int page = 1, int pageSize = 8)
+        public JsonResult getData(
+            string? search, 
+            string? category, 
+            string sort, 
+            int page = 1, 
+            int pageSize = 8)
         {
             var query = _db.Products.AsQueryable();
             if (!string.IsNullOrEmpty(category))
@@ -66,11 +71,11 @@ namespace Clothings_Store.Controllers
                 .AsNoTracking()
                 .ToList();
             return Json(new
-            {
-                products,
-                TotalPages = totalPages,
-                CurrentPage = page,
-            });
+                {
+                    products,
+                    TotalPages = totalPages,
+                    CurrentPage = page,
+                });
         }
         [HttpGet]
         public JsonResult getCategories()
@@ -151,7 +156,7 @@ namespace Clothings_Store.Controllers
                         && p.SizeId == sizeId)
                .FirstOrDefault();
             int quantity = stock == null ? 0 : (int)stock.Stock1;
-            return Json(new { quantity = quantity });
+            return Json(new { quantity });
         }
 
         

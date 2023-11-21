@@ -24,20 +24,23 @@ public class Cart
         _db = context;
         if(_db != null)
         {
-            Stock? stock = _db.Stocks
+            var stock = _db.Stocks
                 .Include(p => p.Product)
                 .Include(p => p.Product.Category)
                 .Include(p => p.Color)
                 .Include(p => p.Size)
                 .FirstOrDefault(p => p.Id == stockId);
-            IdCart = stockId;
-            quantity = 1;
-            cateName = stock.Product.Category.Name;
-            images = stock.Product.Picture;
-            name = stock.Product.Name;
-            unitPrice = stock.Product.UnitPrice;
-            size = stock.Size.Name;
-            color = stock.Color.Name;
+            if(stock != null)
+            {
+                IdCart = stockId;
+                quantity = 1;
+                cateName = stock.Product.Category.Name;
+                images = stock.Product.Picture;
+                name = stock.Product.Name;
+                unitPrice = stock.Product.UnitPrice;
+                size = stock.Size.Name;
+                color = stock.Color.Name;
+            }
         }
     }
 }
