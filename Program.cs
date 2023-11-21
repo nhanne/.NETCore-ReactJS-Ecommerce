@@ -2,16 +2,14 @@ using Clothings_Store.Data;
 using Clothings_Store.Models;
 using Clothings_Store.Patterns;
 using Clothings_Store.Services;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Configuration;
 using System.Text;
 
 Console.OutputEncoding = Encoding.UTF8;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);   
 // Add services to the container.
 builder.Services.AddOptions();
 // How to connect StoreContext to MS SQL Server
@@ -85,6 +83,8 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSettings);
 builder.Services.AddScoped<IEmailSender, SendMailService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
 
