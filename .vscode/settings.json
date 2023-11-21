@@ -20,7 +20,6 @@
         "Views/_ViewStart.cshtml": true,
         "Views/_ViewImports.cshtml": true,
         "wwwroot/favicon.ico": true,
-        "libman.json": true,
         "Migrations": true,
         "/C:/Users/nhanc/Desktop/NetFW/Boutique/Boutique/App_Data": true,
         "/C:/Users/nhanc/Desktop/NetFW/Boutique/Boutique/obj": true,

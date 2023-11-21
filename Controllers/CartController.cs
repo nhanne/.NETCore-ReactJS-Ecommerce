@@ -107,6 +107,7 @@ namespace Clothings_Store.Controllers
                 _db.Orders.Add(order);
                 _db.SaveChanges();
                 _orderService.OrderDetail(order.Id, _cartService.GetCart());
+                _cartService.ClearCart();
                 return Json(new { redirectToUrl = Url.Action("Index", new { Id = order.Id }) });
             }
             catch (Exception ex)

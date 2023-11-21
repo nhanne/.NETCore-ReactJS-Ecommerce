@@ -8,17 +8,29 @@ namespace Clothings_Store.Services
     {
         public const string CARTKEY = "cart";
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public CartService(IHttpContextAccessor httpContextAccessor)
+        private readonly ILogger<CartService> _logger;
+        public CartService(IHttpContextAccessor httpContextAccessor, ILogger<CartService> logger)
         {
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
         public void ClearCart()
         {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext != null && httpContext.Session != null)
+            try
             {
-                httpContext.Session.Remove(CARTKEY);
+                var httpContext = _httpContextAccessor.HttpContext;
+                if (httpContext != null && httpContext.Session != null)
+                {
+                    httpContext.Session.Remove(CARTKEY);
+                }
+                _logger.LogInformation("Xóa giỏ hàng thành công.");
             }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "Thất bại khi xóa giỏ hàng.");
+                throw;
+            }
+           
         }
 
         public List<Cart> GetCart()

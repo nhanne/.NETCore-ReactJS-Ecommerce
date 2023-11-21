@@ -11,15 +11,9 @@ namespace Clothings_Store.Services
         private readonly ILogger<OrderService> _logger;
         public OrderService(StoreContext db, ILogger<OrderService> logger)
         {
-            try
-            {
-                _db = db;
-                _logger = logger;
-                _logger.LogInformation("Inject thành công db và logger.");
-            }
-            catch(Exception ex) {
-                throw;
-            }
+            _db = db;
+            _logger = logger;
+            _logger.LogInformation("Inject thành công db và logger vào OrderService.");
         }
         public void OrderCustomer(Order order, AppUser userModel)
         {
@@ -68,7 +62,7 @@ namespace Clothings_Store.Services
                     _logger.LogInformation("Thêm vào bảng chi tiết đơn hàng thành công.");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Thất bại khi thêm vào bảng chi tiết đơn hàng.");
                 throw;
@@ -101,12 +95,12 @@ namespace Clothings_Store.Services
                 order.TotalPrice = CustomerBill.LastPrice(totalPrice, percent);
                 _logger.LogInformation("Áp dụng mẫu thiết kế Strategy thành công.");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Thất bại khi sử dụng mẫu thiết kế Strategy.");
                 throw;
             }
-          
+
         }
     }
 }
