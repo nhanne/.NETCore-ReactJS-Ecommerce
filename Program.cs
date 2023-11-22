@@ -79,16 +79,13 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
     facebookOptions.CallbackPath = "/loginFacebook";
 });
 // Service DI
-// Mail
 var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSettings);
 builder.Services.AddScoped<IEmailSender, SendMailService>();
-// Cart
 builder.Services.AddScoped<ICartService, CartService>();
-// Order
 builder.Services.AddScoped<IOrderService, OrderService>();
-// Payment
-builder.Services.Configure<VnPayConfig>(builder.Configuration.GetSection("Vnpay"));
+var Vnpay = builder.Configuration.GetSection("Vnpay");
+builder.Services.Configure<VnPayConfig>(Vnpay);
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 //
 builder.Services.AddHttpContextAccessor();

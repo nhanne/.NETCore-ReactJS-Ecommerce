@@ -4,7 +4,7 @@ namespace Clothings_Store.Patterns
 {
     public interface IOrderService
     {
-        Order PlaceOrder(AppUser userModel, Order orderModel, string code);
+        Order PlaceOrder(AppUser userModel, Order orderModel);
     }
 
 }

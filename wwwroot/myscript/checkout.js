@@ -60,6 +60,7 @@ function CheckOut() {
     var _paymentId = $('#payment').val();
     var _totalPrice = $('#totalPrice').text();
     var _note = $('#note').val();
+    var promoCode = $('#promoCode').val();
 
     var userModel = {
         Id: _id,
@@ -72,17 +73,17 @@ function CheckOut() {
         TotalPrice: _totalPrice,
         PaymentId: _paymentId,
         Note: _note,
-        Address: _address
+        Address: _address,
+        PromoCode: promoCode
     }
-    var promoCode = $('#promoCode').val();
+    
     if (Validate()) {
         $.ajax({
             url: '/Cart/CheckOut',
             type: 'POST',
             data: {
                 userModel,
-                orderModel,
-                promoCode
+                orderModel
             },
             success: function (response) {
                 window.location.href = response.redirectToUrl;

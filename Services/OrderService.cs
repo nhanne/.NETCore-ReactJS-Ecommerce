@@ -1,9 +1,6 @@
-﻿using Clothings_Store.Controllers;
-using Clothings_Store.Data;
+﻿using Clothings_Store.Data;
 using Clothings_Store.Models;
 using Clothings_Store.Patterns;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Clothings_Store.Services
@@ -25,13 +22,13 @@ namespace Clothings_Store.Services
             _cartService = cartService;
             _httpContextAccessor = httpContextAccessor;
         }
-        public Order PlaceOrder(AppUser userModel, Order orderModel, string code)
+        public Order PlaceOrder(AppUser userModel, Order orderModel)
         {
             try
             {
                 Order order = new Order();
                 OrderCustomer(order, userModel);
-                OrderInfo(order, orderModel, code);
+                OrderInfo(order, orderModel);
                 OrderDetail(order.Id);
                 _cartService.ClearCart();
                 _logger.LogInformation("Place Order Success.");
@@ -65,7 +62,7 @@ namespace Clothings_Store.Services
                 order.CustomerId = noAccount.Id;
             }
         }
-        private void OrderInfo(Order order, Order orderModel, string code)
+        private void OrderInfo(Order order, Order orderModel)
         {
             if (orderModel == null || _db == null) return;
             order.OrdTime = DateTime.Now;
@@ -77,7 +74,7 @@ namespace Clothings_Store.Services
             order.TotalQuantity = _cartService.TotalItems();
             // Get Promotion
             DateTime now = DateTime.Now;
-            var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == code && m.EndDate > now);
+            var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == orderModel.PromoCode && m.EndDate > now);
             double percent = (codeKM != null) ? (double)codeKM.DiscountPercentage : 100;
             // Strategy Pattern
             IBillingStrategy normalPrice = new NormalStrategy();

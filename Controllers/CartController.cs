@@ -11,23 +11,25 @@ namespace Clothings_Store.Controllers
     public class CartController : Controller
     {
         private readonly StoreContext _db;
-        private readonly IOrderService _orderService;
         private readonly ICartService _cartService;
         private readonly IPaymentService _paymentService;
         public CartController(
             StoreContext context,
-            IOrderService orderService,
             ICartService cartService,
             IPaymentService paymentService
             )
         {
             _db = context;
-            _orderService = orderService;
             _cartService = cartService;
             _paymentService = paymentService;
         }
         public IActionResult Index()
         {
+            List<Cart> listCart = _cartService.GetCart();
+            if (listCart.Count == 0)
+            {
+                return RedirectToAction("Store", "Home");
+            }
             ViewBag.TotalPrice = _cartService.TotalPrice();
             ViewBag.TotalItems = _cartService.TotalItems();
             return View(_cartService.GetCart());
@@ -57,33 +59,27 @@ namespace Clothings_Store.Controllers
             _cartService.UpdateCart(IdCart, Quantity);
             return RedirectToAction("Index");
         }
-        [HttpGet]
-        public IActionResult CheckOut()
-        {
-            List<Cart> listCart = _cartService.GetCart();
-            if (listCart.Count == 0)
-            {
-                return RedirectToAction("Store", "Home");
-            }
-            return View(listCart);
-        }
         [HttpPost]
-        public IActionResult CheckOut(AppUser userModel, Order orderModel, string code)
+        public IActionResult CheckOut(AppUser userModel, Order orderModel)
         {
-            Order order = _orderService.PlaceOrder(userModel, orderModel, code);
             switch (orderModel.PaymentId)
             {
                 case 1:
-                    return Json(new { redirectToUrl = Url.Action("Index", new { Id = orderModel.Id }) });
+                    _paymentService.COD(userModel, orderModel);
+                    return Json(new { redirectToUrl = Url.Action("PaymentConfirm") });
                 case 2:
-                    string vnpaymentUrl = _paymentService.VNPay(order);
+                    string vnpaymentUrl = _paymentService.VNPay(userModel, orderModel);
                     return Json(new { redirectToUrl = vnpaymentUrl });
                 default:
-                    return Json(new { redirectToUrl = Url.Action("Index", new { Id = orderModel.Id }) });
+                    return View();
             }
         }
-        public IActionResult PaymentSuccess()
+        public IActionResult VNPayConfirm()
         {
+            if(!_paymentService.VNPayConfirm())
+            {
+                ViewBag.Confirm = "Thanh toán đơn hàng qua VNPAY không thành công";
+            }
             return View();
         }
     }

@@ -27,14 +27,13 @@ public partial class Order
     public string? Note { get; set; }
 
     public int? StaffId { get; set; }
-
+    public string? PromoCode { get; set; }
     public virtual Customer? Customer { get; set; }
     public virtual AppUser? User { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
     public virtual Payment? Payment { get; set; } 
-
     public virtual Staff? Staff { get; set; }
 
     public virtual OrderStatus? StatusNavigation { get; set; } 
