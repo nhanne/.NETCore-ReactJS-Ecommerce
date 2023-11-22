@@ -27,6 +27,7 @@ builder.Services.Configure<SecurityStampValidatorOptions>(o =>
 builder.Services.AddControllersWithViews(); // MVC
 builder.Services.AddDistributedMemoryCache(); // Cache
 builder.Services.AddRazorPages(); // Razor
+// Config ASP.NET Identity
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings.
@@ -56,7 +57,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-
 // Configuration session
 builder.Services.AddSession(options =>
 {
@@ -64,28 +64,34 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
+// External Login Configuration
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
     IConfigurationSection googleAuthNSection = builder.Configuration.GetSection("Authentication:Google");
-    googleOptions.ClientId = googleAuthNSection["ClientId"];
-    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"];
+    googleOptions.ClientId = googleAuthNSection["ClientId"]!;
+    googleOptions.ClientSecret = googleAuthNSection["ClientSecret"]!;
     googleOptions.CallbackPath = "/loginGoogle";
 }).AddFacebook(facebookOptions =>
 {
     IConfigurationSection facebookAuthNSection = builder.Configuration.GetSection("Authentication:Facebook");
-    facebookOptions.AppId = facebookAuthNSection["AppId"];
-    facebookOptions.AppSecret = facebookAuthNSection["AppSecret"];
+    facebookOptions.AppId = facebookAuthNSection["AppId"]!;
+    facebookOptions.AppSecret = facebookAuthNSection["AppSecret"]!;
     facebookOptions.CallbackPath = "/loginFacebook";
 });
-// Send Mail
+// Service DI
+// Mail
 var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSettings);
-// Service DI
 builder.Services.AddScoped<IEmailSender, SendMailService>();
+// Cart
 builder.Services.AddScoped<ICartService, CartService>();
+// Order
 builder.Services.AddScoped<IOrderService, OrderService>();
-
+// Payment
+builder.Services.Configure<VnPayConfig>(builder.Configuration.GetSection("Vnpay"));
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+//
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
 
 var app = builder.Build();

@@ -1,7 +1,10 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Models;
 using Clothings_Store.Patterns;
+using Clothings_Store.Services;
+using Clothings_Store.Services.Others;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace Clothings_Store.Controllers
 {
@@ -10,14 +13,18 @@ namespace Clothings_Store.Controllers
         private readonly StoreContext _db;
         private readonly IOrderService _orderService;
         private readonly ICartService _cartService;
+        private readonly IPaymentService _paymentService;
         public CartController(
             StoreContext context,
             IOrderService orderService,
-            ICartService cartService)
+            ICartService cartService,
+            IPaymentService paymentService
+            )
         {
             _db = context;
             _orderService = orderService;
             _cartService = cartService;
+            _paymentService = paymentService;
         }
         public IActionResult Index()
         {
@@ -63,14 +70,21 @@ namespace Clothings_Store.Controllers
         [HttpPost]
         public IActionResult CheckOut(AppUser userModel, Order orderModel, string code)
         {
-            Order order = new Order();
-            _orderService.OrderCustomer(order, userModel);
-            _orderService.OrderInfo(order, orderModel, code, _cartService.TotalPrice(), _cartService.TotalItems());
-            _db.Orders.Add(order);
-            _db.SaveChanges();
-            _orderService.OrderDetail(order.Id, _cartService.GetCart());
-            _cartService.ClearCart();
-            return Json(new { redirectToUrl = Url.Action("Index", new { Id = order.Id }) });
+            Order order = _orderService.PlaceOrder(userModel, orderModel, code);
+            switch (orderModel.PaymentId)
+            {
+                case 1:
+                    return Json(new { redirectToUrl = Url.Action("Index", new { Id = orderModel.Id }) });
+                case 2:
+                    string vnpaymentUrl = _paymentService.VNPay(order);
+                    return Json(new { redirectToUrl = vnpaymentUrl });
+                default:
+                    return Json(new { redirectToUrl = Url.Action("Index", new { Id = orderModel.Id }) });
+            }
+        }
+        public IActionResult PaymentSuccess()
+        {
+            return View();
         }
     }
 }

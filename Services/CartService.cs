@@ -44,7 +44,7 @@ namespace Clothings_Store.Services
                 {
                     httpContext.Session.Remove(CARTKEY);
                 }
-                _logger.LogInformation("Xóa giỏ hàng thành công.");
+                _logger.LogInformation("Xóa toàn bộ giỏ hàng thành công.");
             }
             catch (Exception ex)
             {
