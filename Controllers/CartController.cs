@@ -76,10 +76,12 @@ namespace Clothings_Store.Controllers
         }
         public IActionResult VNPayConfirm()
         {
-            if(!_paymentService.VNPayConfirm())
-            {
-                ViewBag.Confirm = "Thanh toán đơn hàng qua VNPAY không thành công";
-            }
+           
+            return RedirectToAction("PaymentConfirm");
+        }
+        public IActionResult PaymentConfirm()
+        {
+           
             return View();
         }
     }

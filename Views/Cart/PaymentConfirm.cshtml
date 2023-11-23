@@ -1,5 +1,62 @@
 ﻿@{
     Layout = "~/Views/Shared/_LayoutBS.cshtml";
 }
-<hr/>
-<h2>@ViewBag.Confirm</h2>
+<div class="row justify-content-center d-flex p-2 align-items-center">
+    <div class="col-lg-8">
+        <div class="card p-4 shadow">
+            <h3 class="text-center mb-4">Cảm ơn bạn đã đặt hàng!</h3>
+            <p class="text-center">
+                Đơn hàng của bạn đã được xác nhận và đang được xử lý. <br />
+                Chúng tôi sẽ liên hệ với bạn qua mail hoặc số điện thoại trong thời gian sớm nhất.
+            </p>
+            <h3 class="text-center">Thông tin đơn hàng:</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Tổng giá</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-center"><strong>Tổng tiền</strong>:  ₫</p>
+            <h3 class="text-center">Thông tin khách hàng:</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Họ tên:</strong> </p>
+                    <p><strong>Ngày đặt hàng:</strong> </p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Email:</strong> </p>
+                    <p><strong>Số điện thoại:</strong></p>
+                </div>
+                <div class="col-md-12">
+                    <p><strong>Hình thức thanh toán:</strong></p>
+                    <p><strong>Địa chỉ:</strong> </p>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button class="btn btn-primary" id="placeOrderButton" onclick="location.href='@Url.Action("Index","Home")'">
+                    Quay về
+                    trang chủ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@* <script src="~/signalr/hubs"></script>
+    <script>
+        $(document).ready(function () {
+            var orderHub = $.connection.notifyHub;
+
+            $.connection.hub.start().done(function () {
+                // Kết nối tới Hub đã thành công
+                    orderHub.server.notifyOrderPlaced(@Model.Id);
+            });
+        });
+    </script> *@

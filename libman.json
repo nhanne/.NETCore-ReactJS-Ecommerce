@@ -43,6 +43,11 @@
       "provider": "cdnjs",
       "library": "multiple-select@1.2.3",
       "destination": "wwwroot/lib/multiple-select/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "signalr.js@2.4.3",
+      "destination": "wwwroot/lib/signalr.js/"
     }
   ]
 }

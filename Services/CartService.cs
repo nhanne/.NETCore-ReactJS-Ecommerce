@@ -22,18 +22,28 @@ namespace Clothings_Store.Services
         }
         public void AddToCart(Stock stock)
         {
-            var listCart = GetCart();
-            var cartitem = listCart.Find(p => p.IdCart == stock.Id);
-            if (cartitem != null)
+            try
             {
-                cartitem.quantity++;
+                var listCart = GetCart();
+                var cartitem = listCart.Find(p => p.IdCart == stock.Id);
+                if (cartitem != null)
+                {
+                    cartitem.quantity++;
+                }
+                else
+                {
+                    cartitem = new Cart(_db, stock.Id);
+                    listCart.Add(cartitem);
+                }
+                SaveCartSession(listCart);
+                _logger.LogInformation("Thêm sản phẩm vào giỏ hàng thành công.");
             }
-            else
+            catch (Exception ex)
             {
-                cartitem = new Cart(_db, stock.Id);
-                listCart.Add(cartitem);
+                _logger.LogError(ex, "Thất bại khi thêm sản phẩm vào giỏ hàng.");
+                throw;
             }
-            SaveCartSession(listCart);
+
         }
         public void ClearCart()
         {
