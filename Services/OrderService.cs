@@ -55,8 +55,6 @@ namespace Clothings_Store.Services
                 noAccount.Phone = userModel.PhoneNumber;
                 noAccount.FullName = userModel.Name;
                 noAccount.Address = userModel.Address;
-                noAccount.Password = "Aa2xi#@!35nx/.?";
-                noAccount.Member = false;
                 _db.Customers.Add(noAccount);
                 _db.SaveChanges();
                 order.CustomerId = noAccount.Id;
