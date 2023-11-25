@@ -8,7 +8,5 @@ namespace Clothings_Store.Patterns
         void COD(OrderInfoSession orderInfoModel);
         string VNPay(OrderInfoSession orderInfoModel);
         bool VNPayConfirm();
-        string Momo(OrderInfoSession orderInfoModel);
-        bool MomoConfirm();
     }
 }

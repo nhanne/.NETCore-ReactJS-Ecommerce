@@ -16,57 +16,34 @@ namespace Clothings_Store.Services
 {
     public class PaymentService : IPaymentService
     {
-        public const string INFOKEY = "order";
-        private readonly StoreContext _db;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOrderService _orderService;
         private readonly VnPayConfig _vnPayConfig;
-        private readonly MoMoConfig _momoConfig;
+        private readonly ICustomSessionService<string> _session;
+        private const string ORDERKEY = "order";
         public PaymentService(
-            StoreContext db,
             IHttpContextAccessor httpContextAccessor,
             IOrderService orderService,
-            IOptions<VnPayConfig> vnPayConfig,
-            IOptions<MoMoConfig> momoConfig
+            ICustomSessionService<string> session,
+            IOptions<VnPayConfig> vnPayConfig
             )
         {
-            _db = db;
             _httpContextAccessor = httpContextAccessor;
             _orderService = orderService;
+            _session = session;
             _vnPayConfig = vnPayConfig.Value;
-            _momoConfig = momoConfig.Value;
         }
         public void COD(OrderInfoSession orderInfoModel)
         {
             _orderService.PlaceOrder(orderInfoModel);
         }
-        private List<string> GetOrderSession()
+        void saveDataTemp(OrderInfoSession orderInfoModel)
         {
-            var session = _httpContextAccessor.HttpContext!.Session;
-            string jsonInfo = session.GetString(INFOKEY) ?? string.Empty;
-            if (!string.IsNullOrEmpty(jsonInfo))
-            {
-                return JsonConvert.DeserializeObject<List<string>>(jsonInfo)!;
-            }
-            return new List<string>();
-        }
-        private void ClearSession()
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext != null && httpContext.Session != null)
-            {
-                httpContext.Session.Remove(INFOKEY);
-            }
-        }
-        public void SaveSession(List<string> listSession)
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext != null && httpContext.Session != null)
-            {
-                var session = httpContext.Session;
-                string jsonInfo = JsonConvert.SerializeObject(listSession);
-                session.SetString(INFOKEY, jsonInfo);
-            }
+            _session.ClearSession(ORDERKEY);
+            var listSession = _session.GetSession(ORDERKEY);
+            string orderInfo = JsonConvert.SerializeObject(orderInfoModel);
+            listSession.Add(orderInfo);
+            _session.SaveSession(listSession);
         }
         public string VNPay(OrderInfoSession orderInfoModel)
         {
@@ -85,11 +62,7 @@ namespace Clothings_Store.Services
             pay.AddRequestData("vnp_TxnRef", orderInfoModel.Id.ToString());
             pay.AddRequestData("vnp_CreateDate", expirationTime.ToString("yyyyMMddHHmmss"));
             pay.AddRequestData("vnp_IpAddr", Util.GetIpAddress(_httpContextAccessor));
-            ClearSession();
-            var listSession = GetOrderSession();
-            string orderInfo = JsonConvert.SerializeObject(orderInfoModel);
-            listSession.Add(orderInfo);
-            SaveSession(listSession);
+            saveDataTemp(orderInfoModel);
             string paymentUrl = pay.CreateRequestUrl(_vnPayConfig.Url, _vnPayConfig.HashSecret);
             return paymentUrl;
         }
@@ -110,14 +83,13 @@ namespace Clothings_Store.Services
                     }
                 }
 
-                List<string> listSession = GetOrderSession();
-                string s = listSession[0];
+                var listSession = _session.GetSession(ORDERKEY);
                 var order = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);
-                long vnpayTranId = Convert.ToInt64(pay.GetResponseData("vnp_TransactionNo"));
+
                 string vnp_ResponseCode = pay.GetResponseData("vnp_ResponseCode");
                 string vnp_SecureHash = _httpContextAccessor.HttpContext.Request.Query["vnp_SecureHash"]!;
                 bool checkSignature = pay.ValidateSignature(vnp_SecureHash, hashSecret);
-                if (checkSignature && listSession.Count > 0)
+                if (checkSignature && listSession.Count > 0 && order != null)
                 {
                     if (vnp_ResponseCode == "00")
                     {
@@ -137,13 +109,5 @@ namespace Clothings_Store.Services
             return true;
         }
 
-        public string Momo(OrderInfoSession orderInfoModel)
-        {
-            return "momo";
-        }
-        public bool MomoConfirm()
-        {
-            return true;
-        }
     }
 }

@@ -7,18 +7,18 @@ namespace Clothings_Store.Services
 {
     public class CartService : ICartService
     {
-        public const string CARTKEY = "cart";
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<CartService> _logger;
         private readonly StoreContext _db;
+        private readonly ICustomSessionService<Cart> _session;
+        private const string CARTKEY = "cart";
         public CartService(
-            IHttpContextAccessor httpContextAccessor,
             ILogger<CartService> logger,
-            StoreContext db)
+            StoreContext db,
+           ICustomSessionService<Cart> session)
         {
-            _httpContextAccessor = httpContextAccessor;
             _logger = logger;
             _db = db;
+            _session = session;
         }
         public void AddToCart(Stock stock)
         {
@@ -45,35 +45,6 @@ namespace Clothings_Store.Services
             }
 
         }
-        public void ClearCart()
-        {
-            try
-            {
-                var httpContext = _httpContextAccessor.HttpContext;
-                if (httpContext != null && httpContext.Session != null)
-                {
-                    httpContext.Session.Remove(CARTKEY);
-                }
-                _logger.LogInformation("Xóa toàn bộ giỏ hàng thành công.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Thất bại khi xóa giỏ hàng.");
-                throw;
-            }
-
-        }
-        public List<Cart> GetCart()
-        {
-            var session = _httpContextAccessor.HttpContext!.Session;
-            string jsoncart = session?.GetString(CARTKEY) ?? string.Empty;
-            if (!string.IsNullOrEmpty(jsoncart))
-            {
-                return JsonConvert.DeserializeObject<List<Cart>>(jsoncart)!;
-            }
-            return new List<Cart>();
-        }
-
         public int RemoveFromCart(int IdCart)
         {
             var listCart = GetCart();
@@ -89,21 +60,10 @@ namespace Clothings_Store.Services
             }
             return 1;
         }
-
-        public void SaveCartSession(List<Cart> listCart)
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            if (httpContext != null && httpContext.Session != null)
-            {
-                var session = httpContext.Session;
-                string jsoncart = JsonConvert.SerializeObject(listCart);
-                session.SetString(CARTKEY, jsoncart);
-            }
-        }
         public int TotalItems()
         {
             int iTotalItems = 0;
-            var listCart = GetCart(); ;
+            var listCart = GetCart();
             if (listCart != null)
             {
                 iTotalItems = listCart.Sum(n => n.quantity);
@@ -130,6 +90,21 @@ namespace Clothings_Store.Services
                 item.quantity = Quantity;
             }
             SaveCartSession(listCart);
+        }
+
+        public List<Cart> GetCart()
+        {
+            return _session.GetSession(CARTKEY);
+        }
+
+        public void ClearCart()
+        {
+            _session.ClearSession(CARTKEY);
+        }
+
+        public void SaveCartSession(List<Cart> listCart)
+        {
+            _session.SaveSession(listCart);
         }
     }
 }

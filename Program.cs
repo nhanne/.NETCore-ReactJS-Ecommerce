@@ -1,4 +1,4 @@
-using Clothings_Store.Data;
+﻿using Clothings_Store.Data;
 using Clothings_Store.Models;
 using Clothings_Store.Patterns;
 using Clothings_Store.Services;
@@ -26,7 +26,6 @@ builder.Services.Configure<SecurityStampValidatorOptions>(o =>
                    o.ValidationInterval = TimeSpan.FromMinutes(1));
 
 builder.Services.AddControllersWithViews(); // MVC
-//builder.Services.AddDistributedMemoryCache(); 
 builder.Services.AddDistributedSqlServerCache(options =>
 {
     options.ConnectionString = "Data Source=DESKTOP-EC723GE\\TNHAN;Initial Catalog=ClothingsStore;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true";
@@ -92,7 +91,9 @@ builder.Services.Configure<MailSettings>(mailSettings);
 builder.Services.AddScoped<IEmailSender, SendMailService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped(typeof(ICustomSessionService<>), typeof(CustomSessionService<>));
 
+// Online Payment
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 var Vnpay = builder.Configuration.GetSection("OnlinePayment:Vnpay");
 builder.Services.Configure<VnPayConfig>(Vnpay);
@@ -113,6 +114,42 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
+app.Use(async (context, next) =>
+{
+    var session = context.Session;
+    var existingSessionId = session.GetString("SessionId");
+
+    // Kiểm tra xem SessionId có tồn tại không
+    if (string.IsNullOrEmpty(existingSessionId))
+    {
+        // Nếu không có SessionId, kiểm tra trong cookie
+        var cookieSessionId = context.Request.Cookies["Store.SessionId"];
+
+        if (!string.IsNullOrEmpty(cookieSessionId))
+        {
+            // Sử dụng SessionId từ cookie để tái tạo session
+            session.SetString("SessionId", cookieSessionId);
+        }
+        else
+        {
+            // Nếu không có cả SessionId lẫn cookie, tạo một SessionId mới
+            var newSessionId = Guid.NewGuid().ToString();
+            session.SetString("SessionId", newSessionId);
+
+            // Lưu SessionId vào cookie
+            context.Response.Cookies.Append("Store.SessionId", newSessionId, new CookieOptions
+            {
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict,
+                IsEssential = true,
+                Expires = DateTimeOffset.Now.AddMinutes(30)
+            });
+        }
+    }
+
+    await next();
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(
