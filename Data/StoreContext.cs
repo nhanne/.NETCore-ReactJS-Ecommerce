@@ -17,8 +17,6 @@ namespace Clothings_Store.Data
 
         public virtual DbSet<Customer> Customers { get; set; }
 
-        public virtual DbSet<JobTitle> JobTitles { get; set; }
-
         public virtual DbSet<Order> Orders { get; set; }
 
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
@@ -32,8 +30,6 @@ namespace Clothings_Store.Data
         public virtual DbSet<Promotion> Promotions { get; set; }
 
         public virtual DbSet<Size> Sizes { get; set; }
-
-        public virtual DbSet<Staff> Staff { get; set; }
 
         public virtual DbSet<Stock> Stocks { get; set; }
 
@@ -69,20 +65,10 @@ namespace Clothings_Store.Data
                     .HasMaxLength(50)
                     .IsUnicode(false);
                 entity.Property(e => e.FullName).HasMaxLength(50);
-                entity.Property(e => e.Password)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
                 entity.Property(e => e.Phone)
                     .HasMaxLength(10)
                     .IsUnicode(false)
                     .IsFixedLength();
-            });
-
-            modelBuilder.Entity<JobTitle>(entity =>
-            {
-                entity.ToTable("Job_title");
-
-                entity.Property(e => e.Name).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -104,10 +90,6 @@ namespace Clothings_Store.Data
                 entity.HasOne(d => d.Payment).WithMany(p => p.Orders)
                     .HasForeignKey(d => d.PaymentId)
                     .HasConstraintName("FK__Order__PaymentId__32AB8735");
-
-                entity.HasOne(d => d.Staff).WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.StaffId)
-                    .HasConstraintName("FK__Order__StaffId__31B762FC");
 
                 entity.HasOne(d => d.StatusNavigation).WithMany(p => p.Orders)
                     .HasForeignKey(d => d.Status)
@@ -207,34 +189,6 @@ namespace Clothings_Store.Data
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Staff>(entity =>
-            {
-                entity.HasKey(e => e.Id).HasName("PK__Staff__3214EC07D20549E0");
-
-                entity.ToTable(tb => tb.HasTrigger("ASP_AbortRoleAdmin"));
-
-                entity.Property(e => e.Address).HasMaxLength(250);
-                entity.Property(e => e.Cmt)
-                    .HasMaxLength(15)
-                    .IsUnicode(false)
-                    .HasColumnName("CMT");
-                entity.Property(e => e.DateOfBirth).HasColumnType("date");
-                entity.Property(e => e.Email)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.FullName).HasMaxLength(50);
-                entity.Property(e => e.JobTitle).HasColumnName("Job_title");
-                entity.Property(e => e.Password)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-                entity.Property(e => e.Phone)
-                    .HasMaxLength(12)
-                    .IsUnicode(false);
-
-                entity.HasOne(d => d.JobTitleNavigation).WithMany(p => p.Staff)
-                    .HasForeignKey(d => d.JobTitle)
-                    .HasConstraintName("FK_STAFF");
-            });
 
             modelBuilder.Entity<Stock>(entity =>
             {

@@ -52,7 +52,6 @@ function CheckOut() {
     var addressText = streets + " " + selectedWard + ", " + selectedDistrict + ", " + selectedCity;
     $('#address').val(addressText);
 
-    var _id = $('#Id').val();
     var _name = $('#full_name').val();
     var _email = $('#email').val();
     var _phone = $('#phone').val();
@@ -62,28 +61,22 @@ function CheckOut() {
     var _note = $('#note').val();
     var promoCode = $('#promoCode').val();
 
-    var userModel = {
-        Id: _id,
-        Name: _name,
+    var OrderInfoModel = {
+        FullName: _name,
         Email: _email,
-        PhoneNumber: _phone,
-        Address: _address
-    }
-    var orderModel = {
-        TotalPrice: _totalPrice,
+        Phone: _phone,
+        Amount: _totalPrice,
         PaymentId: _paymentId,
         Note: _note,
         Address: _address,
-        PromoCode: promoCode
+        DiscountCode: promoCode
     }
-    
     if (Validate()) {
         $.ajax({
             url: '/Cart/CheckOut',
             type: 'POST',
             data: {
-                userModel,
-                orderModel
+                OrderInfoModel
             },
             success: function (response) {
                 window.location.href = response.redirectToUrl;

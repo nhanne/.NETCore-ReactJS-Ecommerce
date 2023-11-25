@@ -22,17 +22,16 @@ namespace Clothings_Store.Services
             _cartService = cartService;
             _httpContextAccessor = httpContextAccessor;
         }
-        public Order PlaceOrder(AppUser userModel, Order orderModel)
+        public void PlaceOrder(OrderInfoSession orderInfoModel)
         {
             try
             {
                 Order order = new Order();
-                OrderCustomer(order, userModel);
-                OrderInfo(order, orderModel);
+                OrderCustomer(order, orderInfoModel);
+                OrderInfo(order, orderInfoModel);
                 OrderDetail(order.Id);
                 _cartService.ClearCart();
                 _logger.LogInformation("Place Order Success.");
-                return order;
             }
             catch (Exception ex)
             {
@@ -40,7 +39,7 @@ namespace Clothings_Store.Services
                 throw;
             }
         }
-        private void OrderCustomer(Order order, AppUser userModel)
+        private void OrderCustomer(Order order, OrderInfoSession orderInfoModel)
         {
             var httpContext = _httpContextAccessor.HttpContext!;
             if (httpContext.User.Identity!.IsAuthenticated == true)
@@ -50,29 +49,30 @@ namespace Clothings_Store.Services
             }
             else
             {
-                Customer noAccount = new Customer();
-                noAccount.Email = userModel.Email;
-                noAccount.Phone = userModel.PhoneNumber;
-                noAccount.FullName = userModel.Name;
-                noAccount.Address = userModel.Address;
-                _db.Customers.Add(noAccount);
+                Customer customer = new Customer();
+                customer.Email = orderInfoModel.Email;
+                customer.Phone = orderInfoModel.Phone;
+                customer.FullName = orderInfoModel.FullName;
+                customer.Address = orderInfoModel.Address;
+                _db.Customers.Add(customer);
                 _db.SaveChanges();
-                order.CustomerId = noAccount.Id;
+                order.CustomerId = customer.Id;
             }
         }
-        private void OrderInfo(Order order, Order orderModel)
+        private void OrderInfo(Order order, OrderInfoSession orderInfoModel)
         {
-            if (orderModel == null || _db == null) return;
+            if (orderInfoModel == null || _db == null) return;
+            order.Id = orderInfoModel.Id;
             order.OrdTime = DateTime.Now;
             order.DeliTime = order.OrdTime.AddDays(3);
             order.Status = "Chờ xác nhận";
-            order.PaymentId = orderModel.PaymentId;
-            order.Address = orderModel.Address;
-            order.Note = orderModel.Note;
+            order.PaymentId = orderInfoModel.PaymentId;
+            order.Address = orderInfoModel.Address;
+            order.Note = orderInfoModel.Note;
             order.TotalQuantity = _cartService.TotalItems();
             // Get Promotion
             DateTime now = DateTime.Now;
-            var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == orderModel.PromoCode && m.EndDate > now);
+            var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == orderInfoModel.DiscountCode && m.EndDate > now);
             double percent = (codeKM != null) ? (double)codeKM.DiscountPercentage : 100;
             // Strategy Pattern
             IBillingStrategy normalPrice = new NormalStrategy();
@@ -82,7 +82,7 @@ namespace Clothings_Store.Services
             _db.Orders.Add(order);
             _db.SaveChanges();
         }
-        private void OrderDetail(int orderId)
+        private void OrderDetail(string orderId)
         {
             foreach (var item in _cartService.GetCart())
             {

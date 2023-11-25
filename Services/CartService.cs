@@ -65,8 +65,7 @@ namespace Clothings_Store.Services
         }
         public List<Cart> GetCart()
         {
-            var httpContext = _httpContextAccessor.HttpContext;
-            var session = httpContext?.Session;
+            var session = _httpContextAccessor.HttpContext!.Session;
             string jsoncart = session?.GetString(CARTKEY) ?? string.Empty;
             if (!string.IsNullOrEmpty(jsoncart))
             {

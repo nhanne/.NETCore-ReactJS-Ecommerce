@@ -5,7 +5,7 @@ namespace Clothings_Store.Models;
 
 public partial class OrderDetail
 {
-    public int OrderId { get; set; }
+    public string OrderId { get; set; }
 
     public int StockId { get; set; }
 

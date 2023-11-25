@@ -5,11 +5,12 @@ using Clothings_Store.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text;
 
 Console.OutputEncoding = Encoding.UTF8;
 
-var builder = WebApplication.CreateBuilder(args);   
+var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddOptions();
 // How to connect StoreContext to MS SQL Server
@@ -25,7 +26,13 @@ builder.Services.Configure<SecurityStampValidatorOptions>(o =>
                    o.ValidationInterval = TimeSpan.FromMinutes(1));
 
 builder.Services.AddControllersWithViews(); // MVC
-builder.Services.AddDistributedMemoryCache(); // Cache
+//builder.Services.AddDistributedMemoryCache(); 
+builder.Services.AddDistributedSqlServerCache(options =>
+{
+    options.ConnectionString = "Data Source=DESKTOP-EC723GE\\TNHAN;Initial Catalog=ClothingsStore;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true";
+    options.SchemaName = "dbo";
+    options.TableName = "OrderInfoSession";
+});
 builder.Services.AddRazorPages(); // Razor
 // Config ASP.NET Identity
 builder.Services.Configure<IdentityOptions>(options =>
@@ -60,7 +67,8 @@ builder.Services.ConfigureApplicationCookie(options =>
 // Configuration session
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.Name = "StoreSession";
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
@@ -84,9 +92,12 @@ builder.Services.Configure<MailSettings>(mailSettings);
 builder.Services.AddScoped<IEmailSender, SendMailService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-var Vnpay = builder.Configuration.GetSection("Vnpay");
-builder.Services.Configure<VnPayConfig>(Vnpay);
+
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+var Vnpay = builder.Configuration.GetSection("OnlinePayment:Vnpay");
+builder.Services.Configure<VnPayConfig>(Vnpay);
+var Momo = builder.Configuration.GetSection("OnlinePayment:Momo");
+builder.Services.Configure<MoMoConfig>(Momo);
 //
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();

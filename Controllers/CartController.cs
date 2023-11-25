@@ -3,8 +3,10 @@ using Clothings_Store.Models;
 using Clothings_Store.Patterns;
 using Clothings_Store.Services;
 using Clothings_Store.Services.Others;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using NuGet.Protocol;
 
 namespace Clothings_Store.Controllers
 {
@@ -35,7 +37,7 @@ namespace Clothings_Store.Controllers
             return View(_cartService.GetCart());
         }
         [HttpPost]
-        public JsonResult AddToCart(int productId, int colorId, int sizeId)
+        public async Task<JsonResult> AddToCart(int productId, int colorId, int sizeId)
         {
             var stock = _db.Stocks.Where(p => p.ProductId == productId && p.ColorId == colorId && p.SizeId == sizeId).FirstOrDefault();
             if (stock == null)
@@ -60,29 +62,37 @@ namespace Clothings_Store.Controllers
             return RedirectToAction("Index");
         }
         [HttpPost]
-        public IActionResult CheckOut(AppUser userModel, Order orderModel)
+        public IActionResult CheckOut(OrderInfoSession orderInfoModel)
         {
-            switch (orderModel.PaymentId)
+            orderInfoModel.Id = DateTime.UtcNow.Ticks.ToString();
+            switch (orderInfoModel.PaymentId)
             {
                 case 1:
-                    _paymentService.COD(userModel, orderModel);
+                    _paymentService.COD(orderInfoModel);
                     return Json(new { redirectToUrl = Url.Action("PaymentConfirm") });
                 case 2:
-                    string vnpaymentUrl = _paymentService.VNPay(userModel, orderModel);
+                    string vnpaymentUrl = _paymentService.VNPay(orderInfoModel);
                     return Json(new { redirectToUrl = vnpaymentUrl });
+                case 3:
+
+                    return Json(new { redirectToUrl = Url.Action("PaymentConfirm") });
                 default:
                     return View();
             }
         }
-        public IActionResult VNPayConfirm()
-        {
-           
-            return RedirectToAction("PaymentConfirm");
-        }
         public IActionResult PaymentConfirm()
         {
-           
+
             return View();
         }
+        public IActionResult VNPayConfirm()
+        {
+            if (!_paymentService.VNPayConfirm())
+            {
+
+            }
+            return RedirectToAction("PaymentConfirm");
+        }
+      
     }
 }

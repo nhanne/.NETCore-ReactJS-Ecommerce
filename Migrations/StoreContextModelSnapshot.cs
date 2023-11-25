@@ -156,30 +156,23 @@ namespace Clothings_Store.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(false)
                         .HasColumnType("varchar(50)");
 
                     b.Property<string>("FullName")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool?>("Member")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Password")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasMaxLength(10)
                         .IsUnicode(false)
                         .HasColumnType("char(10)")
@@ -191,31 +184,10 @@ namespace Clothings_Store.Migrations
                     b.ToTable("Customer", (string)null);
                 });
 
-            modelBuilder.Entity("Clothings_Store.Models.JobTitle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Job_title", (string)null);
-                });
-
             modelBuilder.Entity("Clothings_Store.Models.Order", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .HasMaxLength(250)
@@ -240,9 +212,6 @@ namespace Clothings_Store.Migrations
                     b.Property<string>("PromoCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StaffId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Status")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -263,8 +232,6 @@ namespace Clothings_Store.Migrations
 
                     b.HasIndex("PaymentId");
 
-                    b.HasIndex("StaffId");
-
                     b.HasIndex("Status");
 
                     b.HasIndex("UserId");
@@ -274,8 +241,8 @@ namespace Clothings_Store.Migrations
 
             modelBuilder.Entity("Clothings_Store.Models.OrderDetail", b =>
                 {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("StockId")
                         .HasColumnType("int");
@@ -446,64 +413,6 @@ namespace Clothings_Store.Migrations
                         .HasName("PK__Sizes__3214EC07D711A6F5");
 
                     b.ToTable("Sizes");
-                });
-
-            modelBuilder.Entity("Clothings_Store.Models.Staff", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cmt")
-                        .HasMaxLength(15)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(15)")
-                        .HasColumnName("CMT");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("FullName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("JobTitle")
-                        .HasColumnType("int")
-                        .HasColumnName("Job_title");
-
-                    b.Property<string>("Password")
-                        .HasMaxLength(50)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(12)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(12)");
-
-                    b.HasKey("Id")
-                        .HasName("PK__Staff__3214EC07D20549E0");
-
-                    b.HasIndex("JobTitle");
-
-                    b.ToTable("Staff", t =>
-                        {
-                            t.HasTrigger("ASP_AbortRoleAdmin");
-                        });
                 });
 
             modelBuilder.Entity("Clothings_Store.Models.Stock", b =>
@@ -698,11 +607,6 @@ namespace Clothings_Store.Migrations
                         .IsRequired()
                         .HasConstraintName("FK__Order__PaymentId__32AB8735");
 
-                    b.HasOne("Clothings_Store.Models.Staff", "Staff")
-                        .WithMany("Orders")
-                        .HasForeignKey("StaffId")
-                        .HasConstraintName("FK__Order__StaffId__31B762FC");
-
                     b.HasOne("Clothings_Store.Models.OrderStatus", "StatusNavigation")
                         .WithMany("Orders")
                         .HasForeignKey("Status")
@@ -715,8 +619,6 @@ namespace Clothings_Store.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Payment");
-
-                    b.Navigation("Staff");
 
                     b.Navigation("StatusNavigation");
 
@@ -752,16 +654,6 @@ namespace Clothings_Store.Migrations
                         .HasConstraintName("FK__Product__Categor__267ABA7A");
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Clothings_Store.Models.Staff", b =>
-                {
-                    b.HasOne("Clothings_Store.Models.JobTitle", "JobTitleNavigation")
-                        .WithMany("Staff")
-                        .HasForeignKey("JobTitle")
-                        .HasConstraintName("FK_STAFF");
-
-                    b.Navigation("JobTitleNavigation");
                 });
 
             modelBuilder.Entity("Clothings_Store.Models.Stock", b =>
@@ -865,11 +757,6 @@ namespace Clothings_Store.Migrations
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("Clothings_Store.Models.JobTitle", b =>
-                {
-                    b.Navigation("Staff");
-                });
-
             modelBuilder.Entity("Clothings_Store.Models.Order", b =>
                 {
                     b.Navigation("OrderDetails");
@@ -893,11 +780,6 @@ namespace Clothings_Store.Migrations
             modelBuilder.Entity("Clothings_Store.Models.Size", b =>
                 {
                     b.Navigation("Stocks");
-                });
-
-            modelBuilder.Entity("Clothings_Store.Models.Staff", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Clothings_Store.Models.Stock", b =>
