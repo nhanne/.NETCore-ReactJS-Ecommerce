@@ -1,5 +1,11 @@
-﻿@{
+﻿@model Clothings_Store.Models.OrderInfoSession
+@{
     Layout = "~/Views/Shared/_LayoutBS.cshtml";
+    if (Model == null)
+    {
+        <meta http-equiv="refresh" content="0; url=~/Index" />
+    }
+    List<Cart> listCart = ViewBag.listCart;
 }
 <div class="row justify-content-center d-flex p-2 align-items-center">
     <div class="col-lg-8">
@@ -17,27 +23,39 @@
                             <th>STT</th>
                             <th>Sản phẩm</th>
                             <th>Số lượng</th>
-                            <th>Tổng giá</th>
+                            <th>Đơn giá</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @{
+                            int stt = 1;
+                            foreach (var item in listCart)
+                            {
+                                <tr>
+                                    <td>@(stt++) </td>
+                                    <td>@item.name - @item.size - @item.color</td>
+                                    <td>@item.quantity</td>
+                                    <td>@string.Format("{0:#,0}", item.unitPrice) ₫</td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
-            <p class="text-center"><strong>Tổng tiền</strong>:  ₫</p>
+            <p class="text-center"><strong>Tổng tiền</strong>:   @string.Format("{0:#,0}", Model?.Amount) đ</p>
             <h3 class="text-center">Thông tin khách hàng:</h3>
             <div class="row">
                 <div class="col-md-6">
-                    <p><strong>Họ tên:</strong> </p>
-                    <p><strong>Ngày đặt hàng:</strong> </p>
+                    <p><strong>Họ tên:</strong> @Model?.FullName</p>
+                    <p><strong>Ngày đặt hàng:</strong> @(Model?.Time.ToString("dd-MM-yyyy"))</p>
                 </div>
                 <div class="col-md-6">
-                    <p><strong>Email:</strong> </p>
-                    <p><strong>Số điện thoại:</strong></p>
+                    <p><strong>Email:</strong> @Model?.Email </p>
+                    <p><strong>Số điện thoại:</strong> @Model?.Phone</p>
                 </div>
                 <div class="col-md-12">
-                    <p><strong>Hình thức thanh toán:</strong></p>
-                    <p><strong>Địa chỉ:</strong> </p>
+                    <p><strong>Hình thức thanh toán:</strong> @Model?.PaymentId</p>
+                    <p><strong>Địa chỉ:</strong> @Model?.Address</p>
                 </div>
             </div>
             <div class="text-center mt-4">

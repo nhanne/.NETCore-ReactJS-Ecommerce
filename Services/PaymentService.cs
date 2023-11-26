@@ -18,53 +18,58 @@ namespace Clothings_Store.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOrderService _orderService;
-        private readonly VnPayConfig _vnPayConfig;
         private readonly ICustomSessionService<string> _session;
-        private const string ORDERKEY = "order";
+        private readonly VnPayConfig _vnPayConfig;
         public PaymentService(
-            IHttpContextAccessor httpContextAccessor,
-            IOrderService orderService,
-            ICustomSessionService<string> session,
-            IOptions<VnPayConfig> vnPayConfig
-            )
+                            IHttpContextAccessor httpContextAccessor,
+                            IOrderService orderService,
+                            ICustomSessionService<string> session,
+                            IOptions<VnPayConfig> vnPayConfig
+                            )
         {
             _httpContextAccessor = httpContextAccessor;
             _orderService = orderService;
             _session = session;
             _vnPayConfig = vnPayConfig.Value;
+
         }
-        public void COD(OrderInfoSession orderInfoModel)
+        public void COD()
         {
-            _orderService.PlaceOrder(orderInfoModel);
+            _orderService.PlaceOrder();
         }
-        void saveDataTemp(OrderInfoSession orderInfoModel)
+        public string VNPay()
         {
-            _session.ClearSession(ORDERKEY);
-            var listSession = _session.GetSession(ORDERKEY);
-            string orderInfo = JsonConvert.SerializeObject(orderInfoModel);
-            listSession.Add(orderInfo);
-            _session.SaveSession(listSession);
-        }
-        public string VNPay(OrderInfoSession orderInfoModel)
-        {
-            DateTime expirationTime = DateTime.Now.AddDays(1);
-            PayLib pay = new PayLib();
-            pay.AddRequestData("vnp_TmnCode", _vnPayConfig.TmnCode);
-            pay.AddRequestData("vnp_ReturnUrl", _vnPayConfig.ReturnUrl);
-            pay.AddRequestData("vnp_Command", _vnPayConfig.Command);
-            pay.AddRequestData("vnp_CurrCode", _vnPayConfig.CurrCode);
-            pay.AddRequestData("vnp_Version", _vnPayConfig.Version);
-            pay.AddRequestData("vnp_Locale", _vnPayConfig.Locale);
-            pay.AddRequestData("vnp_BankCode", "");
-            pay.AddRequestData("vnp_OrderInfo", "Thanh toán đơn hàng");
-            pay.AddRequestData("vnp_OrderType", "other");
-            pay.AddRequestData("vnp_Amount", (orderInfoModel.Amount * 100).ToString());
-            pay.AddRequestData("vnp_TxnRef", orderInfoModel.Id.ToString());
-            pay.AddRequestData("vnp_CreateDate", expirationTime.ToString("yyyyMMddHHmmss"));
-            pay.AddRequestData("vnp_IpAddr", Util.GetIpAddress(_httpContextAccessor));
-            saveDataTemp(orderInfoModel);
-            string paymentUrl = pay.CreateRequestUrl(_vnPayConfig.Url, _vnPayConfig.HashSecret);
-            return paymentUrl;
+            var listSession = _session.GetSession("order");
+            var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);
+            try
+            {
+                if (orderInfo != null)
+                {
+                    DateTime expirationTime = DateTime.Now.AddDays(1);
+                    PayLib pay = new PayLib();
+                    pay.AddRequestData("vnp_TmnCode", _vnPayConfig.TmnCode);
+                    pay.AddRequestData("vnp_ReturnUrl", _vnPayConfig.ReturnUrl);
+                    pay.AddRequestData("vnp_Command", _vnPayConfig.Command);
+                    pay.AddRequestData("vnp_CurrCode", _vnPayConfig.CurrCode);
+                    pay.AddRequestData("vnp_Version", _vnPayConfig.Version);
+                    pay.AddRequestData("vnp_Locale", _vnPayConfig.Locale);
+                    pay.AddRequestData("vnp_BankCode", "");
+                    pay.AddRequestData("vnp_OrderInfo", "Thanh toán đơn hàng");
+                    pay.AddRequestData("vnp_OrderType", "other");
+                    pay.AddRequestData("vnp_Amount", (orderInfo.Amount * 100).ToString());
+                    pay.AddRequestData("vnp_TxnRef", orderInfo.Id.ToString());
+                    pay.AddRequestData("vnp_CreateDate", expirationTime.ToString("yyyyMMddHHmmss"));
+                    pay.AddRequestData("vnp_IpAddr", Util.GetIpAddress(_httpContextAccessor));
+
+                    string paymentUrl = pay.CreateRequestUrl(_vnPayConfig.Url, _vnPayConfig.HashSecret);
+                    return paymentUrl;
+                }
+            }
+            catch(Exception ex)
+            {
+            }
+            return "/";
+
         }
         public bool VNPayConfirm()
         {
@@ -82,18 +87,14 @@ namespace Clothings_Store.Services
                         pay.AddResponseData(key, value);
                     }
                 }
-
-                var listSession = _session.GetSession(ORDERKEY);
-                var order = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);
-
                 string vnp_ResponseCode = pay.GetResponseData("vnp_ResponseCode");
                 string vnp_SecureHash = _httpContextAccessor.HttpContext.Request.Query["vnp_SecureHash"]!;
                 bool checkSignature = pay.ValidateSignature(vnp_SecureHash, hashSecret);
-                if (checkSignature && listSession.Count > 0 && order != null)
+                if (checkSignature)
                 {
                     if (vnp_ResponseCode == "00")
                     {
-                        _orderService.PlaceOrder(order);
+                        _orderService.PlaceOrder();
                         return true;
                     }
                     else
@@ -108,6 +109,14 @@ namespace Clothings_Store.Services
             }
             return true;
         }
+        public string Momo()
+        {
 
+            return "momo.html";
+        }
+        public bool MomoConfirm()
+        {
+            return true;
+        }
     }
 }

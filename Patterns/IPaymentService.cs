@@ -5,8 +5,10 @@ namespace Clothings_Store.Patterns
 {
     public interface IPaymentService
     {
-        void COD(OrderInfoSession orderInfoModel);
-        string VNPay(OrderInfoSession orderInfoModel);
+        void COD();
+        string VNPay();
         bool VNPayConfirm();
+        string Momo();
+        bool MomoConfirm();
     }
 }

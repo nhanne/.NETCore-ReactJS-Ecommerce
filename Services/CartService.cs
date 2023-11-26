@@ -8,16 +8,16 @@ namespace Clothings_Store.Services
     public class CartService : ICartService
     {
         private readonly ILogger<CartService> _logger;
-        private readonly StoreContext _db;
         private readonly ICustomSessionService<Cart> _session;
+        private readonly StoreContext _db;
         private const string CARTKEY = "cart";
         public CartService(
-            ILogger<CartService> logger,
-            StoreContext db,
-           ICustomSessionService<Cart> session)
+                         ILogger<CartService> logger,
+                         ICustomSessionService<Cart> session,
+                         StoreContext db)
         {
-            _logger = logger;
             _db = db;
+            _logger = logger;
             _session = session;
         }
         public void AddToCart(Stock stock)

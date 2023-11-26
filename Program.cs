@@ -7,33 +7,37 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Text;
-
 Console.OutputEncoding = Encoding.UTF8;
-
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
-builder.Services.AddOptions();
+builder.Services.AddOptions();// Add services to the container.
+builder.Services.AddControllersWithViews(); // MVC
+builder.Services.AddRazorPages(); // Razor
 // How to connect StoreContext to MS SQL Server
 builder.Services.AddDbContext<StoreContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e when error connected database
 
-builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<StoreContext>()
-                .AddDefaultTokenProviders();
-builder.Services.Configure<SecurityStampValidatorOptions>(o =>
-                   o.ValidationInterval = TimeSpan.FromMinutes(1));
-
-builder.Services.AddControllersWithViews(); // MVC
+// Session distributed cache SQL Server
 builder.Services.AddDistributedSqlServerCache(options =>
 {
     options.ConnectionString = "Data Source=DESKTOP-EC723GE\\TNHAN;Initial Catalog=ClothingsStore;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true";
     options.SchemaName = "dbo";
     options.TableName = "OrderInfoSession";
 });
-builder.Services.AddRazorPages(); // Razor
-// Config ASP.NET Identity
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = "StoreSession";
+});
+// ASP.NET Identity
+builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<StoreContext>()
+                .AddDefaultTokenProviders();
+builder.Services.Configure<SecurityStampValidatorOptions>(o =>
+                   o.ValidationInterval = TimeSpan.FromMinutes(1));
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings.
@@ -63,14 +67,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
 });
 
-// Configuration session
-builder.Services.AddSession(options =>
-{
-    options.Cookie.Name = "StoreSession";
-    options.IdleTimeout = TimeSpan.FromMinutes(10);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+
 // External Login Configuration
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {
@@ -86,19 +83,15 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
     facebookOptions.CallbackPath = "/loginFacebook";
 });
 // Service DI
-var mailSettings = builder.Configuration.GetSection("MailSettings");
-builder.Services.Configure<MailSettings>(mailSettings);
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddScoped<IEmailSender, SendMailService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped(typeof(ICustomSessionService<>), typeof(CustomSessionService<>));
-
 // Online Payment
 builder.Services.AddScoped<IPaymentService, PaymentService>();
-var Vnpay = builder.Configuration.GetSection("OnlinePayment:Vnpay");
-builder.Services.Configure<VnPayConfig>(Vnpay);
-var Momo = builder.Configuration.GetSection("OnlinePayment:Momo");
-builder.Services.Configure<MoMoConfig>(Momo);
+builder.Services.Configure<VnPayConfig>(builder.Configuration.GetSection("OnlinePayment:Vnpay"));
+builder.Services.Configure<MoMoConfig>(builder.Configuration.GetSection("OnlinePayment:Momo"));
 //
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<IdentityErrorDescriber, AppIdentityErrorDescriber>();
@@ -114,42 +107,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
-app.Use(async (context, next) =>
-{
-    var session = context.Session;
-    var existingSessionId = session.GetString("SessionId");
-
-    // Kiểm tra xem SessionId có tồn tại không
-    if (string.IsNullOrEmpty(existingSessionId))
-    {
-        // Nếu không có SessionId, kiểm tra trong cookie
-        var cookieSessionId = context.Request.Cookies["Store.SessionId"];
-
-        if (!string.IsNullOrEmpty(cookieSessionId))
-        {
-            // Sử dụng SessionId từ cookie để tái tạo session
-            session.SetString("SessionId", cookieSessionId);
-        }
-        else
-        {
-            // Nếu không có cả SessionId lẫn cookie, tạo một SessionId mới
-            var newSessionId = Guid.NewGuid().ToString();
-            session.SetString("SessionId", newSessionId);
-
-            // Lưu SessionId vào cookie
-            context.Response.Cookies.Append("Store.SessionId", newSessionId, new CookieOptions
-            {
-                HttpOnly = true,
-                SameSite = SameSiteMode.Strict,
-                IsEssential = true,
-                Expires = DateTimeOffset.Now.AddMinutes(30)
-            });
-        }
-    }
-
-    await next();
-});
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(

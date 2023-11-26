@@ -1,6 +1,9 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Models;
 using Clothings_Store.Patterns;
+using MailKit.Search;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace Clothings_Store.Services
@@ -11,27 +14,34 @@ namespace Clothings_Store.Services
         private readonly ILogger<OrderService> _logger;
         private readonly ICartService _cartService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICustomSessionService<string> _session;
         public OrderService(
             StoreContext db,
             ILogger<OrderService> logger,
             ICartService cartService,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            ICustomSessionService<string> session)
         {
             _db = db;
             _logger = logger;
             _cartService = cartService;
             _httpContextAccessor = httpContextAccessor;
+            _session = session;
         }
-        public void PlaceOrder(OrderInfoSession orderInfoModel)
+        public void PlaceOrder()
         {
+            var listSession = _session.GetSession("order");
+            var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);
             try
             {
-                Order order = new Order();
-                OrderCustomer(order, orderInfoModel);
-                OrderInfo(order, orderInfoModel);
-                OrderDetail(order.Id);
-                _cartService.ClearCart();
-                _logger.LogInformation("Place Order Success.");
+                if (listSession.Count > 0 && orderInfo != null)
+                {
+                    Order order = new Order();
+                    OrderCustomer(order, orderInfo);
+                    OrderInfo(order, orderInfo);
+                    OrderDetail(order.Id);
+                    _logger.LogInformation("Place Order Success.");
+                }
             }
             catch (Exception ex)
             {
@@ -59,20 +69,20 @@ namespace Clothings_Store.Services
                 order.CustomerId = customer.Id;
             }
         }
-        private void OrderInfo(Order order, OrderInfoSession orderInfoModel)
+        private void OrderInfo(Order order, OrderInfoSession orderInfo)
         {
-            if (orderInfoModel == null || _db == null) return;
-            order.Id = orderInfoModel.Id;
-            order.OrdTime = DateTime.Now;
+            if (orderInfo == null || _db == null) return;
+            order.Id = orderInfo.Id;
+            order.OrdTime = DateTime.UtcNow;
             order.DeliTime = order.OrdTime.AddDays(3);
             order.Status = "Chờ xác nhận";
-            order.PaymentId = orderInfoModel.PaymentId;
-            order.Address = orderInfoModel.Address;
-            order.Note = orderInfoModel.Note;
+            order.PaymentId = orderInfo.PaymentId;
+            order.Address = orderInfo.Address;
+            order.Note = orderInfo.Note;
             order.TotalQuantity = _cartService.TotalItems();
             // Get Promotion
             DateTime now = DateTime.Now;
-            var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == orderInfoModel.DiscountCode && m.EndDate > now);
+            var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == orderInfo.DiscountCode && m.EndDate > now);
             double percent = (codeKM != null) ? (double)codeKM.DiscountPercentage : 100;
             // Strategy Pattern
             IBillingStrategy normalPrice = new NormalStrategy();
