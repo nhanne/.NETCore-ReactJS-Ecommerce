@@ -99,6 +99,7 @@
 }
 
 .detail__info_button_addtoCart {
+    cursor: pointer;
     opacity: 0.8;
     display: inline-block;
     font-size: 13px;
