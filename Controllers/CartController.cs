@@ -26,6 +26,10 @@ namespace Clothings_Store.Controllers
         }
         public IActionResult Index()
         {
+            if (TempData.ContainsKey("Confirmed"))
+            {
+                ViewBag.PaymentConfirm = TempData["Confirmed"];
+            }
             List<Cart> listCart = _cartService.GetCart();
             if (listCart.Count == 0)
             {
@@ -69,7 +73,7 @@ namespace Clothings_Store.Controllers
             _session.SaveSession(listSession);
         }
         [HttpPost]
-        public IActionResult CheckOut(OrderInfoSession orderInfoModel)
+        public async Task<IActionResult> CheckOut(OrderInfoSession orderInfoModel)
         {
             saveOrderSession(orderInfoModel);
             switch (orderInfoModel.PaymentId)
@@ -82,8 +86,8 @@ namespace Clothings_Store.Controllers
                     string vnpaymentUrl = _paymentService.VNPay();
                     return Json(new { redirectToUrl = vnpaymentUrl });
                 case 3:
-
-                    return Json(new { redirectToUrl = Url.Action("PaymentConfirm") });
+                    var response = await _paymentService.CreatePaymentAsync(orderInfoModel);
+                    return Json(new { redirectToUrl = response.PayUrl });
                 default:
                     return View();
             }
@@ -109,9 +113,16 @@ namespace Clothings_Store.Controllers
         {
             if (!_paymentService.VNPayConfirm())
             {
-
+                TempData["Confirmed"] = "Giao dịch không thành công, vui lòng thanh toán lại";
+                return RedirectToAction("Index");
             }
             TempData["Confirmed"] = true;
+            return RedirectToAction("PaymentConfirm");
+        }
+        [HttpGet]
+        public IActionResult MomoConfirm()
+        {
+            var response = _paymentService.PaymentExecuteAsync(HttpContext.Request.Query);
             return RedirectToAction("PaymentConfirm");
         }
 

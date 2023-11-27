@@ -20,17 +20,20 @@ namespace Clothings_Store.Services
         private readonly IOrderService _orderService;
         private readonly ICustomSessionService<string> _session;
         private readonly VnPayConfig _vnPayConfig;
+        private readonly MoMoConfig _momoConfig;
         public PaymentService(
                             IHttpContextAccessor httpContextAccessor,
                             IOrderService orderService,
                             ICustomSessionService<string> session,
-                            IOptions<VnPayConfig> vnPayConfig
+                            IOptions<VnPayConfig> vnPayConfig,
+                            IOptions<MoMoConfig> momoConfig
                             )
         {
             _httpContextAccessor = httpContextAccessor;
             _orderService = orderService;
             _session = session;
             _vnPayConfig = vnPayConfig.Value;
+            _momoConfig = momoConfig.Value;
         }
         public void COD()
         {
@@ -109,14 +112,69 @@ namespace Clothings_Store.Services
             }
             return true;
         }
-        public string Momo()
+        public async Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoSession model)
         {
+            model.Id = DateTime.UtcNow.Ticks.ToString();
+            model.Note = "Khách hàng: " + model.FullName + ". Nội dung: " + model.Note;
+            var rawData =
+                $"partnerCode={_momoConfig.PartnerCode}&accessKey={_momoConfig.AccessKey}&requestId={model.Id}&amount={model.Amount}&orderId={model.Id}&orderInfo={model.Note}&returnUrl={_momoConfig.ReturnUrl}&notifyUrl={_momoConfig.NotifyUrl}&extraData=";
 
-            return "momo.html";
+            var signature = ComputeHmacSha256(rawData, _momoConfig.SecretKey);
+
+            var client = new RestClient(_momoConfig.MomoApiUrl);
+            var request = new RestRequest() { Method = RestSharp.Method.Post };
+            request.AddHeader("Content-Type", "application/json; charset=UTF-8");
+
+            // Create an object representing the request data
+            var requestData = new
+            {
+                accessKey = _momoConfig.AccessKey,
+                partnerCode = _momoConfig.PartnerCode,
+                requestType = _momoConfig.RequestType,
+                notifyUrl = _momoConfig.NotifyUrl,
+                returnUrl = _momoConfig.ReturnUrl,
+                orderId = model.Id,
+                amount = model.Amount.ToString(),
+                orderInfo = model.Note,
+                requestId = model.Id,
+                extraData = "",
+                signature = signature
+            };
+
+            request.AddParameter("application/json", JsonConvert.SerializeObject(requestData), ParameterType.RequestBody);
+
+            var response = await client.ExecuteAsync(request);
+
+            return JsonConvert.DeserializeObject<MomoCreatePaymentResponse>(response.Content);
         }
-        public bool MomoConfirm()
+
+        public MomoExecuteResponse PaymentExecuteAsync(IQueryCollection collection)
         {
-            return true;
+            var amount = collection.First(s => s.Key == "amount").Value;
+            var orderInfo = collection.First(s => s.Key == "orderInfo").Value;
+            var orderId = collection.First(s => s.Key == "orderId").Value;
+            return new MomoExecuteResponse()
+            {
+                Amount = amount,
+                OrderId = orderId,
+                OrderInfo = orderInfo
+            };
+        }
+        private string ComputeHmacSha256(string message, string secretKey)
+        {
+            var keyBytes = Encoding.UTF8.GetBytes(secretKey);
+            var messageBytes = Encoding.UTF8.GetBytes(message);
+
+            byte[] hashBytes;
+
+            using (var hmac = new HMACSHA256(keyBytes))
+            {
+                hashBytes = hmac.ComputeHash(messageBytes);
+            }
+
+            var hashString = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+
+            return hashString;
         }
     }
 }

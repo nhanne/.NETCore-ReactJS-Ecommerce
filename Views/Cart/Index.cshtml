@@ -1,10 +1,17 @@
 ﻿@model List<Clothings_Store.Models.Others.Cart>
 @{
     Layout = "~/Views/Shared/_LayoutBS.cshtml";
+    var messege = @ViewBag.PaymentConfirm;
 }
 
 <section class="h-custom" style="background-color: #838383;">
     <div class="container py-5">
+        @if (!String.IsNullOrEmpty(messege))
+        {
+            <div class="alert alert-danger" role="alert">
+                @messege
+            </div>
+        }
         <div class="row d-flex justify-content-center align-items-center">
                 <div class="col-12">
                     <div class="card card-registration card-registration-2" style="border-radius: 15px;">

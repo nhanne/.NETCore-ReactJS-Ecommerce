@@ -1,5 +1,4 @@
-﻿using Clothings_Store.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Clothings_Store.Models.Others;
 
 namespace Clothings_Store.Patterns
 {
@@ -8,7 +7,7 @@ namespace Clothings_Store.Patterns
         void COD();
         string VNPay();
         bool VNPayConfirm();
-        string Momo();
-        bool MomoConfirm();
+        Task<MomoCreatePaymentResponse> CreatePaymentAsync(OrderInfoSession model);
+        MomoExecuteResponse PaymentExecuteAsync(IQueryCollection collection);
     }
 }
