@@ -14,11 +14,11 @@ namespace Clothings_Store.Controllers
             _db = context;
             _logger = logger;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
-                ViewData["Products"] = _db.Products.OrderByDescending(p => p.Sold).Take(3).ToList();
+                ViewData["Products"] = await _db.Products.OrderByDescending(p => p.Sold).Take(3).ToListAsync();
                 _logger.LogInformation("Connected to database.");
                 return View();
             }
@@ -32,8 +32,7 @@ namespace Clothings_Store.Controllers
         {
             return View();
         }
-        [HttpGet]
-        public JsonResult getData(
+        public async Task<JsonResult> getData(
             string? search, 
             string? category, 
             string sort, 
@@ -59,7 +58,7 @@ namespace Clothings_Store.Controllers
             //
             int totalItems = query.Count();
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-            var products = query
+            var products = await query
                 .Select(p => new
                 {
                     p,
@@ -68,7 +67,7 @@ namespace Clothings_Store.Controllers
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .AsNoTracking()
-                .ToList();
+                .ToListAsync();
             return Json(new
                 {
                     products,
@@ -77,9 +76,9 @@ namespace Clothings_Store.Controllers
                 });
         }
         [HttpGet]
-        public JsonResult getCategories()
+        public async Task<JsonResult> getCategories()
         {
-            var categories = _db.Categories.Select(p => p).ToList();
+            var categories = await _db.Categories.Select(p => p).ToListAsync();
             return Json(new { categories, totalItems = categories.Count });
         }
 
@@ -108,9 +107,9 @@ namespace Clothings_Store.Controllers
             return query;
         }
         //
-        public JsonResult Product(int Id)
+        public async Task<JsonResult> Product(int Id)
         {
-            var stock = _db.Stocks.Where(p => p.ProductId == Id)
+            var stock = await _db.Stocks.Where(p => p.ProductId == Id)
                                    .Select(s => new
                                    {
                                        size = new
@@ -133,8 +132,7 @@ namespace Clothings_Store.Controllers
                                            sale = s.Product.Sale,
                                            category = s.Product.Category.Name
                                        }
-                                   }).ToList();
-
+                                   }).ToListAsync();
             var sizes = stock.Select(item => item.size).Distinct().ToList();
             var colors = stock.Select(item => item.color).Distinct().ToList();
             var product = stock.Select(item => item.product).Distinct().ToList();
@@ -147,13 +145,13 @@ namespace Clothings_Store.Controllers
         }
         //
         [HttpGet]
-        public JsonResult getStock(int productId, int sizeId, int colorId)
+        public async Task<JsonResult> getStock(int productId, int sizeId, int colorId)
         {
-            var stock = _db.Stocks
+            var stock = await _db.Stocks
                .Where(p => p.ProductId == productId
                         && p.ColorId == colorId
                         && p.SizeId == sizeId)
-               .FirstOrDefault();
+               .FirstOrDefaultAsync();
             int quantity = stock == null ? 0 : (int)stock.Stock1!;
             return Json(new { quantity });
         }

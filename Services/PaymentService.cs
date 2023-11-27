@@ -35,11 +35,11 @@ namespace Clothings_Store.Services
             _vnPayConfig = vnPayConfig.Value;
             _momoConfig = momoConfig.Value;
         }
-        public void COD()
+        public async Task COD()
         {
-            _orderService.PlaceOrder();
+            await _orderService.PlaceOrder();
         }
-        public string VNPay()
+        public async Task<string> VNPay()
         {
             var listSession = _session.GetSession("order");
             var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);
@@ -74,7 +74,7 @@ namespace Clothings_Store.Services
             return "/";
 
         }
-        public bool VNPayConfirm()
+        public async Task<bool> VNPayConfirm()
         {
             if (_httpContextAccessor.HttpContext!.Request.Query.Count > 0)
             {
@@ -97,7 +97,7 @@ namespace Clothings_Store.Services
                 {
                     if (vnp_ResponseCode == "00")
                     {
-                        _orderService.PlaceOrder();
+                        await _orderService.PlaceOrder();
                         return true;
                     }
                     else
@@ -145,7 +145,7 @@ namespace Clothings_Store.Services
 
             var response = await client.ExecuteAsync(request);
 
-            return JsonConvert.DeserializeObject<MomoCreatePaymentResponse>(response.Content);
+            return JsonConvert.DeserializeObject<MomoCreatePaymentResponse>(response.Content!)!;
         }
 
         public MomoExecuteResponse PaymentExecuteAsync(IQueryCollection collection)
@@ -153,11 +153,13 @@ namespace Clothings_Store.Services
             var amount = collection.First(s => s.Key == "amount").Value;
             var orderInfo = collection.First(s => s.Key == "orderInfo").Value;
             var orderId = collection.First(s => s.Key == "orderId").Value;
+            var errorCode = collection.First(s => s.Key == "errorCode").Value;
             return new MomoExecuteResponse()
             {
                 Amount = amount,
                 OrderId = orderId,
-                OrderInfo = orderInfo
+                OrderInfo = orderInfo,
+                ErrorCode = errorCode
             };
         }
         private string ComputeHmacSha256(string message, string secretKey)

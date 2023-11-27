@@ -4,7 +4,7 @@ namespace Clothings_Store.Patterns
 {
     public interface IOrderService
     {
-        void PlaceOrder();
+        Task PlaceOrder();
     }
 
 }

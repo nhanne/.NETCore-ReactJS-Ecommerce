@@ -29,7 +29,7 @@ namespace Clothings_Store.Services
             _httpContextAccessor = httpContextAccessor;
             _session = session;
         }
-        public void PlaceOrder()
+        public async Task PlaceOrder()
         {
             var listSession = _session.GetSession("order");
             var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);
@@ -38,9 +38,10 @@ namespace Clothings_Store.Services
                 if (listSession.Count > 0 && orderInfo != null)
                 {
                     Order order = new Order();
-                    OrderCustomer(order, orderInfo);
                     OrderInfo(order, orderInfo);
-                    OrderDetail(order.Id);
+                    await Task.WhenAll(
+                    OrderCustomer(order, orderInfo),
+                    OrderDetail(order.Id));
                     _logger.LogInformation("Place Order Success.");
                 }
             }
@@ -50,15 +51,40 @@ namespace Clothings_Store.Services
                 throw;
             }
         }
-        private void OrderCustomer(Order order, OrderInfoSession orderInfoModel)
+        private void OrderInfo(Order order, OrderInfoSession orderInfo)
         {
-            var httpContext = _httpContextAccessor.HttpContext!;
-            if (httpContext.User.Identity!.IsAuthenticated == true)
+            try
             {
-                string userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-                order.UserId = userId;
+                if (orderInfo == null || _db == null) return;
+                order.Id = orderInfo.Id;
+                order.OrdTime = DateTime.UtcNow;
+                order.DeliTime = order.OrdTime.AddDays(3);
+                order.Status = "Chờ xác nhận";
+                order.PaymentId = orderInfo.PaymentId;
+                order.Address = orderInfo.Address;
+                order.Note = orderInfo.Note;
+                order.TotalQuantity = _cartService.TotalItems();
+                // Get Promotion
+                DateTime now = DateTime.Now;
+                var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == orderInfo.DiscountCode && m.EndDate > now);
+                double percent = (codeKM != null) ? (double)codeKM.DiscountPercentage : 100;
+                // Strategy Pattern
+                IBillingStrategy normalPrice = new NormalStrategy();
+                var CustomerBill = new CustomerBill(normalPrice);
+                order.TotalPrice = CustomerBill.LastPrice(_cartService.TotalPrice(), percent);
+                _db.Orders.Add(order);
+                _db.SaveChanges();
+                _logger.LogInformation("Add Order Success.");
             }
-            else
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Add Order Failed.");
+                throw;
+            }
+        }
+        private async Task OrderCustomer(Order order, OrderInfoSession orderInfoModel)
+        {
+            try
             {
                 Customer customer = new Customer();
                 customer.Email = orderInfoModel.Email;
@@ -66,47 +92,48 @@ namespace Clothings_Store.Services
                 customer.FullName = orderInfoModel.FullName;
                 customer.Address = orderInfoModel.Address;
                 _db.Customers.Add(customer);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
                 order.CustomerId = customer.Id;
-            }
-        }
-        private void OrderInfo(Order order, OrderInfoSession orderInfo)
-        {
-            if (orderInfo == null || _db == null) return;
-            order.Id = orderInfo.Id;
-            order.OrdTime = DateTime.UtcNow;
-            order.DeliTime = order.OrdTime.AddDays(3);
-            order.Status = "Chờ xác nhận";
-            order.PaymentId = orderInfo.PaymentId;
-            order.Address = orderInfo.Address;
-            order.Note = orderInfo.Note;
-            order.TotalQuantity = _cartService.TotalItems();
-            // Get Promotion
-            DateTime now = DateTime.Now;
-            var codeKM = _db.Promotions.SingleOrDefault(m => m.PromotionName == orderInfo.DiscountCode && m.EndDate > now);
-            double percent = (codeKM != null) ? (double)codeKM.DiscountPercentage : 100;
-            // Strategy Pattern
-            IBillingStrategy normalPrice = new NormalStrategy();
-            var CustomerBill = new CustomerBill(normalPrice);
-            order.TotalPrice = CustomerBill.LastPrice(_cartService.TotalPrice(), percent);
-            _logger.LogInformation("Use Strategy Pattern Success.");
-            _db.Orders.Add(order);
-            _db.SaveChanges();
-        }
-        private void OrderDetail(string orderId)
-        {
-            foreach (var item in _cartService.GetCart())
-            {
-                OrderDetail model = new OrderDetail
+                var httpContext = _httpContextAccessor.HttpContext!;
+                if (httpContext.User.Identity!.IsAuthenticated == true)
                 {
-                    OrderId = orderId,
-                    StockId = item.IdCart,
-                    Quantity = item.quantity,
-                    UnitPrice = item.unitPrice
-                };
-                _db.OrderDetails.Add(model);
+                    string userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+                    order.UserId = userId;
+                }
+                _logger.LogInformation("Add User Info Success.");
             }
-            _db.SaveChanges();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Add User Info Failed.");
+                throw;
+            }
+
+        }
+       
+        private async Task OrderDetail(string orderId)
+        {
+            try
+            {
+                foreach (var item in _cartService.GetCart())
+                {
+                    OrderDetail model = new OrderDetail
+                    {
+                        OrderId = orderId,
+                        StockId = item.IdCart,
+                        Quantity = item.quantity,
+                        UnitPrice = item.unitPrice
+                    };
+                    _db.OrderDetails.Add(model);
+                }
+                await _db.SaveChangesAsync();
+                _logger.LogInformation("Add OrderDetail Success.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Add OrderDetail Failed.");
+                throw;
+            }
+
         }
     }
 }

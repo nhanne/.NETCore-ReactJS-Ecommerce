@@ -26,9 +26,9 @@ namespace Clothings_Store.Controllers
         }
         public IActionResult Index()
         {
-            if (TempData.ContainsKey("Confirmed"))
+            if (TempData.ContainsKey("Confirmed") && (bool)TempData["Confirmed"]! == false)
             {
-                ViewBag.PaymentConfirm = TempData["Confirmed"];
+                ViewBag.PaymentConfirm = "Giao dịch không thành công, vui lòng thanh toán lại";
             }
             List<Cart> listCart = _cartService.GetCart();
             if (listCart.Count == 0)
@@ -80,10 +80,10 @@ namespace Clothings_Store.Controllers
             {
                 case 1:
                     TempData["Confirmed"] = true;
-                    _paymentService.COD();
+                    await _paymentService.COD();
                     return Json(new { redirectToUrl = Url.Action("PaymentConfirm") });
                 case 2:
-                    string vnpaymentUrl = _paymentService.VNPay();
+                    string vnpaymentUrl = await _paymentService.VNPay();
                     return Json(new { redirectToUrl = vnpaymentUrl });
                 case 3:
                     var response = await _paymentService.CreatePaymentAsync(orderInfoModel);
@@ -109,11 +109,11 @@ namespace Clothings_Store.Controllers
                 return RedirectToAction("Store", "Home");
             }
         }
-        public IActionResult VNPayConfirm()
+        public async Task<IActionResult> VNPayConfirm()
         {
-            if (!_paymentService.VNPayConfirm())
+            if (!await _paymentService.VNPayConfirm())
             {
-                TempData["Confirmed"] = "Giao dịch không thành công, vui lòng thanh toán lại";
+                TempData["Confirmed"] = false;
                 return RedirectToAction("Index");
             }
             TempData["Confirmed"] = true;
@@ -121,8 +121,14 @@ namespace Clothings_Store.Controllers
         }
         [HttpGet]
         public IActionResult MomoConfirm()
-        {
+        { 
             var response = _paymentService.PaymentExecuteAsync(HttpContext.Request.Query);
+            if (int.Parse(response.ErrorCode) != 0)
+            {
+                TempData["Confirmed"] = false;
+                return RedirectToAction("Index");
+            }
+            TempData["Confirmed"] = true;
             return RedirectToAction("PaymentConfirm");
         }
 
