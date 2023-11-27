@@ -1,6 +1,6 @@
 ﻿using Clothings_Store.Data;
+using Clothings_Store.Interface;
 using Clothings_Store.Models.Others;
-using Clothings_Store.Patterns;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 

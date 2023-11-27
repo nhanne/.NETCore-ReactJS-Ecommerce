@@ -1,7 +1,7 @@
 ﻿using Clothings_Store.Models.Database;
 using Clothings_Store.Models.Others;
 
-namespace Clothings_Store.Patterns
+namespace Clothings_Store.Interface
 {
     public interface ICartService
     {

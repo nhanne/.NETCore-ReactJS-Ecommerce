@@ -1,21 +1,21 @@
 ﻿using Clothings_Store.Data;
+using Clothings_Store.Interface;
 using Clothings_Store.Models.Database;
 using Clothings_Store.Models.Others;
-using Clothings_Store.Patterns;
 using Clothings_Store.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System.Text;
+
 Console.OutputEncoding = Encoding.UTF8;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOptions();// Add services to the container.
-builder.Services.AddControllersWithViews(); // MVC
-builder.Services.AddRazorPages(); // Razor
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 // How to connect StoreContext to MS SQL Server
 builder.Services.AddDbContext<StoreContext>(options =>
-               options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")));
+               options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")),ServiceLifetime.Scoped);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e when error connected database
 
 // Session distributed cache SQL Server
@@ -41,25 +41,21 @@ builder.Services.Configure<SecurityStampValidatorOptions>(o =>
                    o.ValidationInterval = TimeSpan.FromMinutes(1));
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    // Password settings.
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 1;
-    // Lockout settings.
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.AllowedForNewUsers = true;
-    // User settings.
     options.User.AllowedUserNameCharacters =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
     options.User.RequireUniqueEmail = false;
 });
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    // Cookie settings
     options.Cookie.HttpOnly = true;
     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
     options.Cookie.Name = "StoreCookie";
@@ -67,8 +63,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
     options.SlidingExpiration = true;
 });
-
-
 // External Login Configuration
 builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 {

@@ -1,4 +1,4 @@
-﻿namespace Clothings_Store.Patterns
+﻿namespace Clothings_Store.Interface
 {
     public interface IBillingStrategy
     {

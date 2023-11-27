@@ -1,4 +1,7 @@
-﻿namespace Clothings_Store.Models.Others
+﻿using Clothings_Store.Data;
+using Clothings_Store.Models.Database;
+
+namespace Clothings_Store.Models.Others
 {
     public class OrderInfoSession
     {

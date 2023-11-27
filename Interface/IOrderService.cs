@@ -1,6 +1,6 @@
 ﻿using Clothings_Store.Models;
 
-namespace Clothings_Store.Patterns
+namespace Clothings_Store.Interface
 {
     public interface IOrderService
     {

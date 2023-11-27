@@ -1,6 +1,6 @@
 ﻿using Clothings_Store.Data;
+using Clothings_Store.Interface;
 using Clothings_Store.Models.Others;
-using Clothings_Store.Patterns;
 using Clothings_Store.Services.Others;
 using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
 using Microsoft.Extensions.Options;
