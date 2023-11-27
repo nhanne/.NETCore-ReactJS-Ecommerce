@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Clothings_Store.Models;
+using Clothings_Store.Models.Database;
 
 namespace Clothings_Store.Areas.Identity.Pages.Account
 {

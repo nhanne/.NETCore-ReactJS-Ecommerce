@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Clothings_Store.Models;
+namespace Clothings_Store.Models.Database;
 
 public partial class Order
 {
@@ -30,8 +30,8 @@ public partial class Order
     public virtual AppUser? User { get; set; }
 
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-    public virtual Payment? Payment { get; set; } 
-    public virtual OrderStatus? StatusNavigation { get; set; } 
+    public virtual Payment? Payment { get; set; }
+    public virtual OrderStatus? StatusNavigation { get; set; }
 
 
 }

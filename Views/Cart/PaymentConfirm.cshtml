@@ -1,10 +1,7 @@
-﻿@model Clothings_Store.Models.OrderInfoSession
+﻿@using Clothings_Store.Models.Others;
+@model Clothings_Store.Models.Others.OrderInfoSession
 @{
     Layout = "~/Views/Shared/_LayoutBS.cshtml";
-    if (Model == null)
-    {
-        <meta http-equiv="refresh" content="0; url=~/Index" />
-    }
     List<Cart> listCart = ViewBag.listCart;
 }
 <div class="row justify-content-center d-flex p-2 align-items-center">

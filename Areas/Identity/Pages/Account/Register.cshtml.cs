@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Clothings_Store.Models;
+using Clothings_Store.Models.Database;
 
 namespace Clothings_Store.Areas.Identity.Pages.Account
 {

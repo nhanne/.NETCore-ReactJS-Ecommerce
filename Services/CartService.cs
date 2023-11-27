@@ -1,5 +1,6 @@
 ﻿using Clothings_Store.Data;
-using Clothings_Store.Models;
+using Clothings_Store.Models.Database;
+using Clothings_Store.Models.Others;
 using Clothings_Store.Patterns;
 using Newtonsoft.Json;
 
@@ -36,27 +37,35 @@ namespace Clothings_Store.Services
                     listCart.Add(cartitem);
                 }
                 SaveCartSession(listCart);
-                _logger.LogInformation("Thêm sản phẩm vào giỏ hàng thành công.");
+                _logger.LogInformation("Add to cart success.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Thất bại khi thêm sản phẩm vào giỏ hàng.");
+                _logger.LogError(ex, "Add to cart failed.");
                 throw;
             }
 
         }
         public int RemoveFromCart(int IdCart)
         {
-            var listCart = GetCart();
-            var item = listCart.SingleOrDefault(c => c.IdCart == IdCart);
-            if (item != null)
+            try
             {
-                listCart.RemoveAll(c => c.IdCart == IdCart);
-                SaveCartSession(listCart);
+                var listCart = GetCart();
+                var item = listCart.SingleOrDefault(c => c.IdCart == IdCart);
+                if (item != null)
+                {
+                    listCart.RemoveAll(c => c.IdCart == IdCart);
+                    SaveCartSession(listCart);
+                }
+                _logger.LogInformation("Remove from cart success.");
+                if (listCart.Count == 0)
+                {
+                    return 0;
+                }
             }
-            if (listCart.Count == 0)
-            {
-                return 0;
+            catch(Exception ex) {
+                _logger.LogError(ex, "Remove from cart failed.");
+                throw;
             }
             return 1;
         }

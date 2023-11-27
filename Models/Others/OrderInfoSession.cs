@@ -1,4 +1,4 @@
-﻿namespace Clothings_Store.Models
+﻿namespace Clothings_Store.Models.Others
 {
     public class OrderInfoSession
     {
@@ -8,7 +8,7 @@
         public DateTime DeliveryTime { get; set; } = DateTime.UtcNow.AddDays(3);
         public double Amount { get; set; } = 0;
         public string DiscountCode { get; set; } = "";
-        public int PaymentId { get; set; } 
+        public int PaymentId { get; set; }
         public string Note { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }

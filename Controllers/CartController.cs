@@ -1,14 +1,8 @@
 ﻿using Clothings_Store.Data;
-using Clothings_Store.Models;
+using Clothings_Store.Models.Others;
 using Clothings_Store.Patterns;
-using Clothings_Store.Services;
-using Clothings_Store.Services.Others;
-using MailKit.Search;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using NuGet.Protocol;
 
 namespace Clothings_Store.Controllers
 {
@@ -96,22 +90,20 @@ namespace Clothings_Store.Controllers
         }
         public IActionResult PaymentConfirm()
         {
-            var listOrder = _session.GetSession("order");
-            var listCart = _cartService.GetCart();
-            if (TempData.ContainsKey("Confirmed") && (bool)TempData["Confirmed"])
+            if (TempData.ContainsKey("Confirmed") && (bool)TempData["Confirmed"]!)
             {
-                // Xử lý khi xác nhận đã được thực hiện
+                var listOrder = _session.GetSession("order");
+                var listCart = _cartService.GetCart();
+                var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listOrder[0]);
+                ViewBag.listCart = listCart;
+                _session.ClearSession("order");
+                _session.ClearSession("cart");
+                return View(orderInfo);
             }
             else
             {
-                // Nếu không có thông tin xác nhận, chuyển hướng người dùng
                 return RedirectToAction("Store", "Home");
             }
-            var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listOrder[0]);
-            ViewBag.listCart = listCart;
-            _session.ClearSession("order");
-            _session.ClearSession("cart");
-            return View(orderInfo);
         }
         public IActionResult VNPayConfirm()
         {

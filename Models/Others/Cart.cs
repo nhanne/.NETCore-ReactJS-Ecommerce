@@ -1,7 +1,7 @@
 ﻿using Clothings_Store.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Clothings_Store.Models;
+namespace Clothings_Store.Models.Others;
 
 public class Cart
 {
@@ -19,10 +19,10 @@ public class Cart
     {
         get { return quantity * unitPrice; }
     }
-    public Cart(StoreContext context,int stockId)
+    public Cart(StoreContext context, int stockId)
     {
         _db = context;
-        if(_db != null)
+        if (_db != null)
         {
             var stock = _db.Stocks
                 .Include(p => p.Product)
@@ -30,7 +30,7 @@ public class Cart
                 .Include(p => p.Color)
                 .Include(p => p.Size)
                 .FirstOrDefault(p => p.Id == stockId);
-            if(stock != null)
+            if (stock != null)
             {
                 IdCart = stockId;
                 quantity = 1;

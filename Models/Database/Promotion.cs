@@ -1,6 +1,4 @@
-﻿
-
-namespace Clothings_Store.Models;
+﻿namespace Clothings_Store.Models.Database;
 
 public partial class Promotion
 {

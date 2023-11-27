@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Clothings_Store.Models;
+namespace Clothings_Store.Models.Database;
 
 public partial class Category
 {

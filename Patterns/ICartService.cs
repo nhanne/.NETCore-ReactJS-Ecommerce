@@ -1,4 +1,5 @@
-﻿using Clothings_Store.Models;
+﻿using Clothings_Store.Models.Database;
+using Clothings_Store.Models.Others;
 
 namespace Clothings_Store.Patterns
 {

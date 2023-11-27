@@ -1,5 +1,6 @@
 ﻿using Clothings_Store.Data;
-using Clothings_Store.Models;
+using Clothings_Store.Models.Database;
+using Clothings_Store.Models.Others;
 using Clothings_Store.Patterns;
 using Clothings_Store.Services;
 using Microsoft.AspNetCore.Identity;
@@ -103,6 +104,11 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+app.Use((context, next) =>
+{
+    context.Request.Scheme = "https";
+    return next(context);
+});
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

@@ -1,4 +1,4 @@
-﻿namespace Clothings_Store.Models
+﻿namespace Clothings_Store.Models.Others
 {
     public class MoMoConfig
     {

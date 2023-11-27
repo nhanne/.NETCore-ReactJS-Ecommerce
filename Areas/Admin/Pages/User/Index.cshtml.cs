@@ -1,5 +1,5 @@
 using Clothings_Store.Data;
-using Clothings_Store.Models;
+using Clothings_Store.Models.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

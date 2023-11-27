@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
 
-namespace Clothings_Store.Models
+namespace Clothings_Store.Models.Others
 {
     public class MailSettings
     {
@@ -13,5 +13,5 @@ namespace Clothings_Store.Models
         public string Host { get; set; }
         public int Port { get; set; }
     }
-  
+
 }

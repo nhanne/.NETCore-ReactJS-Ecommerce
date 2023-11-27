@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Clothings_Store.Areas.Identity.Pages.Shared.Components.MessagePage;
-using Clothings_Store.Models;
+using Clothings_Store.Models.Database;
 
 namespace Clothings_Store.Areas.Identity.Pages.Account
 {

@@ -1,4 +1,4 @@
-﻿using Clothings_Store.Models;
+﻿using Clothings_Store.Models.Others;
 using MailKit.Security;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;

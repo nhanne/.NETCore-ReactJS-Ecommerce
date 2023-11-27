@@ -1,4 +1,4 @@
-﻿using Clothings_Store.Models;
+﻿using Clothings_Store.Models.Database;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

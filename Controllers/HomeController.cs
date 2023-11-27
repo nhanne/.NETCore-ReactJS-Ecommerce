@@ -1,6 +1,5 @@
 ﻿using Clothings_Store.Data;
-using Clothings_Store.Models;
-using Clothings_Store.Patterns;
+using Clothings_Store.Models.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -155,7 +154,7 @@ namespace Clothings_Store.Controllers
                         && p.ColorId == colorId
                         && p.SizeId == sizeId)
                .FirstOrDefault();
-            int quantity = stock == null ? 0 : (int)stock.Stock1;
+            int quantity = stock == null ? 0 : (int)stock.Stock1!;
             return Json(new { quantity });
         }
 

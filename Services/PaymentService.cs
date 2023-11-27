@@ -1,5 +1,5 @@
 ﻿using Clothings_Store.Data;
-using Clothings_Store.Models;
+using Clothings_Store.Models.Others;
 using Clothings_Store.Patterns;
 using Clothings_Store.Services.Others;
 using Microsoft.DotNet.Scaffolding.Shared.CodeModifier.CodeChange;
@@ -31,7 +31,6 @@ namespace Clothings_Store.Services
             _orderService = orderService;
             _session = session;
             _vnPayConfig = vnPayConfig.Value;
-
         }
         public void COD()
         {
@@ -60,13 +59,14 @@ namespace Clothings_Store.Services
                     pay.AddRequestData("vnp_TxnRef", orderInfo.Id.ToString());
                     pay.AddRequestData("vnp_CreateDate", expirationTime.ToString("yyyyMMddHHmmss"));
                     pay.AddRequestData("vnp_IpAddr", Util.GetIpAddress(_httpContextAccessor));
-
                     string paymentUrl = pay.CreateRequestUrl(_vnPayConfig.Url, _vnPayConfig.HashSecret);
                     return paymentUrl;
                 }
             }
             catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
+                throw;
             }
             return "/";
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Clothings_Store.Models;
+namespace Clothings_Store.Models.Database;
 
 public partial class Customer
 {
