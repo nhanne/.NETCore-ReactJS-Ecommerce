@@ -39,7 +39,7 @@ namespace Clothings_Store.Services
         {
             await _orderService.PlaceOrder();
         }
-        public async Task<string> VNPay()
+        public string VNPay()
         {
             var listSession = _session.GetSession("order");
             var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);

@@ -32,50 +32,33 @@ namespace Clothings_Store.Controllers
         {
             return View();
         }
-        public async Task<JsonResult> getData(
-            string? search, 
-            string? category, 
-            string sort, 
-            int page = 1, 
-            int pageSize = 8)
+        public async Task<JsonResult> getData( string? search, string? category, string sort, 
+                                               int page = 1, int pageSize = 8)
         {
             var query = _db.Products.AsQueryable();
             if (!string.IsNullOrEmpty(category))
             {
-                query = query.Where(p => p.Category.Name
-                                          .ToLower()
-                                          .Contains(category.Trim().ToLower()
-                                   ));
+                query = query.Where(p => p.Category.Name.ToLower()
+                                                        .Contains(category.Trim().ToLower()));
             }
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x => x.Name.ToLower()
-                                          .Contains(search.Trim().ToLower()
-                                   ));
+                                               .Contains(search.Trim().ToLower()));
             }
-            //
+
             query = Sort(sort, query);
-            //
-            int totalItems = query.Count();
+
+            int totalItems = await query.CountAsync();
             int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-            var products = await query
-                .Select(p => new
-                {
-                    p,
-                    cateName = p.Category.Name
-                })
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .AsNoTracking()
-                .ToListAsync();
-            return Json(new
-                {
-                    products,
-                    TotalPages = totalPages,
-                    CurrentPage = page,
-                });
+
+            var products = await query.Select(p => new { p,cateName = p.Category.Name} )
+                                      .Skip((page - 1) * pageSize)
+                                      .Take(pageSize)
+                                      .AsNoTracking()
+                                      .ToListAsync();
+            return Json(new{ products, TotalPages = totalPages, CurrentPage = page });
         }
-        [HttpGet]
         public async Task<JsonResult> getCategories()
         {
             var categories = await _db.Categories.Select(p => p).ToListAsync();
@@ -147,11 +130,11 @@ namespace Clothings_Store.Controllers
         [HttpGet]
         public async Task<JsonResult> getStock(int productId, int sizeId, int colorId)
         {
-            var stock = await _db.Stocks
-               .Where(p => p.ProductId == productId
-                        && p.ColorId == colorId
-                        && p.SizeId == sizeId)
-               .FirstOrDefaultAsync();
+            var stock = await _db.Stocks.Where(p => p.ProductId == productId
+                                                && p.ColorId == colorId
+                                                && p.SizeId == sizeId)
+                                        .FirstOrDefaultAsync();
+
             int quantity = stock == null ? 0 : (int)stock.Stock1!;
             return Json(new { quantity });
         }

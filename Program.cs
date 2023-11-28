@@ -22,6 +22,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e w
 builder.Services.AddDistributedSqlServerCache(options =>
 {
     options.ConnectionString = "Data Source=DESKTOP-EC723GE\\TNHAN;Initial Catalog=ClothingsStore;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true";
+    //options.ConnectionString = "Data Source=SQL8006.site4now.net;Initial Catalog=db_aa2078_dbstore;User ID=db_aa2078_dbstore_admin;Password=UcB3266SbE.R5ry";
     options.SchemaName = "dbo";
     options.TableName = "OrderInfoSession";
 });
@@ -98,10 +99,19 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-app.Use((context, next) =>
+app.Use(async (context, next) =>
 {
-    context.Request.Scheme = "https";
-    return next(context);
+    if (context.Request.IsHttps)
+    {
+        context.Request.Scheme = "https";
+    }
+    await next();
+
+    if (context.Response.StatusCode == 404 && !context.Response.HasStarted)
+    {
+        context.Request.Path = "/"; 
+        await next();
+    }
 });
 app.UseHttpsRedirection();
 app.UseStaticFiles();

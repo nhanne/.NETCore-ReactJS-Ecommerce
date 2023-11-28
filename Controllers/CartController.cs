@@ -83,7 +83,7 @@ namespace Clothings_Store.Controllers
                     await _paymentService.COD();
                     return Json(new { redirectToUrl = Url.Action("PaymentConfirm") });
                 case 2:
-                    string vnpaymentUrl = await _paymentService.VNPay();
+                    string vnpaymentUrl = _paymentService.VNPay();
                     return Json(new { redirectToUrl = vnpaymentUrl });
                 case 3:
                     var response = await _paymentService.CreatePaymentAsync(orderInfoModel);

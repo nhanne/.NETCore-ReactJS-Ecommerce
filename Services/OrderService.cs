@@ -34,6 +34,7 @@ namespace Clothings_Store.Services
             {
                 Order order = new Order();
                 await OrderInfo(order);
+                _logger.LogInformation("Hoàn thành task OrderInfo");
                 await OrderDetail(order.Id);
                 _logger.LogInformation("Place Order Success.");
             }
@@ -49,14 +50,15 @@ namespace Clothings_Store.Services
             var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);
             if (orderInfo == null || listSession.Count == 0) return;
             await Data(order, orderInfo);
+            _logger.LogInformation("Chạy xong hàm Data rồi tới task orderInffo");
             _db.Orders.Add(order);
             _db.SaveChanges();
         }
 
         public async Task Data(Order order, OrderInfoSession Model)
         {
-            order.CustomerId = CustomerInfo(Model);
             var amount = Amount(Model);
+            var customerId = CustomerInfo(Model);
             var httpContext = _httpContextAccessor.HttpContext!;
             if (httpContext.User.Identity!.IsAuthenticated == true)
             {
@@ -64,31 +66,37 @@ namespace Clothings_Store.Services
                 order.UserId = userId;
             }
             order.Id = Model.Id;    
-            order.OrdTime = DateTime.UtcNow;
+            TimeZoneInfo haNoiTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            DateTime haNoiNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, haNoiTimeZone);
+            order.OrdTime = haNoiNow;
             order.DeliTime = order.OrdTime.AddDays(3);
             order.Status = "Chờ xác nhận";
             order.PaymentId = Model.PaymentId;
             order.Address = Model.Address;
             order.Note = Model.Note;
             order.TotalQuantity = _cartService.TotalItems();
-            order.TotalPrice = await amount;
+            order.TotalPrice = await amount; 
+            order.CustomerId = await customerId;
+            _logger.LogInformation("Chạy xong Task amount và customerId");
         }
-        private int CustomerInfo(OrderInfoSession Model)
+        private async Task<int> CustomerInfo(OrderInfoSession Model)
         {
-            Customer customer = new Customer();
-            customer.Email = Model.Email;
-            customer.Phone = Model.Phone;
-            customer.FullName = Model.FullName;
-            customer.Address = Model.Address;
-            _db.Customers.Add(customer);
+            Customer customer = new Customer
+            {
+                Email = Model.Email,
+                Phone = Model.Phone,
+                FullName = Model.FullName,
+                Address = Model.Address
+            };
+            await _db.Customers.AddAsync(customer);
+            _logger.LogInformation("Thêm thành công khách hàng");
             _db.SaveChanges();
             return customer.Id;
         }
-        public async Task<double> Amount(OrderInfoSession Model)
+        private async Task<double> Amount(OrderInfoSession Model)
         {
-            DateTime now = DateTime.UtcNow;
             var codeKM = await _db.Promotions.SingleOrDefaultAsync(m => 
-                               m.PromotionName == Model.DiscountCode && m.EndDate > now);
+                               m.PromotionName == Model.DiscountCode && m.EndDate > DateTime.UtcNow);
             double percent = (codeKM != null) ? (double)codeKM.DiscountPercentage : 100;
 
             IBillingStrategy normalPrice = new NormalStrategy();
@@ -99,19 +107,35 @@ namespace Clothings_Store.Services
 
         private async Task OrderDetail(string orderId)
         {
-            var cartItems = _cartService.GetCart().ToList();
-            foreach (var item in cartItems)
+            Task task = new Task(() =>
             {
-                OrderDetail model = new OrderDetail
+                var cartItems = _cartService.GetCart().ToList();
+                foreach (var item in cartItems)
                 {
-                    OrderId = orderId,
-                    StockId = item.IdCart,
-                    Quantity = item.quantity,
-                    UnitPrice = item.unitPrice
-                };
-                await _db.OrderDetails.AddAsync(model);
-            }
-            await _db.SaveChangesAsync();
+                    OrderDetail model = new OrderDetail
+                    {
+                        OrderId = orderId,
+                        StockId = item.IdCart,
+                        Quantity = item.quantity,
+                        UnitPrice = item.unitPrice
+                    };
+                    _db.OrderDetails.AddAsync(model);
+                    _logger.LogInformation("Thêm chi tiết đơn hàng " + item.IdCart);
+                }
+            });
+            Task t2 = new Task(() =>
+            {
+                for (var i = 0; i < 10; i++)
+                {
+                    _logger.LogInformation("Đang chạy task 2 lần " + i);
+                }
+            });
+            task.Start();
+            t2.Start();
+            await task;
+            await t2;
+            _db.SaveChanges();
+            _logger.LogInformation("Hoàn thành task orderDetail");
         }
     }
 }
