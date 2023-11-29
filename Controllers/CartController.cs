@@ -1,8 +1,12 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Interface;
+using Clothings_Store.Models.Database;
 using Clothings_Store.Models.Others;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Clothings_Store.Controllers
 {
@@ -12,17 +16,20 @@ namespace Clothings_Store.Controllers
         private readonly ICartService _cartService;
         private readonly IPaymentService _paymentService;
         private readonly ICustomSessionService<string> _session;
+        private readonly IEmailSender _emailSender;
         public CartController(
             StoreContext context,
             ICartService cartService,
             IPaymentService paymentService,
-            ICustomSessionService<string> session
+            ICustomSessionService<string> session,
+            IEmailSender emailSender
             )
         {
             _db = context;
             _cartService = cartService;
             _paymentService = paymentService;
             _session = session;
+            _emailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -92,16 +99,34 @@ namespace Clothings_Store.Controllers
                     return View();
             }
         }
-        public IActionResult PaymentConfirm()
+        public async Task<IActionResult> PaymentConfirm()
         {
             if (TempData.ContainsKey("Confirmed") && (bool)TempData["Confirmed"]!)
             {
-                var listOrder = _session.GetSession("order");
                 var listCart = _cartService.GetCart();
-                var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listOrder[0]);
-                ViewBag.listCart = listCart;
-                _session.ClearSession("order");
                 _session.ClearSession("cart");
+                ViewBag.listCart = listCart;
+
+                var listOrder = _session.GetSession("order");
+                _session.ClearSession("order");
+                var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listOrder[0]);
+
+                var emailBody = new StringBuilder();
+                emailBody.AppendLine($"Kính gửi {orderInfo.FullName}, <br><br>");
+                emailBody.AppendLine($"Thông tin chi tiết đơn hàng:<br>");
+                foreach (var item in listCart)
+                {
+                    emailBody.AppendLine($"- {item.name}, size: {item.size}, color: {item.color} x{item.quantity}</p><br/>");
+                }
+                emailBody.AppendLine($"Cảm ơn bạn đã ghé thăm và đặt hàng tại Clothings Store. Chúng tôi sẽ sớm xác nhận lại với bạn khi đã tiếp nhận đơn hàng.<br><br>");
+                emailBody.AppendLine("Trân trọng ! <br> Tran Thanh Nhan");
+
+                await _emailSender.SendEmailAsync(
+                    orderInfo.Email,
+                    "[Clothings Store] Thông báo đơn hàng",
+                    emailBody.ToString()
+                );
+
                 return View(orderInfo);
             }
             else
@@ -121,7 +146,7 @@ namespace Clothings_Store.Controllers
         }
         [HttpGet]
         public IActionResult MomoConfirm()
-        { 
+        {
             var response = _paymentService.PaymentExecuteAsync(HttpContext.Request.Query);
             if (int.Parse(response.ErrorCode) != 0)
             {
