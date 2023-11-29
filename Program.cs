@@ -10,9 +10,15 @@ using System.Text;
 
 Console.OutputEncoding = Encoding.UTF8;
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddOptions();// Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+var mvcBuilder = builder.Services.AddControllersWithViews();
+var razorBuilder = builder.Services.AddRazorPages();
+if (builder.Environment.IsDevelopment())
+{
+    razorBuilder.AddRazorRuntimeCompilation();
+    mvcBuilder.AddRazorRuntimeCompilation();
+}
 // How to connect StoreContext to MS SQL Server
 builder.Services.AddDbContext<StoreContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")),ServiceLifetime.Scoped);
