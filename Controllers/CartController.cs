@@ -144,7 +144,6 @@ namespace Clothings_Store.Controllers
             TempData["Confirmed"] = true;
             return RedirectToAction("PaymentConfirm");
         }
-        [HttpGet]
         public IActionResult MomoConfirm()
         {
             var response = _paymentService.PaymentExecuteAsync(HttpContext.Request.Query);
