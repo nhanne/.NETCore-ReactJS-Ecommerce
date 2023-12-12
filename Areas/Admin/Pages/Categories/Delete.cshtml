@@ -1,0 +1,26 @@
+﻿@page "/admin/delete-category/{categoryid}"
+@model DeleteModel
+@{
+    ViewData["Title"] = "Xóa danh mục";
+}
+<h2>@ViewData["Title"]</h2>
+<partial name="_StatusMessage" for="StatusMessage" />
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger" style="text-align:center" role="alert"></div>
+            <p>Bạn có chắc chắn muốn xóa danh mục này ?</p>
+            <hr />
+            <div class="form-group">
+                <input type="submit" value="Đồng ý" class="btn btn-primary" />
+                <a class="btn btn-danger" asp-page="./Index">Danh sách các danh mục</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

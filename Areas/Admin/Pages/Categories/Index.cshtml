@@ -1,0 +1,29 @@
+﻿@page "/admin/categories"
+@model IndexModel
+@{
+    ViewData["Title"] = "Danh sách danh mục sản phẩm";
+}
+<h2>@ViewData["Title"]</h2>
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="mb-2">
+    <a class="btn btn-primary" asp-page="./Create">Thêm mới</a>
+</div>
+<table class="table">
+    <tr>
+        <th>Mã danh mục</th>
+        <th>Tên danh mục</th>
+        <th>Chức năng</th>
+    </tr>
+    @foreach (var item in Model.categories)
+    {
+        <tr>
+            <td>@item.Code</td>
+            <td>@item.Name</td>
+            <td>
+                <a class="btn btn-success btn-sm" asp-page="./Edit" asp-route-categoryid="@item.Id">Cập nhật</a>
+                <a class="btn btn-danger btn-sm" asp-page="./Delete" asp-route-categoryid="@item.Id">Xóa</a>
+            </td>
+        </tr>
+    }
+</table>
