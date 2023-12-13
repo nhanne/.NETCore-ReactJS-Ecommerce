@@ -2,6 +2,7 @@
 using Clothings_Store.Interface;
 using Clothings_Store.Models.Database;
 using Clothings_Store.Models.Others;
+using Clothings_Store.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Security.Claims;
@@ -11,45 +12,29 @@ namespace Clothings_Store.Services
     public class OrderService : IOrderService
     {
         private readonly StoreContext _db;
-        private readonly ILogger<OrderService> _logger;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICartService _cartService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ICustomSessionService<string> _session;
-        public delegate void Show(string messege);
-        public void confirmOrder(string messege)
-        {
-            _logger.LogInformation(messege);
-        }
 
         public OrderService(
             StoreContext db,
-            ILogger<OrderService> logger,
+            IUnitOfWork unitOfWork,
             ICartService cartService,
             IHttpContextAccessor httpContextAccessor,
             ICustomSessionService<string> session)
         {
             _db = db;
-            _logger = logger;
+            _unitOfWork = unitOfWork;
             _cartService = cartService;
             _httpContextAccessor = httpContextAccessor;
             _session = session;
         }
         public async Task PlaceOrder()
         {
-            Show testDelegate;
-            testDelegate = confirmOrder;
-            try
-            {
                 Order order = new Order();
                 await OrderInfo(order);
                 await OrderDetail(order.Id);
-                testDelegate?.Invoke("Place Order Success");
-            }
-            catch (Exception ex)
-            {
-                testDelegate?.Invoke("Place Order Failed, error: " + ex);
-                throw;
-            }
         }
         private async Task OrderInfo(Order order)
         {
@@ -57,10 +42,9 @@ namespace Clothings_Store.Services
             var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);
             if (orderInfo == null || listSession.Count == 0) return;
             await Data(order, orderInfo);
-            _db.Orders.Add(order);
-            _db.SaveChanges();
+            _unitOfWork.OrderRepository.Create(order);
+            _unitOfWork.SaveChanges();
         }
-
         public async Task Data(Order order, OrderInfoSession Model)
         {
             Task<double> amount = Amount(Model);
@@ -116,7 +100,7 @@ namespace Clothings_Store.Services
                               m.PromotionName == Model.DiscountCode && m.EndDate > DateTime.UtcNow);
                 double percent = (codeKM != null) ? (double)codeKM.DiscountPercentage : 100;
 
-                IBillingStrategy normalPrice = new NormalStrategy();
+                IBillingStrategy normalPrice = new NormalStrategy(); 
                 var CustomerBill = new CustomerBill(normalPrice);
                 return CustomerBill.LastPrice(_cartService.TotalPrice(), percent);
             });

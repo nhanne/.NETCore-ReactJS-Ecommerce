@@ -2,10 +2,12 @@
 using Clothings_Store.Interface;
 using Clothings_Store.Models.Database;
 using Clothings_Store.Models.Others;
+using Clothings_Store.Repositories;
 using Clothings_Store.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Formats.Asn1;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
@@ -89,12 +91,22 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
     facebookOptions.AppSecret = facebookAuthNSection["AppSecret"]!;
     facebookOptions.CallbackPath = "/loginFacebook";
 });
-// Service DI
+// Service DI 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 builder.Services.AddScoped<IEmailSender, SendMailService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped(typeof(ICustomSessionService<>), typeof(CustomSessionService<>));
+
+// Repository 
+builder.Services.AddScoped<IRepository<Category>, CategoriesRepository>();
+builder.Services.AddScoped<IRepository<Order>, OrdersRepository>();
+builder.Services.AddScoped<IRepository<OrderDetail>, OrderDetailsRepository>();
+builder.Services.AddScoped<IRepository<Product>, ProductsRepository>();
+builder.Services.AddScoped<IRepository<Customer>, CustomerRepository>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 // Online Payment
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.Configure<VnPayConfig>(builder.Configuration.GetSection("OnlinePayment:Vnpay"));

@@ -1,5 +1,6 @@
 ﻿using Clothings_Store.Interface;
 using Clothings_Store.Models.Database;
+using Clothings_Store.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -24,8 +25,7 @@ public class DeleteModel : PageModel
     {
         var model = _repository.Get(categoryid);
         if (model == null) return NotFound("không tìm thấy danh mục");
-        _repository.Remove(model);
-        _repository.SaveChanges();
+        _repository.Delete(model);
         StatusMessage = $"Bạn vừa xóa danh mục: {model.Name}";
         return RedirectToPage("./Index");
     }

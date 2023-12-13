@@ -1,24 +1,25 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Models.Database;
-using Clothings_Store.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace Clothings_Store.Areas.Admin.Pages.Categories;
+namespace Clothings_Store.Repositories;
 public class CategoriesRepository : GenericRepository<Category>
 {
-    private readonly StoreContext _context;
     public CategoriesRepository(StoreContext context) : base(context)
     {
-        _context = context;
     }
-    public override Category Add(Category Input)
+    public override void Create(Category Input)
     {
         var model = new Category();
-        model.Id = _context.Categories.ToList().Last().Id + 1;
+        model.Id = base._db.Categories.ToList().Last().Id + 1;
         model.Name = Input.Name;
         model.Code = Input.Code;
-        model = base.Add(model);
+        base.Create(model);
         base.SaveChanges();
-        return model;
+    }
+    public override void Delete(Category entity)
+    {
+        base.Delete(entity);
+        base.SaveChanges();
     }
 }

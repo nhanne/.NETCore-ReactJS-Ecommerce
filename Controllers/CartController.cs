@@ -2,6 +2,7 @@
 using Clothings_Store.Interface;
 using Clothings_Store.Models.Database;
 using Clothings_Store.Models.Others;
+using Clothings_Store.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -16,7 +17,7 @@ namespace Clothings_Store.Controllers
         private readonly ICartService _cartService;
         private readonly IPaymentService _paymentService;
         private readonly ICustomSessionService<string> _session;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSender _emailSender; 
         public CartController(
             StoreContext context,
             ICartService cartService,

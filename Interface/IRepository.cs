@@ -1,14 +1,13 @@
 ﻿using System.Linq.Expressions;
 
-namespace Clothings_Store.Interface
+namespace Clothings_Store.Interface;
+public interface IRepository<T>
 {
-    public interface IRepository<T>
-    {
-        T Add(T entity);
-        T Update(T entity);
-        T Get(Guid id);
-        IEnumerable<T> GetAll();
-        IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
-        void SaveChanges();
-    }
+    T Get(int id);
+    void Create(T entity);
+    void Update(T entity);
+    void Delete (T entity);
+    IEnumerable<T> GetAll();
+    IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
+    void SaveChanges();
 }

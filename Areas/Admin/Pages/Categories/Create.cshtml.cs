@@ -1,6 +1,7 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Interface;
 using Clothings_Store.Models.Database;
+using Clothings_Store.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,7 @@ namespace Clothings_Store.Areas.Admin.Pages.Categories
             {
                 return Page(); 
             }
-            _repository.Add(Input);
+            _repository.Create(Input);
             StatusMessage = $"Bạn vừa tạo danh mục mới: {Input.Name}";
             return RedirectToPage("./Index");
         }
