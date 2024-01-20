@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace Clothings_Store.Models.Database;
-
 public partial class OrderStatus
 {
     public string Status { get; set; } = null!;

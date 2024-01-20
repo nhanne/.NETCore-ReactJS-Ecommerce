@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 
 namespace Clothings_Store.Models.Database;
-
 public partial class Customer
 {
     public int Id { get; set; }

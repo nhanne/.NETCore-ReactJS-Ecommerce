@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 
 namespace Clothings_Store.Models.Others;
-
 public class Cart
 {
     private readonly StoreContext _db;

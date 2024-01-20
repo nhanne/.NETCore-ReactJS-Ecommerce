@@ -6,6 +6,7 @@ using Clothings_Store.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 Console.OutputEncoding = Encoding.UTF8;
@@ -18,7 +19,11 @@ if (builder.Environment.IsDevelopment())
 {
     razorBuilder.AddRazorRuntimeCompilation();
     mvcBuilder.AddRazorRuntimeCompilation();
-}
+};
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+});
 // How to connect StoreContext to MS SQL Server
 builder.Services.AddDbContext<StoreContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")),ServiceLifetime.Scoped);
@@ -27,7 +32,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e w
 // Session distributed cache SQL Server
 builder.Services.AddDistributedSqlServerCache(options =>
 {
-    options.ConnectionString = "Data Source=DESKTOP-EC723GE\\TNHAN;Initial Catalog=ClothingsStore;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true";
+    options.ConnectionString = "Data Source=NHAN;Initial Catalog=ClothingsStore;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true";
     //options.ConnectionString = "Data Source=SQL8006.site4now.net;Initial Catalog=db_aa2078_dbstore;User ID=db_aa2078_dbstore_admin;Password=UcB3266SbE.R5ry";
     options.SchemaName = "dbo";
     options.TableName = "OrderInfoSession";
@@ -129,5 +134,10 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+});
 app.Run();
 
