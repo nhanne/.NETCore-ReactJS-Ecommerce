@@ -41,7 +41,7 @@ public class UnitOfWork : IUnitOfWork
         {
             if (orderRepository == null)
             {
-                orderRepository = new OrdersRepository(context);
+                orderRepository = new OrderRepository(context);
             }
 
             return orderRepository;
@@ -55,7 +55,7 @@ public class UnitOfWork : IUnitOfWork
         {
             if (productRepository == null)
             {
-                productRepository = new ProductsRepository(context);
+                productRepository = new ProductRepository(context);
             }
 
             return productRepository;
@@ -68,7 +68,7 @@ public class UnitOfWork : IUnitOfWork
         {
             if (orderDetailsRepository == null)
             {
-                orderDetailsRepository = new OrderDetailsRepository(context);
+                orderDetailsRepository = new OrderDetailRepository(context);
             }
 
             return orderDetailsRepository;

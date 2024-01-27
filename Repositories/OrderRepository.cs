@@ -2,9 +2,9 @@
 using Clothings_Store.Models.Database;
 
 namespace Clothings_Store.Repositories;
-public class OrdersRepository : GenericRepository<Order>
+public class OrderRepository : GenericRepository<Order>
 {
-    public OrdersRepository(StoreContext context) : base(context)
+    public OrderRepository(StoreContext context) : base(context)
     {
     }
 }

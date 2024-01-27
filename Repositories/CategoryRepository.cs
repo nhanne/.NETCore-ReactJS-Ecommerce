@@ -3,9 +3,9 @@ using Clothings_Store.Models.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Clothings_Store.Repositories;
-public class CategoriesRepository : GenericRepository<Category>
+public class CategoryRepository : GenericRepository<Category>
 {
-    public CategoriesRepository(StoreContext context) : base(context)
+    public CategoryRepository(StoreContext context) : base(context)
     {
     }
     public override void Create(Category Input)
