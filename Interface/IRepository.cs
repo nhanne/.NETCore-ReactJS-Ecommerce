@@ -1,13 +1,11 @@
 ﻿using System.Linq.Expressions;
-
 namespace Clothings_Store.Interface;
-public interface IRepository<T>
+public interface IRepository<TEntity, TKey>
 {
-    T Get(int id);
-    void Create(T entity);
-    void Update(T entity);
-    void Delete (T entity);
-    IEnumerable<T> GetAll();
-    IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
-    void SaveChanges();
+    Task<TEntity?> GetByIdAsync(TKey id);
+    Task CreateAsync(TEntity entity);
+    Task UpdateAsync(TEntity entity);
+    Task DeleteAsync (TEntity entity);
+    Task<IEnumerable<TEntity>?> GetAllAsync();
+    Task<IEnumerable<TEntity>?> FindAsync(Expression<Func<TEntity, bool>> predicate);
 }

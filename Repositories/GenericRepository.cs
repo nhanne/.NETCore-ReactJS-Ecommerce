@@ -4,19 +4,46 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Clothings_Store.Repositories;
-public abstract class GenericRepository<T> : IRepository<T> where T : class
+public abstract class GenericRepository<TEntity, TKey> : IRepository<TEntity, TKey> where TEntity : class
 {
     protected readonly StoreContext _db;
     public GenericRepository(StoreContext db)
     {
         _db = db;
     }
-    public virtual T Get(int id) => _db.Find<T>(id);
-    public virtual void Create(T entity) => _db.Set<T>().Add(entity);
-    public virtual void Update(T entity) => _db.Entry(entity).State = EntityState.Modified;
-    public virtual void Delete(T entity) => _db.Set<T>().Remove(entity);
-    public IEnumerable<T> Find(Expression<Func<T, bool>> predicate) => _db.Set<T>().AsQueryable().Where(predicate).ToList();
-    public IEnumerable<T> GetAll() => _db.Set<T>().Select(item => item).AsNoTracking().ToList();
-    public void SaveChanges() => _db.SaveChanges();
+    public virtual async Task<TEntity?> GetByIdAsync(TKey id)
+    {
+        return await _db.FindAsync<TEntity>(id);
+    }
+    public virtual async Task CreateAsync(TEntity entity)
+    {
+        await _db.Set<TEntity>().AddAsync(entity);
+        await _db.SaveChangesAsync();
+    }
+    public virtual async Task UpdateAsync(TEntity entity)
+    {
+        _db.Entry(entity).State = EntityState.Modified;
+        await _db.SaveChangesAsync();
+    }
+    public virtual async Task DeleteAsync(TEntity entity)
+    {
+        _db.Set<TEntity>().Remove(entity);
+        await _db.SaveChangesAsync();
+    }
+    public async Task<IEnumerable<TEntity>?> FindAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        return await _db.Set<TEntity>()
+                        .AsQueryable()
+                        .Where(predicate)
+                        .AsNoTracking()
+                        .ToListAsync();
+    }
+    public async Task<IEnumerable<TEntity>?> GetAllAsync()
+    {
+        return await _db.Set<TEntity>()
+                        .Select(item => item)
+                        .AsNoTracking()
+                        .ToListAsync();
+    }
 }
 

@@ -1,25 +1,22 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Models.Database;
-using Microsoft.EntityFrameworkCore;
 
 namespace Clothings_Store.Repositories;
-public class CategoryRepository : GenericRepository<Category>
+public class CategoryRepository : GenericRepository<Category, int>
 {
     public CategoryRepository(StoreContext context) : base(context)
     {
     }
-    public override void Create(Category Input)
+    public override async Task CreateAsync(Category input)
     {
         var model = new Category();
         model.Id = base._db.Categories.ToList().Last().Id + 1;
-        model.Name = Input.Name;
-        model.Code = Input.Code;
-        base.Create(model);
-        base.SaveChanges();
+        model.Name = input.Name;
+        model.Code = input.Code;
+        await base.CreateAsync(model);
     }
-    public override void Delete(Category entity)
+    public override async Task DeleteAsync(Category category)
     {
-        base.Delete(entity);
-        base.SaveChanges();
+        await base.DeleteAsync(category);
     }
 }

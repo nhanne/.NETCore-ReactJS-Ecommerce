@@ -9,10 +9,10 @@ namespace Clothings_Store.Areas.Admin.Pages.Products
     [Authorize(Roles = "Shop Master")]
     public class CreateModel : PageModel
     {
-        private readonly IRepository<Product> _repository;
-        public CreateModel(IRepository<Product> repository) => _repository = repository;
+        private readonly IRepository<Product, int> _repository;
+        public CreateModel(IRepository<Product, int> repository) => _repository = repository;
         [TempData]
-        public string StatusMessage { get; set; }
+        public string? StatusMessage { get; set; }
         [BindProperty]
         public Product Input { get; set; }
         public void OnGet()
@@ -21,10 +21,8 @@ namespace Clothings_Store.Areas.Admin.Pages.Products
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
-            {
                 return Page(); 
-            }
-            _repository.Create(Input);
+            await _repository.CreateAsync(Input);
             StatusMessage = $"Bạn vừa tạo sản phẩm mới: {Input.Name}";
             return RedirectToPage("./Index");
         }

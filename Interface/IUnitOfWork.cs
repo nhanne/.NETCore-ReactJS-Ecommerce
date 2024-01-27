@@ -5,10 +5,10 @@ using Clothings_Store.Repositories;
 namespace Clothings_Store.Interface;
 public interface IUnitOfWork
 {
-    IRepository<Customer> CustomerRepository { get; }
-    IRepository<Order> OrderRepository { get; }
-    IRepository<Product> ProductRepository { get; }
-    IRepository<OrderDetail> OrderDetailsRepository { get; }
+    IRepository<Customer, int> CustomerRepository { get; }
+    IRepository<Product, int> ProductRepository { get; }
+    IRepository<Order, string> OrderRepository { get; }
+    IRepository<OrderDetail, string> OrderDetailRepository { get; }
     void SaveChanges();
 }
 public class UnitOfWork : IUnitOfWork
@@ -20,61 +20,48 @@ public class UnitOfWork : IUnitOfWork
         this.context = context;
     }
 
-    private IRepository<Customer> customerRepository;
-    public IRepository<Customer> CustomerRepository
+    private IRepository<Customer, int> _customerRepository;
+    public IRepository<Customer, int> CustomerRepository
     {
         get
         {
-            if (customerRepository == null)
-            {
-                customerRepository = new CustomerRepository(context);
-            }
-
-            return customerRepository;
+            if (_customerRepository == null)
+                _customerRepository = new CustomerRepository(context);
+            return _customerRepository;
         }
     }
 
-    private IRepository<Order> orderRepository;
-    public IRepository<Order> OrderRepository
+    private IRepository<Order, string> _orderRepository;
+    public IRepository<Order, string> OrderRepository
     {
         get
         {
-            if (orderRepository == null)
-            {
-                orderRepository = new OrderRepository(context);
-            }
-
-            return orderRepository;
+            if (_orderRepository == null)
+                _orderRepository = new OrderRepository(context);
+            return _orderRepository;
         }
     }
 
-    private IRepository<Product> productRepository;
-    public IRepository<Product> ProductRepository
+    private IRepository<Product, int> _productRepository;
+    public IRepository<Product, int> ProductRepository
     {
         get
         {
-            if (productRepository == null)
-            {
-                productRepository = new ProductRepository(context);
-            }
-
-            return productRepository;
+            if (_productRepository == null)
+                _productRepository = new ProductRepository(context);
+            return _productRepository;
         }
     }
-    private IRepository<OrderDetail> orderDetailsRepository;
-    public IRepository<OrderDetail> OrderDetailsRepository
+    private IRepository<OrderDetail, string> _orderDetailRepository;
+    public IRepository<OrderDetail, string> OrderDetailRepository
     {
         get
         {
-            if (orderDetailsRepository == null)
-            {
-                orderDetailsRepository = new OrderDetailRepository(context);
-            }
-
-            return orderDetailsRepository;
+            if (_orderDetailRepository == null)
+                _orderDetailRepository = new OrderDetailRepository(context);
+            return _orderDetailRepository;
         }
     }
-
     public void SaveChanges()
     {
         context.SaveChanges();

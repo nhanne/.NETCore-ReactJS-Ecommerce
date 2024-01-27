@@ -2,23 +2,18 @@
 using Clothings_Store.Models.Database;
 
 namespace Clothings_Store.Repositories;
-public class ProductRepository : GenericRepository<Product>
+public class ProductRepository : GenericRepository<Product, int>
 {
     public ProductRepository(StoreContext context) : base(context)
     {
     }
-    public override void Create(Product Input)
+    public override async Task CreateAsync(Product input)
     {
         var model = new Product();
-        model.Id = base._db.Products.ToList().Last().Id + 1;
-        model.Name = Input.Name;
-        model.Code = Input.Code;
-        base.Create(model);
-        base.SaveChanges();
+        await base.CreateAsync(model);
     }
-    public override void Delete(Product entity)
+    public override async Task DeleteAsync(Product product)
     {
-        base.Delete(entity);
-        base.SaveChanges();
+        await base.DeleteAsync(product);
     }
 }

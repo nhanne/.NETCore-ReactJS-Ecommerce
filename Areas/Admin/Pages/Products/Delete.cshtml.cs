@@ -9,20 +9,23 @@ namespace Clothings_Store.Areas.Admin.Pages.Products;
 [Authorize(Roles = "Shop Master")]
 public class DeleteModel : PageModel
 {
-    private readonly IRepository<Product> _repository;
-    public DeleteModel(IRepository<Product> repository) => _repository = repository;
+    private readonly IRepository<Product, int> _repository;
+    public DeleteModel(IRepository<Product, int> repository) => _repository = repository;
     [TempData]
     public string? StatusMessage { get; set; }
-    public IActionResult OnGet(int? Productid)
+    public async Task<IActionResult> OnGet(int? Productid)
     {
-        if (Productid == null) return NotFound("không tìm thấy sản phẩm");
+        if (Productid == null) 
+            return NotFound("không tìm thấy sản phẩm");
+        await Task.CompletedTask;
         return Page();
     }
-    public IActionResult OnPost(int Productid)
+    public async Task<IActionResult> OnPost(int Productid)
     {
-        var model = _repository.Get(Productid);
-        if (model == null) return NotFound("không tìm thấy sản phẩm");
-        _repository.Delete(model);
+        var model = await _repository.GetByIdAsync(Productid);
+        if (model == null) 
+            return NotFound("không tìm thấy sản phẩm");
+        await _repository.DeleteAsync(model);
         StatusMessage = $"Bạn vừa xóa sản phẩm: {model.Name}";
         return RedirectToPage("./Index");
     }

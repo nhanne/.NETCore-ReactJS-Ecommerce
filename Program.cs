@@ -99,11 +99,11 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped(typeof(ICustomSessionService<>), typeof(CustomSessionService<>));
 
 // Repository 
-builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
-builder.Services.AddScoped<IRepository<Order>, OrderRepository>();
-builder.Services.AddScoped<IRepository<OrderDetail>, OrderDetailRepository>();
-builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
-builder.Services.AddScoped<IRepository<Customer>, CustomerRepository>();
+builder.Services.AddScoped<IRepository<Category, int>, CategoryRepository>();
+builder.Services.AddScoped<IRepository<Order, string>, OrderRepository>();
+builder.Services.AddScoped<IRepository<OrderDetail, string>, OrderDetailRepository>();
+builder.Services.AddScoped<IRepository<Product, int>, ProductRepository>();
+builder.Services.AddScoped<IRepository<Customer, int>, CustomerRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

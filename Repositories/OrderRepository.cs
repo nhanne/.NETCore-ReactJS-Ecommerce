@@ -2,7 +2,7 @@
 using Clothings_Store.Models.Database;
 
 namespace Clothings_Store.Repositories;
-public class OrderRepository : GenericRepository<Order>
+public class OrderRepository : GenericRepository<Order, string>
 {
     public OrderRepository(StoreContext context) : base(context)
     {
