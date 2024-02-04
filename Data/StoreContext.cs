@@ -202,4 +202,9 @@ public class StoreContext : IdentityDbContext<AppUser>
 
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        //optionsBuilder.UseLazyLoadingProxies();
+        // ...
+    }
 }

@@ -3,7 +3,7 @@ namespace Clothings_Store.Models.Database;
 public partial class Product
 {
     public int Id { get; set; }
-    public int? CategoryId { get; set; }
+    public int CategoryId { get; set; }
     public string Picture { get; set; }
 
     [Required(ErrorMessage = "Tên sản phẩm là bắt buộc.")]

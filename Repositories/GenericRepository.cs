@@ -30,7 +30,7 @@ public abstract class GenericRepository<TEntity, TKey> : IRepository<TEntity, TK
         _db.Set<TEntity>().Remove(entity);
         await _db.SaveChangesAsync();
     }
-    public async Task<IEnumerable<TEntity>?> FindAsync(Expression<Func<TEntity, bool>> predicate)
+    public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await _db.Set<TEntity>()
                         .AsQueryable()
@@ -38,7 +38,7 @@ public abstract class GenericRepository<TEntity, TKey> : IRepository<TEntity, TK
                         .AsNoTracking()
                         .ToListAsync();
     }
-    public async Task<IEnumerable<TEntity>?> GetAllAsync()
+    public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
     {
         return await _db.Set<TEntity>()
                         .Select(item => item)

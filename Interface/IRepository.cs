@@ -6,6 +6,6 @@ public interface IRepository<TEntity, TKey>
     Task CreateAsync(TEntity entity);
     Task UpdateAsync(TEntity entity);
     Task DeleteAsync (TEntity entity);
-    Task<IEnumerable<TEntity>?> GetAllAsync();
-    Task<IEnumerable<TEntity>?> FindAsync(Expression<Func<TEntity, bool>> predicate);
+    Task<IEnumerable<TEntity>> GetAllAsync();
+    Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
 }

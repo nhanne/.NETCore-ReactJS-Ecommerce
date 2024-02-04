@@ -20,6 +20,9 @@
         <tr>
             <td>@item.Code</td>
             <td>@item.Name</td>
+            <td>@string.Format("{0:#,0} VNĐ", item.UnitPrice)</td>
+            <td> <img src="/Images/sp/@Url.Content(@item.Picture)" alt="@item.Name" /></td>
+            <td>@item.Category.Name</td>
             <td>
                 <a class="btn btn-success btn-sm" asp-page="./Edit" asp-route-productid="@item.Id">Cập nhật</a>
                 <a class="btn btn-danger btn-sm" asp-page="./Delete" asp-route-productid="@item.Id">Xóa</a>

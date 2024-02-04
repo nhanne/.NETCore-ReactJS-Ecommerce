@@ -12,7 +12,7 @@ public class IndexModel : PageModel
     public IndexModel(IRepository<Product, int> repository) => _repository = repository;
     [TempData]
     public string? StatusMessage { get; set; }
-    public IEnumerable<Product>? categories { get; set; } = new List<Product>();
+    public IEnumerable<Product> categories { get; set; } = new List<Product>();
     public async Task OnGet()
     {
         categories = await _repository.GetAllAsync();

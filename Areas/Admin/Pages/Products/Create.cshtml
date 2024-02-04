@@ -8,7 +8,7 @@
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger" style="text-align:center" role="alert"></div>
             <div class="input-box">
                 <label asp-for="Input.Code" class="form-label"></label>
@@ -19,6 +19,31 @@
                 <label asp-for="Input.Name" class="form-label"></label>
                 <input asp-for="Input.Name" class="form-control" />
                 <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="input-box">
+                <label asp-for="Input.CostPrice" class="form-label"></label>
+                <input asp-for="Input.CostPrice" class="form-control" />
+                <span asp-validation-for="Input.CostPrice" class="text-danger"></span>
+            </div>
+            <div class="input-box">
+                <label asp-for="Input.Sale" class="form-label"></label>
+                <input asp-for="Input.Sale" class="form-control" />
+                <span asp-validation-for="Input.Sale" class="text-danger"></span>
+            </div>
+            <div class="input-box">
+                <label asp-for="Input.Category" for="categoryDropdown" class="control-label"></label>
+                <select asp-for="Input.CategoryId" class="form-control" id="categoryDropdown">
+                    <option value="">-- Select Category --</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="Input.CategoryId" class="text-danger"></span>
+            </div>
+            <div class="input-box">
+                <label asp-for="Input.Picture" class="form-label"></label>
+                <input class="form-control" type="file" name="file" formnovalidate />
             </div>
             <hr/>
             <div class="form-group">
