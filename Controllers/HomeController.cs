@@ -32,7 +32,7 @@ public class HomeController : Controller
         return View();
     }
     [HttpGet]
-    public async Task<JsonResult> getData( string? search, string? category, string sort, 
+    public async Task<JsonResult> GetData( string? search, string? category, string sort, 
                                            int page = 1, int pageSize = 8)
     {
         var query = _db.Products.AsQueryable();
@@ -59,12 +59,16 @@ public class HomeController : Controller
                                   .ToListAsync();
         return Json(new{ products, TotalPages = totalPages, CurrentPage = page });
     }
-    public async Task<JsonResult> getCategories()
+    public async Task<JsonResult> GetCategories()
     {
         var categories = await _db.Categories.Select(p => p).ToListAsync();
         return Json(new { categories, totalItems = categories.Count });
     }
-
+    public async Task<JsonResult> GetCategoriesForApp()
+    {
+        var categories = await _db.Categories.Select(p => p).ToListAsync();
+        return Json(categories);
+    }
     private IQueryable<Product> Sort(string sort, IQueryable<Product> query)
     {
         switch (sort)
@@ -84,31 +88,29 @@ public class HomeController : Controller
             case "Khuyến mãi":
                 query = query.OrderByDescending(c => c.Sale);
                 break;
-            default:
-                break;
         }
         return query;
     }
     //
-    public async Task<JsonResult> Product(int Id)
+    public async Task<JsonResult> Product(int id)
     {
-        var stock = await _db.Stocks.Where(p => p.ProductId == Id)
+        var stock = await _db.Stocks.Where(p => p.ProductId == id)
                                .Select(s => new
                                {
                                    size = new
                                    {
                                        id = s.SizeId,
-                                       name = s.Size.Name
+                                       name = s.Size!.Name
                                    },
                                    color = new
                                    {
                                        id = s.ColorId,
-                                       name = s.Color.Name
+                                       name = s.Color!.Name
                                    },
                                    product = new
                                    {
                                        id = s.ProductId,
-                                       image = s.Product.Picture,
+                                       image = s.Product!.Picture,
                                        name = s.Product.Name,
                                        costPrice = s.Product.CostPrice,
                                        unitPrice = s.Product.UnitPrice,
@@ -128,14 +130,14 @@ public class HomeController : Controller
     }
     //
     [HttpGet]
-    public async Task<JsonResult> getStock(int productId, int sizeId, int colorId)
+    public async Task<JsonResult> GetStock(int productId, int sizeId, int colorId)
     {
         var stock = await _db.Stocks.Where(p => p.ProductId == productId
                                             && p.ColorId == colorId
                                             && p.SizeId == sizeId)
                                     .FirstOrDefaultAsync();
 
-        int quantity = stock == null ? 0 : (int)stock.Quantity!;
+        int quantity = stock?.Quantity ?? 0;
         return Json(new { quantity });
     }
 

@@ -13,11 +13,11 @@ public interface IUnitOfWork
 }
 public class UnitOfWork : IUnitOfWork
 {
-    private StoreContext context;
+    private StoreContext _context;
 
     public UnitOfWork(StoreContext context)
     {
-        this.context = context;
+        this._context = context;
     }
 
     private IRepository<Customer, int> _customerRepository;
@@ -26,7 +26,7 @@ public class UnitOfWork : IUnitOfWork
         get
         {
             if (_customerRepository == null)
-                _customerRepository = new CustomerRepository(context);
+                _customerRepository = new CustomerRepository(_context);
             return _customerRepository;
         }
     }
@@ -37,7 +37,7 @@ public class UnitOfWork : IUnitOfWork
         get
         {
             if (_orderRepository == null)
-                _orderRepository = new OrderRepository(context);
+                _orderRepository = new OrderRepository(_context);
             return _orderRepository;
         }
     }
@@ -48,7 +48,7 @@ public class UnitOfWork : IUnitOfWork
         get
         {
             if (_productRepository == null)
-                _productRepository = new ProductRepository(context);
+                _productRepository = new ProductRepository(_context);
             return _productRepository;
         }
     }
@@ -58,12 +58,12 @@ public class UnitOfWork : IUnitOfWork
         get
         {
             if (_orderDetailRepository == null)
-                _orderDetailRepository = new OrderDetailRepository(context);
+                _orderDetailRepository = new OrderDetailRepository(_context);
             return _orderDetailRepository;
         }
     }
     public void SaveChanges()
     {
-        context.SaveChanges();
+        _context.SaveChanges();
     }
 }

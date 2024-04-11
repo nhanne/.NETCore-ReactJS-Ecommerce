@@ -2,7 +2,6 @@
 using Clothings_Store.Interface;
 using Clothings_Store.Models.Database;
 using Clothings_Store.Models.Others;
-using Newtonsoft.Json;
 
 namespace Clothings_Store.Services
 {
@@ -26,15 +25,15 @@ namespace Clothings_Store.Services
             try
             {
                 var listCart = GetCart();
-                var cartitem = listCart.Find(p => p.IdCart == stock.Id);
-                if (cartitem != null)
+                var cartItem = listCart.Find(p => p.IdCart == stock.Id);
+                if (cartItem != null)
                 {
-                    cartitem.quantity++;
+                    cartItem.quantity++;
                 }
                 else
                 {
-                    cartitem = new Cart(_db, stock.Id);
-                    listCart.Add(cartitem);
+                    cartItem = new Cart(_db, stock.Id);
+                    listCart.Add(cartItem);
                 }
                 SaveCartSession(listCart);
                 _logger.LogInformation("Add to cart success.");
@@ -46,15 +45,15 @@ namespace Clothings_Store.Services
             }
 
         }
-        public int RemoveFromCart(int IdCart)
+        public int RemoveFromCart(int idCart)
         {
             try
             {
                 var listCart = GetCart();
-                var item = listCart.SingleOrDefault(c => c.IdCart == IdCart);
+                var item = listCart.SingleOrDefault(c => c.IdCart == idCart);
                 if (item != null)
                 {
-                    listCart.RemoveAll(c => c.IdCart == IdCart);
+                    listCart.RemoveAll(c => c.IdCart == idCart);
                     SaveCartSession(listCart);
                 }
                 _logger.LogInformation("Remove from cart success.");
@@ -71,32 +70,24 @@ namespace Clothings_Store.Services
         }
         public int TotalItems()
         {
-            int iTotalItems = 0;
             var listCart = GetCart();
-            if (listCart != null)
-            {
-                iTotalItems = listCart.Sum(n => n.quantity);
-            }
+            var iTotalItems = listCart.Sum(n => n.quantity);
             return iTotalItems;
         }
         public double TotalPrice()
         {
-            double iTotalPrice = 0;
             var listCart = GetCart();
-            if (listCart != null)
-            {
-                iTotalPrice = listCart.Sum(n => n.totalPrice);
-            }
+            var iTotalPrice = listCart.Sum(n => n.totalPrice);
             return iTotalPrice;
         }
 
-        public void UpdateCart(int IdCart, int Quantity)
+        public void UpdateCart(int idCart, int quantity)
         {
             List<Cart> listCart = GetCart();
-            var item = listCart.SingleOrDefault(c => c.IdCart == IdCart);
+            var item = listCart.SingleOrDefault(c => c.IdCart == idCart);
             if (item != null)
             {
-                item.quantity = Quantity;
+                item.quantity = quantity;
             }
             SaveCartSession(listCart);
         }

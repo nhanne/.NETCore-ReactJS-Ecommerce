@@ -10,7 +10,7 @@
     }
     public class CustomerBill
     {
-        public IBillingStrategy Strategy { get; set; }
+        private IBillingStrategy Strategy { get; set; }
         public CustomerBill(IBillingStrategy strategy)
         {
             this.Strategy = strategy;

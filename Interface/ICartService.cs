@@ -11,7 +11,7 @@ namespace Clothings_Store.Interface
         void ClearCart();
         void SaveCartSession(List<Cart> listCart);
         void AddToCart(Stock stock);
-        int RemoveFromCart(int IdCart);
-        void UpdateCart(int IdCart, int Quantity);
+        int RemoveFromCart(int idCart);
+        void UpdateCart(int idCart, int quantity);
     }
 }

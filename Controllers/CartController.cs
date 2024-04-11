@@ -1,13 +1,10 @@
 ﻿using Clothings_Store.Data;
 using Clothings_Store.Interface;
-using Clothings_Store.Models.Database;
 using Clothings_Store.Models.Others;
-using Clothings_Store.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
-using System.Text.Encodings.Web;
 
 namespace Clothings_Store.Controllers
 {
@@ -50,7 +47,7 @@ namespace Clothings_Store.Controllers
         [HttpPost]
         public JsonResult AddToCart(int productId, int colorId, int sizeId)
         {
-            var stock = _db.Stocks.Where(p => p.ProductId == productId && p.ColorId == colorId && p.SizeId == sizeId).FirstOrDefault();
+            var stock = _db.Stocks.FirstOrDefault(p => p.ProductId == productId && p.ColorId == colorId && p.SizeId == sizeId);
             if (stock == null)
             {
                 return Json(false);
@@ -58,21 +55,21 @@ namespace Clothings_Store.Controllers
             _cartService.AddToCart(stock);
             return Json(true);
         }
-        public IActionResult RemoveFromCart(int IdCart)
+        public IActionResult RemoveFromCart(int idCart)
         {
-            if (_cartService.RemoveFromCart(IdCart) == 0)
+            if (_cartService.RemoveFromCart(idCart) == 0)
             {
                 return RedirectToAction("Store", "Home");
             }
             return RedirectToAction("Index");
         }
-        public ActionResult UpdateCart(int IdCart, IFormCollection form)
+        public ActionResult UpdateCart(int idCart, IFormCollection form)
         {
-            int Quantity = int.Parse(form["quantity"].ToString());
-            _cartService.UpdateCart(IdCart, Quantity);
+            int quantity = int.Parse(form["quantity"].ToString());
+            _cartService.UpdateCart(idCart, quantity);
             return RedirectToAction("Index");
         }
-        void saveOrderSession(OrderInfoSession orderInfoModel)
+        void SaveOrderSession(OrderInfoSession orderInfoModel)
         {
             _session.ClearSession("order");
             var listSession = _session.GetSession("order");
@@ -81,23 +78,23 @@ namespace Clothings_Store.Controllers
             _session.SaveSession(listSession);
         }
         [HttpPost]
-        public async Task<IActionResult> CheckOut(OrderInfoSession orderInfoModel)
+        public async Task<IActionResult?> CheckOut(OrderInfoSession orderInfoModel)
         {
-            saveOrderSession(orderInfoModel);
+            SaveOrderSession(orderInfoModel);
             switch (orderInfoModel.PaymentId)
             {
                 case 1:
                     TempData["Confirmed"] = true;
-                    await _paymentService.COD();
+                    await _paymentService.Cod();
                     return Json(new { redirectToUrl = Url.Action("PaymentConfirm") });
                 case 2:
-                    string vnpaymentUrl = _paymentService.VNPay();
+                    string vnpaymentUrl = _paymentService.VnPay();
                     return Json(new { redirectToUrl = vnpaymentUrl });
                 case 3:
                     var response = await _paymentService.CreatePaymentAsync(orderInfoModel);
                     return Json(new { redirectToUrl = response.PayUrl });
                 default:
-                    return View();
+                    return null;
             }
         }
         public async Task<IActionResult> PaymentConfirm()
@@ -113,7 +110,7 @@ namespace Clothings_Store.Controllers
                 var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listOrder[0]);
 
                 var emailBody = new StringBuilder();
-                emailBody.AppendLine($"Kính gửi {orderInfo.FullName}, <br><br>");
+                emailBody.AppendLine($"Kính gửi {orderInfo?.FullName}, <br><br>");
                 emailBody.AppendLine($"Thông tin chi tiết đơn hàng:<br>");
                 foreach (var item in listCart)
                 {
@@ -123,7 +120,7 @@ namespace Clothings_Store.Controllers
                 emailBody.AppendLine("Trân trọng ! <br> Tran Thanh Nhan");
 
                 await _emailSender.SendEmailAsync(
-                    orderInfo.Email,
+                    orderInfo!.Email,
                     "[Clothings Store] Thông báo đơn hàng",
                     emailBody.ToString()
                 );
@@ -135,9 +132,9 @@ namespace Clothings_Store.Controllers
                 return RedirectToAction("Store", "Home");
             }
         }
-        public async Task<IActionResult> VNPayConfirm()
+        public async Task<IActionResult> VnPayConfirm()
         {
-            if (!await _paymentService.VNPayConfirm())
+            if (!await _paymentService.VnPayConfirm())
             {
                 TempData["Confirmed"] = false;
                 return RedirectToAction("Index");

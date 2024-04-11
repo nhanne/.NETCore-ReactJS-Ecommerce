@@ -35,11 +35,11 @@ namespace Clothings_Store.Services
             _vnPayConfig = vnPayConfig.Value;
             _momoConfig = momoConfig.Value;
         }
-        public async Task COD()
+        public async Task Cod()
         {
             await _orderService.PlaceOrder();
         }
-        public string VNPay()
+        public string VnPay()
         {
             var listSession = _session.GetSession("order");
             var orderInfo = JsonConvert.DeserializeObject<OrderInfoSession>(listSession[0]);
@@ -74,7 +74,7 @@ namespace Clothings_Store.Services
             return "/";
 
         }
-        public async Task<bool> VNPayConfirm()
+        public async Task<bool> VnPayConfirm()
         {
             if (_httpContextAccessor.HttpContext!.Request.Query.Count > 0)
             {
