@@ -7,13 +7,13 @@ using Clothings_Store.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Formats.Asn1;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
 Console.OutputEncoding = Encoding.UTF8;
 var builder = WebApplication.CreateBuilder(args);
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddOptions();// Add services to the container.
 var mvcBuilder = builder.Services.AddControllersWithViews();
 var razorBuilder = builder.Services.AddRazorPages();
@@ -26,6 +26,15 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("*").AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                      });
+});
 // How to connect StoreContext to MS SQL Server
 builder.Services.AddDbContext<StoreContext>(options =>
                options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")),ServiceLifetime.Scoped);
@@ -34,8 +43,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();  // How to throw e w
 // Session distributed cache SQL Server
 builder.Services.AddDistributedSqlServerCache(options =>
 {
-    options.ConnectionString = "Data Source=NHAN;Initial Catalog=ClothingsStore;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true";
-    //options.ConnectionString = "Data Source=SQL8006.site4now.net;Initial Catalog=db_aa2078_dbstore;User ID=db_aa2078_dbstore_admin;Password=UcB3266SbE.R5ry";
+    // options.ConnectionString = "Data Source=NHAN;Initial Catalog=ClothingsStore;Trusted_Connection=SSPI;Encrypt=false;TrustServerCertificate=true";
+    options.ConnectionString = "Data Source=SQL5113.site4now.net;Initial Catalog=db_aa750b_database;User ID=db_aa750b_database_admin;Password=UcB3266SbE.R5ry";
     options.SchemaName = "dbo";
     options.TableName = "OrderInfoSession";
 });
@@ -104,6 +113,7 @@ builder.Services.AddScoped<IRepository<Order, string>, OrderRepository>();
 builder.Services.AddScoped<IRepository<OrderDetail, string>, OrderDetailRepository>();
 builder.Services.AddScoped<IRepository<Product, int>, ProductRepository>();
 builder.Services.AddScoped<IRepository<Customer, int>, CustomerRepository>();
+builder.Services.AddScoped<IRepository<Stock, int>, StockRepository>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -139,6 +149,7 @@ app.Use(async (context, next) =>
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();

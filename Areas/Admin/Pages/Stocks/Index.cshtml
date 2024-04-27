@@ -1,0 +1,29 @@
+﻿@page "/admin/stocks"
+@model Clothings_Store.Areas.Admin.Pages.Stocks.IndexModel
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm tồn kho";
+}
+
+<div class="mb-2">
+    <a class="btn btn-primary" asp-page="./Create">Thêm mới</a>
+</div>
+<table class="table">
+    <tr>
+        <th>Mã sản phẩm</th>
+        <th>Tên sản phẩm</th>
+        <th>Ảnh sản phẩm</th>
+        <th>Màu sản phẩm</th>
+        <th>Kích cỡ sản phẩm</th>
+    </tr>
+    @foreach (var item in Model.Stocks)
+    {
+        <tr>
+            <td>@item.Product.Code</td>
+            <td>@item.Product.Name</td>
+            <td> <img src="/Images/sp/@Url.Content(@item.Product.Picture)" /></td>
+            <td>@item.Color.Name</td>
+            <td>@item.Size.Name</td>
+        </tr>
+    }
+</table>

@@ -1,4 +1,5 @@
 ﻿using Clothings_Store.Models.Database;
+using Clothings_Store.Models.Others;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace Clothings_Store.Data;
@@ -18,6 +19,8 @@ public class StoreContext : IdentityDbContext<AppUser>
     public virtual DbSet<Promotion> Promotions { get; set; }
     public virtual DbSet<Size> Sizes { get; set; }
     public virtual DbSet<Stock> Stocks { get; set; }
+    public virtual DbSet<OrderFlutter> OrderFlutters { get; set; }
+    public virtual DbSet<OrderDetailFlutter> OrderDetailFlutters { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -188,6 +191,18 @@ public class StoreContext : IdentityDbContext<AppUser>
                   .WithMany(p => p.Stocks)
                   .HasForeignKey(d => d.SizeId)
                   .HasConstraintName("FK__Stock__SizeId");
+        });
+
+        modelBuilder.Entity<OrderFlutter>(entity =>
+        {
+            entity.ToTable("OrderFlutters");
+            entity.HasKey(e => e.Id).HasName("PK__OrderFlutters");
+        });
+
+        modelBuilder.Entity<OrderDetailFlutter>(entity =>
+        {
+            entity.ToTable("OrderDetailFlutters");
+            entity.HasKey(e => new { e.OrderFlutterId, e.StockId }).HasName("PK__OrderDetailFlutter");
         });
 
         base.OnModelCreating(modelBuilder);
